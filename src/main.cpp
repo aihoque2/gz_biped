@@ -8,7 +8,7 @@ int main(int argc, char **argv)
     gz::common::Console::SetVerbosity(4);
 
     gz::sim::ServerConfig serverConfig;
-    serverConfig.SetSdfFile("worlds/empty.world");
+    serverConfig.SetSdfFile("world/empty.world");
 
     gz::sim::Server server(serverConfig);
 
