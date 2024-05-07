@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 
     gz::sim::Server server(serverConfig);
 
-    server.Run(true, 0, false);
+    server.Run(true /*blocking*/, 300 /*iterations*/, false /*paused*/);
 
     return 0;
 
