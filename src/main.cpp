@@ -16,32 +16,7 @@ int main(int argc, char **argv)
 
     gz::sim::Server server(serverConfig);
 
-    // // Initialize Ignition GUI and Rendering
-    // ignition::gui::Application app(argc, argv);
-    // app.LoadConfig("gui.config");
-
-    // // Get engine and scene
-    // auto engine = ignition::rendering::engine("ogre2");
-    // if (!engine)
-    // {
-    //     std::cerr << "Engine 'ogre2' is not available." << std::endl;
-    //     return 1;
-    // }
-
-    // // Create a scene
-    // auto scene = engine->CreateScene("MyScene");
-    // if (!scene)
-    // {
-    //     std::cerr << "Failed to create scene." << std::endl;
-    //     return 1;
-    // }
-
-    // // Configure scene properties as needed
-    // scene->SetAmbientLight(0.8, 0.8, 0.8);
-
-
-
-    // Run the server
+    // run the server
     server.Run(true, 0, false);
 
 

@@ -1,4 +1,4 @@
-#include "include/ResetSim.h"
+#include "include/sim.h"
 
 ResetSimulation::ResetSimulation(){
     return;
