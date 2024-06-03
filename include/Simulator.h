@@ -6,31 +6,57 @@
 #include <ignition/common.hh>
 #include <memory>
 
+/*
+NOTE: NO ROS2 to WORRY about here. only have to worry
+aobout being able to pull full state out in valid manner
+
+*/
+
 using namespace ignition;
 using namespace gazebo;
 using namespace systems;
 
-#ifndef RESET_SIMULATION_H
-#define RESET_SIMULATION_H
+#ifndef TRAINSIMULATOR_H
+#define TRAINSIMULATOR_H
 
 /*Sim.h*/
-struct PhysicsData{
 
-}
+class TrainSimulator{
+    /*
+    TODO:
 
-class Simulator{
+    Hello, I am TrainSimulator
+    you shall attach me to a gym
+    environment wrapper via pybind11
+    */
 
     public:
-        Simulator();
-        std::unique_ptr<gz::sim::Server> server;
-        std::unique_ptr<TInyProcessLib::Process> gui;
-        ignition::gazebo::System;
+        TrainSimulator(); // constructor
+        std::unique_ptr<gz::sim::Server> server_;
+        std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
+
+        void start();
+        void pause();
+        void step();
+        void reset_simulation(); // make action_cb ignore action
+
+        // "Simulation Resources"
+        // TODO: should these be "smart pointers"? 
+        ignition::gazebo::EventManager* eventMgr = NULL;
+        ignition::gazebo::EntityComponentManager* ecm = NULL;
+
+        // "PhsyicsData"
+        double rtf = -1;
+        double maxStepSize = ;
+        double realtimeUpdateRate= -1;
+
+        bool valid_physics()
 
     private:
         gz::sim::ServerConfig serverConfig;
+        std::string sdfFile; // filename for the sdf to spawn
 
 
 };
 
-ignition::msgs::
 #endif
