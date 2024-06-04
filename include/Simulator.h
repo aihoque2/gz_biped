@@ -5,7 +5,6 @@
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
 #include <memory>
-
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
 aobout being able to pull full state out in valid manner
@@ -35,26 +34,28 @@ class TrainSimulator{
         std::unique_ptr<gz::sim::Server> server_;
         std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
 
-        void start();
+        void Initialize();
         void pause();
-        void step();
-        void reset_simulation(); // make action_cb ignore action
+        void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
+        void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque velocities
 
         // "Simulation Resources"
         // TODO: should these be "smart pointers"? 
-        ignition::gazebo::EventManager* eventMgr = NULL;
-        ignition::gazebo::EntityComponentManager* ecm = NULL;
+        std::shared_ptr<ignition::gazebo::EventManager> eventMgr = NULL;
+        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm = NULL;
 
         // "PhsyicsData"
         double rtf = -1;
-        double maxStepSize = ;
+        double maxStepSize = -1;
         double realtimeUpdateRate= -1;
 
-        bool valid_physics()
+        bool valid_physics();
+        bool spawn_blackbird();
 
     private:
         gz::sim::ServerConfig serverConfig;
         std::string sdfFile; // filename for the sdf to spawn
+        std::string worldFile; // filename for the world
 
 
 };

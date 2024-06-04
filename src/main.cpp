@@ -14,10 +14,13 @@ int main(int argc, char **argv)
     gz::sim::ServerConfig serverConfig;
     serverConfig.SetSdfFile("world/empty.world");
 
+    // No longer needed bc blackbird is already in world file
+    //std::string blackbirdFile = "urdf/blackbird.sdf" 
+
     gz::sim::Server server(serverConfig);
 
     // run the server
-    server.Run(true, 0, false);
+    server.Run(true, 1000, false);
 
 
     return 0;

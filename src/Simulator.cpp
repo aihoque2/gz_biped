@@ -2,13 +2,15 @@
 
 TrainSimulator::TrainSimulator(bool gui){
     server_ = std::make_unique<gz::sim::Server>();
+
+
     if (gui){
         /*
         TODO: gui code
         */
 
         // Spawn a new process with the GUI
-        pImpl->gazebo.gui = std::make_unique<TinyProcessLib::Process>(
+        gui_ = std::make_unique<TinyProcessLib::Process>(
             "ign gazebo -g -v " + std::to_string(guiVerbosity) + redirect);
 
         bool guiServiceExists = false;
@@ -25,7 +27,9 @@ TrainSimulator::TrainSimulator(bool gui){
                     break;
                 }
             }
-        }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        } while (!guiServiceExists);
         // end gui bracket
     }
 }

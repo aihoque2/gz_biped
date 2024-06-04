@@ -1,70 +1,6 @@
-<?xml version="1.0" ?>
 
-<sdf version="1.6">
-  <world name="empty">
-    <physics name="1ms" type="ignored">
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1.0</real_time_factor>
-    </physics>
-    <plugin
-      filename="gz-sim-physics-system"
-      name="gz::sim::systems::Physics">
-    </plugin>
-    <plugin
-      filename="gz-sim-user-commands-system"
-      name="gz::sim::systems::UserCommands">
-    </plugin>
-    <plugin
-      filename="gz-sim-scene-broadcaster-system"
-      name="gz::sim::systems::SceneBroadcaster">
-    </plugin>
-    <plugin
-      filename="gz-sim-contact-system"
-      name="gz::sim::systems::Contact">
-    </plugin>
-
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 10 0 0 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-    </light>
-
-    <model name="ground_plane">
-      <static>true</static>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>100 100</size>
-            </plane>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>100 100</size>
-            </plane>
-          </geometry>
-          <material>
-            <ambient>0.8 0.8 0.8 1</ambient>
-            <diffuse>0.8 0.8 0.8 1</diffuse>
-            <specular>0.8 0.8 0.8 1</specular>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-<model name='blackbird'>
+<sdf version='1.7'>
+  <model name='blackbird'>
     <material
       name="teal">
       <color
@@ -124,7 +60,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_001.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_001.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -136,7 +72,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_016.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_016.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -148,7 +84,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_017.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_017.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -202,7 +138,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_003.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_003.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -256,7 +192,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_005.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_005.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -301,7 +237,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_013.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_013.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -355,7 +291,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_011.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_011.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -367,7 +303,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_014.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_014.stl</uri>
           </mesh>
         </geometry>
       </visual>
@@ -496,7 +432,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_012.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_012.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -550,7 +486,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_004.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_004.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -604,7 +540,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_006.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_006.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -649,7 +585,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_009.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_009.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -703,7 +639,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_010.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_010.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -715,7 +651,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27_015.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27_015.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -844,7 +780,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>file://meshes/Assembly_Mockup_v27.stl</uri>
+            <uri>file://meshes/blackbird/Assembly_Mockup_v27.stl</uri>
           </mesh>
         </geometry>
         <material>
@@ -853,6 +789,4 @@
       </visual>
     </link>
   </model>
-
-  </world>
 </sdf>
