@@ -20,12 +20,18 @@ UPDATE 06/04: I need this files to access utilize the server's EntityComponentMa
 /*
 
 */
-class ECMProvider{
+class ECMProvider: public ignition::gazebo::System, public ignition::gazebo::ISystemConfigure
+{
     public:
         ECMProvider(); // create the ignition gazebo system
-        void Confiigure(const ignition::gazebo::Entity& entity, 
+        void Configure(const ignition::gazebo::Entity& entity, 
         ignition::gazebo::EntityComponentManager& ecm,
         ignition::gazebo::EventManager& eventMgr);
+    
+    private:
+        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_ptr_;
+        std::shared_ptr<ignition::gazebo::EntityComponentManager> eventMgr_ptr_;
+
 };
 
 #endif
