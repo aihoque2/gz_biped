@@ -57,6 +57,8 @@ class TrainSimulator{
         std::string sdfFile; // filename for the sdf to spawn
         std::string worldFile; // filename for the world
 
+        double *state; // 1D 30-vector to represent our state
+        double *action; // 1D 10-vector to represent torques we send on each joint
 
 };
 

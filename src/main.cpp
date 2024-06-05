@@ -5,6 +5,10 @@
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
 
+// class ModelNameProvider: public {
+    
+// };
+
 int main(int argc, char **argv)
 {
     // debug
@@ -19,8 +23,11 @@ int main(int argc, char **argv)
 
     gz::sim::Server server(serverConfig);
 
+    bool hasBlackbird = server.HasEntity("blackbir",0);
+    std::cout << "hasBlackbird: " << hasBlackbird << std::endl;
+
     // run the server
-    server.Run(true, 1000, false);
+    server.Run(true, 0, false);
 
 
     return 0;
