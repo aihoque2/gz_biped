@@ -37,14 +37,14 @@ class TrainSimulator{
 
         void pause();
         void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
-        void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque velocities
+        void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         // "Simulation Resources"
         // TODO: should these be "smart pointers"? 
         std::shared_ptr<ignition::gazebo::EventManager> eventMgr_;
         std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_;
 
-        // "PhsyicsData"
+        // "PhsyicsData" not sure if needed
         double rtf = -1;
         double maxStepSize = -1;
         double realtimeUpdateRate= -1;
@@ -57,8 +57,10 @@ class TrainSimulator{
         std::string sdfFile; // filename for the sdf to spawn
         std::string worldFile; // filename for the world
 
-        double *state_; // 1D 30-vector to represent our state
-        double *axn_; // 1D 10-vector to represent torques we send on each joint
+        std::shared_ptr<double[]> state_; // 1D 30-vector to represent our state
+        std::shared_ptr<double[]> axn_; // 1D 10-vector to represent torques we send on each joint
+
+        int STATE_SIZE; // should i be 
 
 };
 

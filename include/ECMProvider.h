@@ -25,7 +25,7 @@ class ECMProvider: public ignition::gazebo::System, public ignition::gazebo::ISy
     public:
         ECMProvider(); // create the ignition gazebo system
         void Configure(const ignition::gazebo::Entity& entity, 
-        ignition::gazebo::EntityComponentManager& ecm,
+        const ignition::gazebo::EntityComponentManager& ecm,
         ignition::gazebo::EventManager& eventMgr);
     
     private:

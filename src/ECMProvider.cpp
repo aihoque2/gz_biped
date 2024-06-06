@@ -1,5 +1,4 @@
 #include "gz_bipedal/ECMProvider.h"
-#include <iostream> // debugging reasons
 
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
@@ -8,6 +7,7 @@
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
 #include <memory>
+#include <iostream> // I use cout because I'm a peasant
 
 
 /*
