@@ -24,7 +24,7 @@ TrainSimulator::TrainSimulator(bool gui){
     auto provider = std::make_shared<ECMProvider>();
     const auto ok = server_->AddSystem(provider, WORLD_IDX);
     if (!ok){
-        throw run
+        throw std::runtime_error("could not integrate ECMProvider into server");
     }
     /*
     TODO: gui code
@@ -32,7 +32,7 @@ TrainSimulator::TrainSimulator(bool gui){
     if (gui){
         // Spawn a new process with the GUI
         gui_ = std::make_unique<TinyProcessLib::Process>(
-            "ign gazebo -g -v " + std::to_string(guiVerbosity) + redirect);
+            "ign gazebo -g -v 4");
 
         bool guiServiceExists = false;
         ignition::transport::Node node;
@@ -54,18 +54,24 @@ TrainSimulator::TrainSimulator(bool gui){
         // end gui bracket
     } // endif
 
+    ecm_ = provider->ecm_ptr_;
+    eventMgr_ = provider->event_mgr_ptr_;
+
+    //TODO: get robot's joint states and torso pose set.
+
 }
 
 /* start() */
-void TrainSimulator::start(){
-    
-}
 
 
 /* step() 
 * step 1 ms in the simulation
 */
-void TrainSimulator::step(){}
+void TrainSimulator::step(vector<double> inputAction){
+    for (int i = 0; i < 10; i++){
+        axn_[i] = inputAction[i]
+    }
+}
 
 /* pause()
 * pause the simulation

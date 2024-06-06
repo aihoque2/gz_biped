@@ -35,15 +35,14 @@ class TrainSimulator{
         std::unique_ptr<gz::sim::Server> server_;
         std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
 
-        void Initialize();
         void pause();
         void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque velocities
 
         // "Simulation Resources"
         // TODO: should these be "smart pointers"? 
-        std::shared_ptr<ignition::gazebo::EventManager> eventMgr = NULL;
-        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm = NULL;
+        std::shared_ptr<ignition::gazebo::EventManager> eventMgr_;
+        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_;
 
         // "PhsyicsData"
         double rtf = -1;
@@ -58,8 +57,8 @@ class TrainSimulator{
         std::string sdfFile; // filename for the sdf to spawn
         std::string worldFile; // filename for the world
 
-        double *state; // 1D 30-vector to represent our state
-        double *action; // 1D 10-vector to represent torques we send on each joint
+        double *state_; // 1D 30-vector to represent our state
+        double *axn_; // 1D 10-vector to represent torques we send on each joint
 
 };
 
