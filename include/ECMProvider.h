@@ -1,6 +1,6 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
-#include <ignition/gazebo/ServerConfig.hh>
+#include <gz/sim/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
 #include <ignition/common.hh>

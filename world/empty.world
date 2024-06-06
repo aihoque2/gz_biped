@@ -65,7 +65,7 @@
     </model>
 
   <model name='blackbird'>
-      <pose>0 0 1.25 0 0 0</pose>
+      <pose>0 0 2.25 0 0 0</pose>
       <material
         name="teal">
         <color

@@ -1,9 +1,10 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
-#include <ignition/gazebo/ServerConfig.hh>
+#include <gz/sim/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
+#include <iostream>
 
 // class ModelNameProvider: public {
     
@@ -23,12 +24,13 @@ int main(int argc, char **argv)
 
     gz::sim::Server server(serverConfig);
 
-    bool hasBlackbird = server.HasEntity("blackbir",0);
+    bool hasBlackbird = server.HasEntity("blackbird", 0);
     std::cout << "hasBlackbird: " << hasBlackbird << std::endl;
+    auto paused = server.Paused(); // need to auto bc it returns std::optional
+    std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
     server.Run(true, 0, false);
-
 
     return 0;
 }

@@ -31,6 +31,7 @@ class TrainSimulator{
 
     public:
         TrainSimulator(); // constructor
+        ~TrainSimulator(); // desctructor
         std::unique_ptr<gz::sim::Server> server_;
         std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
 
