@@ -36,6 +36,7 @@ class TrainSimulator{
         std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
 
         void pause();
+        void set_action(double *action) // mainly a helper for step() to make modifying axn_ thread-safe
         void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
@@ -58,9 +59,12 @@ class TrainSimulator{
         std::string worldFile; // filename for the world
 
         std::shared_ptr<double[]> state_; // 1D 30-vector to represent our state
+        
         std::shared_ptr<double[]> axn_; // 1D 10-vector to represent torques we send on each joint
+        std::mutex axnMutex; // lock used for set_action() and get_action()
 
-        int STATE_SIZE; // should i be 
+        int STATE_SIZE;
+        int ACTION_SIZE;
 
 };
 
