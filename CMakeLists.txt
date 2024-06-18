@@ -6,8 +6,10 @@ project(fortress_sim)
 find_package(ignition-gazebo6 REQUIRED)
 find_package(ignition-rendering6 REQUIRED)
 
+add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
+add_library(train_simulator include/Simulator.h src/Simulator.cpp)
 
-add_library()
+target_link_libraries(train_simulator ecm_provider)
 
 add_executable(launch_empty_world src/main.cpp)
 
