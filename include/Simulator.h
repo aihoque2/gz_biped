@@ -11,9 +11,7 @@ aobout being able to pull full state out in valid manner
 
 */
 
-using namespace ignition;
-using namespace gazebo;
-using namespace systems;
+
 
 #ifndef TRAINSIMULATOR_H
 #define TRAINSIMULATOR_H
@@ -39,6 +37,8 @@ class TrainSimulator{
         void set_action(double *action) // mainly a helper for step() to make modifying axn_ thread-safe
         void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
+
+        void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
 
         // "Simulation Resources"
         // TODO: should these be "smart pointers"? 

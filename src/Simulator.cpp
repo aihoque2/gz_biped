@@ -11,6 +11,10 @@
 
 #define WORLD_IDX 0;
 
+using namespace ignition;
+using namespace gazebo;
+using namespace systems;
+
 TrainSimulator::TrainSimulator(bool gui){
     
     // debug

@@ -7,6 +7,8 @@ find_package(ignition-gazebo6 REQUIRED)
 find_package(ignition-rendering6 REQUIRED)
 
 
+add_library()
+
 add_executable(launch_empty_world src/main.cpp)
 
 # Link against the Gazebo libraries
