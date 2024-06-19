@@ -1,5 +1,5 @@
-#include "include/Simulator.h"
-#include "include/ECMProvider.h"
+#include "Simulator.h"
+#include "ECMProvider.h"
 
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>

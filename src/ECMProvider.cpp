@@ -1,4 +1,4 @@
-#include "gz_bipedal/ECMProvider.h"
+#include "ECMProvider.h"
 
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
@@ -23,7 +23,7 @@ AddSystem() on this system
 void ECMProvider::Configure(const ignition::gazebo::Entity& entity,
     const std::shared_ptr<const sdf::Element>&,
     const ignition::gazebo::EntityComponentManager& ecm,
-    const ignition::gazebo::EventManager& eventMgr)
+    ignition::gazebo::EventManager& eventMgr)
 {
     // TODO
     if (!ecm.EntityHasComponentType(entity, 
