@@ -3,7 +3,8 @@
 #include <gz/sim/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
-#include <ignition/common.hh>
+#include <gz/sim/components/Name.hh>
+#include <gz/sim/components/World.hh>
 #include <memory>
 
 
@@ -28,10 +29,12 @@ class ECMProvider: public ignition::gazebo::System, public ignition::gazebo::ISy
         const std::shared_ptr<const sdf::Element>&, 
         const ignition::gazebo::EntityComponentManager& ecm,
         ignition::gazebo::EventManager& eventMgr);
+        const std::string getExistingComponentData();
     
     private:
         std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_ptr_;
         std::shared_ptr<ignition::gazebo::EntityComponentManager> eventMgr_ptr_;
+        std::string world_name_;
 
 };
 
