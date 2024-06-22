@@ -1,3 +1,12 @@
+/*
+TODO: Uneccessary bc blackbird is already declared in `empty.world`
+
+allow us to spawn the blackbird without 
+explicitly declaring it in the world file?
+
+useful for inserting some arbitrary robot
+*/
+
 #include <memory>
 
 #ifndef WORLD_H

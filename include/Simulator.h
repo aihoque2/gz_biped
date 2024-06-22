@@ -28,13 +28,13 @@ class TrainSimulator{
     */
 
     public:
-        TrainSimulator(); // constructor
+        TrainSimulator(bool gui); // constructor
         ~TrainSimulator(); // desctructor
         std::unique_ptr<gz::sim::Server> server_;
-        std::unique_ptr<TInyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
+        std::unique_ptr<TinyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
 
         void pause();
-        void set_action(double *action) // mainly a helper for step() to make modifying axn_ thread-safe
+        void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe
         void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
@@ -42,8 +42,8 @@ class TrainSimulator{
 
         // "Simulation Resources"
         // TODO: should these be "smart pointers"? 
-        std::shared_ptr<ignition::gazebo::EventManager> eventMgr_;
-        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_;
+        ignition::gazebo::EventManager* event_mgr_;
+        ignition::gazebo::EntityComponentManager* ecm_;
 
         // "PhsyicsData" not sure if needed
         double rtf = -1;

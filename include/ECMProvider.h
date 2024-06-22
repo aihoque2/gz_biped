@@ -26,14 +26,13 @@ class ECMProvider: public ignition::gazebo::System, public ignition::gazebo::ISy
     public:
         ECMProvider(); // create the ignition gazebo system
         void Configure(const ignition::gazebo::Entity& entity,
-        const std::shared_ptr<const sdf::Element>&, 
-        const ignition::gazebo::EntityComponentManager& ecm,
-        ignition::gazebo::EventManager& eventMgr);
-        const std::string getExistingComponentData();
+                        const std::shared_ptr<const sdf::Element>&, 
+                        const ignition::gazebo::EntityComponentManager& ecm,
+                        const ignition::gazebo::EventManager& eventMgr);
     
     private:
-        std::shared_ptr<ignition::gazebo::EntityComponentManager> ecm_ptr_;
-        std::shared_ptr<ignition::gazebo::EntityComponentManager> eventMgr_ptr_;
+        const ignition::gazebo::EntityComponentManager* ecm_ptr_; // not the owner
+        const ignition::gazebo::EventManager* evtmgr_ptr_; // not the owner
         std::string world_name_;
 
 };

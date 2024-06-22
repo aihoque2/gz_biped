@@ -23,7 +23,7 @@ AddSystem() on this system
 void ECMProvider::Configure(const gz::sim::Entity& entity,
     const std::shared_ptr<const sdf::Element>&,
     const ignition::gazebo::EntityComponentManager& ecm,
-    ignition::gazebo::EventManager& eventMgr)
+    const ignition::gazebo::EventManager& eventMgr)
 {
     // TODO
     if (!ecm.EntityHasComponentType(entity, 
@@ -44,6 +44,6 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
     
 
     this->ecm_ptr_ = &ecm; // point to the addy
-    this->eventMgr_ptr_ = &eventMgr;
+    this->evtmgr_ptr_ = &eventMgr; // point to the addy
     std::cout << "SUCCES: obtained EntityComponentManager & EvenManager from World: " << this->world_name_ << std::endl;
 }
