@@ -36,7 +36,7 @@ class JointController: public ignition::gazebo::System,
                          public ignition::gazebo::ISystemPreUpdate 
 {
     public:
-        JointController();
+        JointController(std::mutex &axnMutex);
         ~JointController();
 
         // inherited from ISystemConfigure ABC
@@ -51,7 +51,7 @@ class JointController: public ignition::gazebo::System,
 
     private:
         std::shared_ptr<double[]> action_;// commanded action vector for each joint, as sepcified in docs
-        std::mutex actionMutex; // lock which function can modify the action ptr
+        std::mutex axnMutex; // lock which function can modify the action ptr
 };
 
 

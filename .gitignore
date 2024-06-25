@@ -1,3 +1,4 @@
 build/
 sourcing.sh
 .vscode
+config.cmake

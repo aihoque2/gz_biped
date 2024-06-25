@@ -1,13 +1,6 @@
 #include "Simulator.h"
-#include "ECMProvider.h"
+#include "process.hpp"
 
-#include <gz/sim/Server.hh>
-#include <gz/common/Console.hh>
-#include <ignition/gazebo/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
-#include <memory>
 
 #define WORLD_IDX 0;
 
@@ -76,6 +69,8 @@ void TrainSimulator::step(vector<double> inputAction){
         axn_[i] = inputAction[i]
     }
 }
+
+/*stepFew()*/
 
 /* pause()
 * pause the simulation

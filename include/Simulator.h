@@ -1,10 +1,19 @@
+
+// local includes
+#include "ECMProvider.h"
+
+// higher lvl includes
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
 #include <ignition/gazebo/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
+#include <ignition/transport/Node.hh>
+
 #include <memory>
+
+
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
 aobout being able to pull full state out in valid manner
@@ -41,7 +50,6 @@ class TrainSimulator{
         void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
 
         // "Simulation Resources"
-        // TODO: should these be "smart pointers"? 
         ignition::gazebo::EventManager* event_mgr_;
         ignition::gazebo::EntityComponentManager* ecm_;
 
@@ -62,6 +70,7 @@ class TrainSimulator{
         
         std::shared_ptr<double[]> axn_; // 1D 10-vector to represent torques we send on each joint
         std::mutex axnMutex; // lock used for set_action() and get_action()
+        std::mutex stateMutex; // lock used for publishing state info
 
         int STATE_SIZE;
         int ACTION_SIZE;
