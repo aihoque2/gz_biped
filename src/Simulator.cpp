@@ -1,7 +1,4 @@
 #include "Simulator.h"
-#include "process.hpp"
-
-
 #define WORLD_IDX 0;
 
 using namespace ignition;
@@ -28,7 +25,7 @@ TrainSimulator::TrainSimulator(bool gui){
     */
     if (gui){
         // Spawn a new process with the GUI
-        gui_ = std::make_unique<TinyProcessLib::Process>(
+        gui_ = std::make_unique<boost::process::child>(
             "ign gazebo -g -v 4");
 
         bool guiServiceExists = false;

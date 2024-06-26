@@ -10,7 +10,7 @@
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
 #include <ignition/transport/Node.hh>
-
+#include <boost/process.hpp>
 #include <memory>
 
 
@@ -18,6 +18,7 @@
 NOTE: NO ROS2 to WORRY about here. only have to worry
 aobout being able to pull full state out in valid manner
 
+the ROS2 nodes to step and publish will be written with rclpy.
 */
 
 
@@ -40,7 +41,7 @@ class TrainSimulator{
         TrainSimulator(bool gui); // constructor
         ~TrainSimulator(); // desctructor
         std::unique_ptr<gz::sim::Server> server_;
-        std::unique_ptr<TinyProcessLib::Process> gui_; // note that gui of ignition simulation runs as a separate process.
+        std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
         void pause();
         void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe

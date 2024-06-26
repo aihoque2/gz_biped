@@ -6,18 +6,17 @@ include(config.cmake)
 
 # cmake_print_variables(PROJECT_SOURCE_DIR)
 
-# Global Variables
-message("TINYPROCESS_PATH: ${TINYPROCESSLIB_PATH}")
-message(PROJECT_SOURCE_DIR: "${PROJECT_SOURCE_DIR}")
-message(CMAKE_SOURCE_DIR: "${CMAKE_SOURCE_DIR}")
 
 # we use std::optional here, we need 17
-set(CMAKE_CXX_STANDARD 17) 
+set(CMAKE_CXX_STANDARD 17)
 
 
 # Find the Gazebo packages
 find_package(ignition-gazebo6 REQUIRED)
 find_package(ignition-rendering6 REQUIRED)
+
+# Find Boost for subprocess
+find_package(Boost 1.74.0 REQUIRED)
 
 add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
 target_include_directories(ecm_provider PUBLIC
@@ -30,7 +29,7 @@ add_library(train_simulator include/Simulator.h src/Simulator.cpp)
 # target_include_directories(train_simulator PUBLIC
 #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
-target_link_libraries(train_simulator ecm_provider) # link TrainSimulator with ECMProvider
+target_link_libraries(train_simulator ecm_provider tiny-process-library) # link TrainSimulator with ECMProvider
 
 add_executable(launch_empty_world src/main.cpp)
 
