@@ -15,7 +15,7 @@
 int main(int argc, char **argv)
 {
 
-    TrainSimulator my_sim;
+    TrainSimulator my_sim(true);
     bool hasBlackbird = my_sim->server_.HasEntity("blackbird", 0);
     std::cout << "hasBlackbird: " << hasBlackbird << std::endl;
     auto paused = my_sim->server_.Paused(); // need to auto bc it returns std::optional
