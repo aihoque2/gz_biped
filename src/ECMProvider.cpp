@@ -20,10 +20,10 @@ ECMProvider::ECMProvider(): ignition::gazebo::System(){}
 function that is run when the server does 
 AddSystem() on this system
 */
-void ECMProvider::Configure(const gz::sim::Entity& entity,
+void ECMProvider::Configure(const ignition::gazebo::Entity& entity,
     const std::shared_ptr<const sdf::Element>&,
-    const ignition::gazebo::EntityComponentManager& ecm,
-    const ignition::gazebo::EventManager& eventMgr)
+    ignition::gazebo::EntityComponentManager& ecm,
+    ignition::gazebo::EventManager& eventMgr)
 {
     // TODO
     if (!ecm.EntityHasComponentType(entity, 
@@ -46,4 +46,12 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
     this->ecm_ptr_ = &ecm; // point to the addy
     this->evtmgr_ptr_ = &eventMgr; // point to the addy
     std::cout << "SUCCES: obtained EntityComponentManager & EvenManager from World: " << this->world_name_ << std::endl;
+}
+
+const ignition::gazebo::EntityComponentManager* ECMProvider::getECM(){
+    return this->ecm_ptr_;
+}
+
+const ignition::gazebo::EventManager* ECMProvider::getEvtMgr(){
+    return this->evtmgr_ptr_;
 }

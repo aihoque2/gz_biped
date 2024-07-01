@@ -1,5 +1,5 @@
 #include "Simulator.h"
-#define WORLD_IDX 0;
+#define WORLD_IDX 0
 
 using namespace ignition;
 using namespace gazebo;
@@ -9,7 +9,7 @@ TrainSimulator::TrainSimulator(bool gui){
     
     // debug
     gz::common::Console::SetVerbosity(4);
-    gz::sim::serverConfig config; 
+    gz::sim::ServerConfig config; 
     serverConfig.SetSdfFile("world/empty.world");
 
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
@@ -48,8 +48,8 @@ TrainSimulator::TrainSimulator(bool gui){
         // end gui bracket
     } // endif
 
-    ecm_ = provider->ecm_ptr_;
-    event_mgr_ = provider->event_mgr_ptr_;
+    ecm_ = provider->getECM();
+    event_mgr_ = provider->getEvtMgr();
 
     //TODO: get robot's joint states and torso pose set.
 
@@ -58,10 +58,12 @@ TrainSimulator::TrainSimulator(bool gui){
 
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
+
     gui_->wait_for(std::chrono::seconds(5));
+    
     if(gui_->running()){
-        std::cerr << "TRAINSIMULATOR GUI FAILED TO EXIT IN DESTRUCTOR" << std::endl << std::flush;
-        std::cerr << "Forcing shutdown of gui...";
+        std::cerr << "TRAINSIMULATOR GUI FAILED TO EXIT WITHIN A TIMELY MANNER" << std::endl << std::flush;
+        std::cerr << "Forcing shutdown of gui..."<< std::endl << std::flush;
         gui_->terminate();
         std::this_thread::sleep_for(std::chrono::seconds(5));
         gui_->wait();
@@ -79,10 +81,14 @@ TrainSimulator::~TrainSimulator(){
 /* step() 
 * step 1 ms in the simulation
 */
-void TrainSimulator::step(vector<double> inputAction){
+void TrainSimulator::step(std::vector<double> inputAction){
+    // run our action
     for (int i = 0; i < 10; i++){
+        std::lock_guard<std::mutex> guard(axnMutex);
         axn_[i] = inputAction[i];
     }
+
+    bool stepped = server_->RunOnce(true); // true for running the simulation steps paused.
 }
 
 /*stepFew()*/

@@ -45,14 +45,17 @@ class TrainSimulator{
 
         void pause();
         void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe
-        void step(double *action); // 10-array of joint commands to send each joint and step environment with joint action
+        
+        // should this be void, or should this return state values?
+        void step(std::vector<double> action); // 10-array of joint commands to send each joint and step environment with joint action
+        
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
 
         // "Simulation Resources"
-        ignition::gazebo::EventManager* event_mgr_;
-        ignition::gazebo::EntityComponentManager* ecm_;
+        const ignition::gazebo::EventManager* event_mgr_; // not the owner, so raw ptr OK
+        const ignition::gazebo::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
 
         // "PhsyicsData" not sure if needed
         double rtf = -1;

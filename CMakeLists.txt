@@ -9,6 +9,7 @@ include(config.cmake)
 
 # we use std::optional here, we need 17
 set(CMAKE_CXX_STANDARD 17)
+set(Boost_USE_MULTITHREADED ON)
 
 
 # Find the Gazebo packages
@@ -17,6 +18,11 @@ find_package(ignition-rendering6 REQUIRED)
 
 # Find Boost for subprocess
 find_package(Boost 1.74.0 REQUIRED)
+if(Boost_FOUND)
+  message(STATUS "Boost found: ${Boost_INCLUDE_DIRS}")
+else()
+  message(FATAL_ERROR "Boost not found")
+endif()
 
 add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
 target_include_directories(ecm_provider PUBLIC
@@ -26,13 +32,11 @@ target_link_libraries(ecm_provider ignition-gazebo6::ignition-gazebo6)
 
 
 add_library(train_simulator include/Simulator.h src/Simulator.cpp)
-# target_include_directories(train_simulator PUBLIC
-#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
+target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
+target_link_libraries(train_simulator ecm_provider ${Boost_LIBRARIES}) # link TrainSimulator with ECMProvider
 
-target_link_libraries(train_simulator ecm_provider tiny-process-library) # link TrainSimulator with ECMProvider
-
+# our executable (or binary for bazel bitches)
 add_executable(launch_empty_world src/main.cpp)
-
 target_link_libraries(launch_empty_world train_simulator)
 
 # Link against the Gazebo libraries
