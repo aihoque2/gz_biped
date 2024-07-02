@@ -41,7 +41,8 @@ class JointController: public ignition::gazebo::System,
 
         // inherited from ISystemConfigure ABC
         void Configure(const ignition::gazebo::Entity& entity,
-                        const ignition::gazebo::EntityComponentManager& ecm,
+                        const std::shared_ptr<const sdf::Element>&, //doc-inherited
+                        ignition::gazebo::EntityComponentManager& ecm,
                         ignition::gazebo::EventManager& eventMgr);
 
         // inherited from ISystemPreUpdate ABC

@@ -35,7 +35,7 @@ add_library(train_simulator include/Simulator.h src/Simulator.cpp)
 target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(train_simulator ecm_provider ${Boost_LIBRARIES}) # link TrainSimulator with ECMProvider
 
-# our executable (or binary for bazel bitches)
+# our executable (or binary for Bazel bitches)
 add_executable(launch_empty_world src/main.cpp)
 target_link_libraries(launch_empty_world train_simulator)
 

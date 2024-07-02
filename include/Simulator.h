@@ -47,8 +47,10 @@ class TrainSimulator{
         void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe
         
         // should this be void, or should this return state values?
-        void step(std::vector<double> action); // 10-array of joint commands to send each joint and step environment with joint action
+        void step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
         
+        void stepFew(std::vector<double> inputAction, int numSteps);
+
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         void run(bool train); // just run the simulation like a main example...we'll figure out the rest later

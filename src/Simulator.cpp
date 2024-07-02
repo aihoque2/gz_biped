@@ -67,6 +67,7 @@ TrainSimulator::~TrainSimulator(){
         gui_->terminate();
         std::this_thread::sleep_for(std::chrono::seconds(5));
         gui_->wait();
+        std::cerr << "Finished waiting on subprocess"<< std::endl << std::flush;
 
     }
 
@@ -79,19 +80,38 @@ TrainSimulator::~TrainSimulator(){
 
 
 /* step() 
+* Given our inputAction
 * step 1 ms in the simulation
 */
 void TrainSimulator::step(std::vector<double> inputAction){
+    // run our action
+    {
+        std::lock_guard<std::mutex> guard(axnMutex);
+        for (int i = 0; i < 10; i++){
+            axn_[i] = inputAction[i];
+        }
+        
+    }
+    bool stepped = server_->RunOnce(true); // true for running the simulation steps paused.
+}    
+
+
+/* stepFew()
+* given our inputAction and numSteps
+* step (numSteps) milliseconds in the 
+* simulation with the given inputAction 
+* put for the first frame of these steps.
+*/
+void TrainSimulator::stepFew(std::vector<double> inputAction, int numSteps){
     // run our action
     for (int i = 0; i < 10; i++){
         std::lock_guard<std::mutex> guard(axnMutex);
         axn_[i] = inputAction[i];
     }
+    
+    bool stepped = server_->Run(true, numSteps); // true for running the simulation steps paused.
+}    
 
-    bool stepped = server_->RunOnce(true); // true for running the simulation steps paused.
-}
-
-/*stepFew()*/
 
 /* pause()
 * pause the simulation
