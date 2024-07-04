@@ -5,6 +5,7 @@
 // higher lvl includes
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
+#include <gz/sim/Joint.hh>
 #include <ignition/gazebo/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
@@ -13,15 +14,12 @@
 #include <boost/process.hpp>
 #include <memory>
 
-
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
 aobout being able to pull full state out in valid manner
 
 !!!the ROS2 nodes to step and publish will be written with rclpy!!!
 */
-
-
 
 #ifndef TRAINSIMULATOR_H
 #define TRAINSIMULATOR_H
@@ -38,22 +36,31 @@ class TrainSimulator{
     */
 
     public:
+
+        /*
+        functions
+        */
         TrainSimulator(bool gui); // constructor
         ~TrainSimulator(); // desctructor
-        std::unique_ptr<gz::sim::Server> server_;
-        std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
-        void pause();
-        void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe
-        
         // should this be void, or should this return state values?
         void step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
-        
         void stepFew(std::vector<double> inputAction, int numSteps);
 
+        void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe       
+        void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
+
+        void pause();
+        void unpause();
+
+        /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
-        void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
+        /*
+        variables 
+        */
+        std::unique_ptr<gz::sim::Server> server_;
+        std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
         // "Simulation Resources"
         const ignition::gazebo::EventManager* event_mgr_; // not the owner, so raw ptr OK
@@ -63,9 +70,6 @@ class TrainSimulator{
         double rtf = -1;
         double maxStepSize = -1;
         double realtimeUpdateRate= -1;
-
-        bool valid_physics();
-        bool spawn_blackbird();
 
     private:
         gz::sim::ServerConfig serverConfig;
@@ -80,6 +84,8 @@ class TrainSimulator{
 
         int STATE_SIZE;
         int ACTION_SIZE;
+
+        bool hasGUI;
 
 };
 

@@ -15,6 +15,12 @@ Constructor
 */
 ECMProvider::ECMProvider(): ignition::gazebo::System(){}
 
+ECMProvider::~ECMProvider(){
+    ecm_ptr_ = nullptr;
+    evtmgr_ptr_ = nullptr;
+
+}
+
 
 /*
 function that is run when the server does 
@@ -25,7 +31,7 @@ void ECMProvider::Configure(const ignition::gazebo::Entity& entity,
     ignition::gazebo::EntityComponentManager& ecm,
     ignition::gazebo::EventManager& eventMgr)
 {
-    // TODO
+
     if (!ecm.EntityHasComponentType(entity, 
     gz::sim::components::World::typeId)){
         std::cerr << "ECMProvider system was not inserted in a world entity" << std::endl;

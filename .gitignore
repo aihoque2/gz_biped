@@ -2,3 +2,4 @@ build/
 sourcing.sh
 .vscode
 config.cmake
+valgrind.txt
