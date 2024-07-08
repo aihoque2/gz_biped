@@ -5,7 +5,8 @@
 // higher lvl includes
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
-#include <gz/sim/Joint.hh>
+#include <ignition/gazebo/components/Name.hh>
+#include <ignition/gazebo/components/Joint.hh>
 #include <ignition/gazebo/ServerConfig.hh>
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
