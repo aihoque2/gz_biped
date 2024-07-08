@@ -1,17 +1,29 @@
 #include "Simulator.h"
 #define WORLD_IDX 0
 
-using namespace ignition;
-using namespace gazebo;
-using namespace systems;
+#define STATE_SIZE 30
+#define ACTION_SIZE 10
+
+
 
 TrainSimulator::TrainSimulator(bool gui){
     
+    axn_ = std::shared_ptr<double[]>(new double[ACTION_SIZE], std::default_delete<double[]>());
+    state_ =std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
+    
+    for (int i = 0; i < ACTION_SIZE; i++){
+        axn_[i] = 0.0;
+    }
+    
+    for (int i = 0; i < STATE_SIZE; i++){
+        state_[i] = 0.0; // state is defined by the LaTeX document
+    }
+
     // debug
     gz::common::Console::SetVerbosity(4);
     gz::sim::ServerConfig config; 
     serverConfig.SetSdfFile("world/empty.world");
-
+    
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
 
     // adding world idx
@@ -55,7 +67,17 @@ TrainSimulator::TrainSimulator(bool gui){
 
     // TODO: get robot's joint states and torso pose set.
     // based on gz-sim/examples
-    // auto joints = ecm_->EntitiesByComponents(components::Joint());
+    // auto joints = ecm_->EntitiesByComponents(gz::sim::components::Joint());
+    // std::cout << "size of joints array: " << joints.size() << std::endl;
+
+    auto graph = ecm_->Entities();
+    auto vertices = graph.Vertices();
+
+    std::cout << "number of vertices: " << vertices.size() << std::endl;
+
+    for (auto vertex : vertices){
+        
+    }
 
 }
 

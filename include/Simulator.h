@@ -77,13 +77,10 @@ class TrainSimulator{
         std::string worldFile; // filename for the world
 
         std::shared_ptr<double[]> state_; // 1D 30-vector to represent our state
-        
         std::shared_ptr<double[]> axn_; // 1D 10-vector to represent torques we send on each joint
+        
         std::mutex axnMutex; // lock used for set_action() and get_action()
         std::mutex stateMutex; // lock used for publishing state info
-
-        int STATE_SIZE;
-        int ACTION_SIZE;
 
         bool hasGUI;
 
