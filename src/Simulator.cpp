@@ -75,12 +75,15 @@ TrainSimulator::TrainSimulator(bool gui){
 
     std::cout << "number of vertices: " << vertices.size() << std::endl;
 
+    // these vertices aren't even the whole entity.
     for (auto vertex : vertices){
-        
+        auto vertexRef = vertex.second.get();
+        auto entity = vertexRef.Data();
+        //std::string name = ecm_->Component<ignition::gazebo::components::Name>(entity)->Data();
+        std::cout << "name of some entity: " << name << std::endl;
     }
 
 }
-
 
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
