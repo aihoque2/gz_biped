@@ -15,7 +15,12 @@ JointEffortController.h
 
 joint effort controller for the bipedal. acts as plugin
 but i'm not making a ignition transport node to publish the data.
+
+cites:
+like gz-sim::systems::ApplyJointForce
 */
+
+
 
 std::vector<std::string> joint_names = {"l_hip_roll", 
                                         "l_hip_yaw", 
@@ -51,8 +56,8 @@ class JointController: public ignition::gazebo::System,
 
     private:
         std::shared_ptr<double[]> action_;// commanded action vector for each joint, as sepcified in docs
-        std::mutex& axnMutex_; // lock which function can modify the action ptr
-        std::unordered_map<std::string, gz::sim::Entity*> jointMap_; // Map each joint name to its entity.
+        std::mutex& axn_mutex_; // lock which function can modify the action ptr
+        std::unordered_map<std::string, gz::sim::Entity*> joint_map_; // Map each joint name to its entity.
 };
 
 
