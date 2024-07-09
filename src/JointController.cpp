@@ -65,13 +65,18 @@ void JointController::PreUpdate(const gz::sim::UpdateInfo& info,
     std::lock_guard<std::mutex> lock(axnMutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jntNm = JOINT_NAMES[i];
-        gz::sim::Entity entityPtr = joint_map_[jntNm];
-        
-        // null entity error
-        if (entityPtr == nullptr){
-            throw std::runtime_error("JointController::PreUpdate(): entity: " + jntNm + " returned NULL");
+
+        // null entity error check (prevent segfaults)
+        if (joint_map_[jntNm] == nullptr){
+            throw std::runtime_error("JointController::PreUpdate(): entity: " + jntNm + " returned NULL. wtf");
         }
 
+        gz::sim::Entity joint = *joint_map_[jntNm];
+        
 
+        // send force command       
+        auto force = ecm_.Component<components::JointForceCmd>(joint);
+        force->Data()[0] += axn_[i];
+        axn_[i] = 0.0;
     }
 }
