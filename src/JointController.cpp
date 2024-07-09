@@ -23,7 +23,7 @@ JointController::JointController(std::mutex& axnMutex, std::shared_ptr<double[]>
 
 }
 
-JointController::Configure(const ignition::gazebo::Entity& entity,
+void JointController::Configure(const ignition::gazebo::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, //doc-inherited
                         ignition::gazebo::EntityComponentManager& ecm,
                         ignition::gazebo::EventManager& eventMgr)
@@ -43,5 +43,17 @@ JointController::Configure(const ignition::gazebo::Entity& entity,
     }
 
     std::cout << "jointMap_ creation completed. Here is the size: " << jointMap_.size() << std::endl;
+}
+
+void JointController::PreUpdate(const gz::sim::UpdateInfo& info,
+                        const gz::sim::EntityComponentManager& ecm)
+{
+    /*
+    Torque msg updates
+    */
+    std::lock_guard<std::mutex> lock(axnMutex_); // lock our axn array
+    for (int i =0; i < joint_names.size(); i++){
+        
+    }
 
 }

@@ -34,7 +34,7 @@ TrainSimulator::TrainSimulator(bool gui){
     }
 
     /*
-    TODO: gui code
+    gui code
     */
     hasGUI = gui; // need this so destructor doesn't segfault in headless
     if (gui){
@@ -65,9 +65,7 @@ TrainSimulator::TrainSimulator(bool gui){
     ecm_ = provider->getECM();
     event_mgr_ = provider->getEvtMgr();
 
-    // TODO: get robot's joint states and torso pose set.
-    // based on gz-sim/examples
-    
+    // TODO: set up the controller
 
 
 }
