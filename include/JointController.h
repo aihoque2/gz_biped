@@ -53,6 +53,7 @@ class JointController: public ignition::gazebo::System,
     private:
         std::shared_ptr<double[]> action_;// commanded action vector for each joint, as sepcified in docs
         std::mutex axnMutex_; // lock which function can modify the action ptr
+        std::unordered_map<std::string, gz::sim::Entity*> jointMap_; // Map each joint name to its entity.
 };
 
 

@@ -67,15 +67,8 @@ TrainSimulator::TrainSimulator(bool gui){
 
     // TODO: get robot's joint states and torso pose set.
     // based on gz-sim/examples
-    auto joints = ecm_->EntitiesByComponents(gz::sim::components::Joint());
-    // std::cout << "size of joints array: " << joints.size() << std::endl;
+    
 
-    for (auto joint : joints){
-        if (ecm_->EntityHasComponentType(joint, gz::sim::components::Name().typeId)){
-            std::string name = ecm_->Component<gz::sim::components::Name>(joint)->Data();
-            std::cout << "name of joint: " << name << std::endl;
-        }
-    }
 
 }
 

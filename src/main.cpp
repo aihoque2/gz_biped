@@ -22,17 +22,19 @@ int main(int argc, char **argv)
     std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
+
+    std::cout << "first run...." << std::endl; // debug
     my_sim.server_->Run(true, 200, false);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
+    std::cout << "second run...." << std::endl; // debug
     my_sim.server_->Run(true, 300, false);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
+    std::cout << "third run...." << std::endl; // debug
     my_sim.server_->Run(true, 300, false);
-    // while(true){
-    //     // listen to input for a button and during each button press, step environment
-       
-    // }
+
+    my_sim.pause(); // quick test for me
 
     return 0;
 }

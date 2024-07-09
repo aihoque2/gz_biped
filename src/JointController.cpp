@@ -2,6 +2,7 @@
 
 
 
+// order our joint commands will be recieved in
 std::vector<std::string> joint_names = {"l_hip_roll", 
                                         "l_hip_yaw", 
                                         "l_hip_pitch", 
@@ -19,9 +20,28 @@ JointController::JointController(std::mutex& axnMutex, std::shared_ptr<double[]>
 {
     action_ = axn; // up the reference count
     axnMutex_ = axnMutex; // share the same mutex?
+
 }
 
 JointController::Configure(const ignition::gazebo::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, //doc-inherited
                         ignition::gazebo::EntityComponentManager& ecm,
-                        ignition::gazebo::EventManager& eventMgr){}
+                        ignition::gazebo::EventManager& eventMgr)
+{
+    auto joints = ecm_->EntitiesByComponents(gz::sim::components::Joint());
+    // std::cout << "size of joints array: " << joints.size() << std::endl;
+
+    for (auto joint : joints){
+        if (ecm_->EntityHasComponentType(joint, gz::sim::components::Name().typeId)){
+            std::string name = ecm_->Component<gz::sim::components::Name>(joint)->Data();
+            std::cout << "name of joint: " << name << std::endl;
+
+            ignition::gazebo::Entity* entityPtr = &joint;
+
+            jointMap.insert(std::make_pair(name, entityPtr));
+        }
+    }
+
+    std::cout << "jointMap_ creation completed. Here is the size: " << jointMap_.size() << std::endl;
+
+}
