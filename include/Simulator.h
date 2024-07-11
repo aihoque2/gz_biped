@@ -1,6 +1,7 @@
 
 // local includes
 #include "ECMProvider.h"
+#include "JointController.h"
 
 // higher lvl includes
 #include <gz/sim/Server.hh>
@@ -17,13 +18,18 @@
 
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
-aobout being able to pull full state out in valid manner
+about being able to pull full state out in valid manner
 
 !!!the ROS2 nodes to step and publish will be written with rclpy!!!
 */
 
 #ifndef TRAINSIMULATOR_H
 #define TRAINSIMULATOR_H
+
+#define WORLD_IDX 0
+
+#define STATE_SIZE 30
+#define ACTION_SIZE 10
 
 /*Sim.h*/
 
@@ -48,7 +54,7 @@ class TrainSimulator{
         void step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
         void stepFew(std::vector<double> inputAction, int numSteps);
 
-        void set_action(double *action); // mainly a helper for step() to make modifying axn_ thread-safe       
+        void set_action(double action[ACTION_SIZE]); // mainly a helper for gym's step() to make modifying axn_ thread-safe       
         void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
 
         void pause();

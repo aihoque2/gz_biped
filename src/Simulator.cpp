@@ -1,10 +1,4 @@
 #include "Simulator.h"
-#define WORLD_IDX 0
-
-#define STATE_SIZE 30
-#define ACTION_SIZE 10
-
-
 
 TrainSimulator::TrainSimulator(bool gui){
     
@@ -26,12 +20,19 @@ TrainSimulator::TrainSimulator(bool gui){
     
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
 
-    // adding world idx
+    // adding ECMProvider idx
     auto provider = std::make_shared<ECMProvider>();
     const auto ok = server_->AddSystem(provider, WORLD_IDX);
     if (!ok){
         throw std::runtime_error("could not integrate ECMProvider into server");
     }
+
+    auto controller = std::make_shared<JointController>();
+    const auto ok =  server_->AddSystem(controller, WORLD_IDX);
+    if (!ok){
+        throw std::runtime_error("could not integrate JointController into server");
+    }
+    
 
     /*
     gui code
@@ -66,7 +67,6 @@ TrainSimulator::TrainSimulator(bool gui){
     event_mgr_ = provider->getEvtMgr();
 
     // TODO: set up the controller
-
 
 }
 

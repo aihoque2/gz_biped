@@ -1,4 +1,4 @@
-#include "gz_bipedal/JointController.h"
+#include "JointController.h"
 
 typedef gz::sim::components components;
 
@@ -20,6 +20,14 @@ JointController::JointController(std::mutex& axnMutex, std::shared_ptr<double[]>
 {
     action_ = axn; // up the reference count
     axn_mutex_ = axnMutex; // share the same mutex?
+
+}
+
+JointController::~JointController(std::mutex& axnMutex, std::shared_ptr<double[]> axn) : ignition::gazebo::System()
+{
+    for (auto name : JOINT_NAMES){
+        joint_map_[name] = nullptr;
+    }
 
 }
 
@@ -57,7 +65,7 @@ void JointController::Configure(const ignition::gazebo::Entity& entity,
 }
 
 void JointController::PreUpdate(const gz::sim::UpdateInfo& info,
-                        const gz::sim::EntityComponentManager& ecm)
+                        gz::sim::EntityComponentManager& ecm)
 {
     /*
     Torque msg updates

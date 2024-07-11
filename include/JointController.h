@@ -36,8 +36,8 @@ std::vector<std::string> joint_names = {"l_hip_roll",
 
 
 class JointController: public ignition::gazebo::System, 
-                         public ignition::gazebo::ISystemPreUpdate 
-                         public ignition::gazebo::ISystemConfigure,
+                         public ignition::gazebo::ISystemPreUpdate,
+                         public ignition::gazebo::ISystemConfigure
 {
     public:
         JointController(std::mutex &axnMutex);
@@ -51,7 +51,7 @@ class JointController: public ignition::gazebo::System,
 
         // inherited from ISystemPreUpdate ABC
         void PreUpdate(const gz::sim::UpdateInfo& info,
-                        const gz::sim::EntityComponentManager& ecm);
+                        gz::sim::EntityComponentManager& ecm);
 
 
     private:
