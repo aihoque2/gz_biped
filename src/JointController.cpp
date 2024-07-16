@@ -1,19 +1,7 @@
 #include "JointController.h"
 
 typedef gz::sim::components components;
-
-// order our joint commands will be recieved in
-std::vector<std::string> JOINT_NAMES = {"l_hip_roll", 
-                                        "l_hip_yaw", 
-                                        "l_hip_pitch", 
-                                        "l_knee", 
-                                        "l_ankle",
-                                        "r_hip_roll", 
-                                        "r_hip_yaw", 
-                                        "r_hip_pitch", 
-                                        "r_knee", 
-                                        "r_ankle"
-                                        };
+extern const std::vector<std::string> JOINT_NAMES;
 
 
 JointController::JointController(std::mutex& axnMutex, std::shared_ptr<double[]> axn) : ignition::gazebo::System()
@@ -73,6 +61,7 @@ void JointController::PreUpdate(const gz::sim::UpdateInfo& info,
     std::lock_guard<std::mutex> lock(axnMutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jntNm = JOINT_NAMES[i];
+        std::cout << "here's jntNm: " << jntNm << std::endl;
 
         // null entity error check (prevent segfaults)
         if (joint_map_[jntNm] == nullptr){

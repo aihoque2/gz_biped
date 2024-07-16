@@ -21,26 +21,28 @@ like gz-sim::systems::ApplyJointForce
 */
 
 
+#ifndef JOINTCONTROLLER_HPP
+#define JOINTCONTROLLER_HPP
 
-std::vector<std::string> joint_names = {"l_hip_roll", 
-                                        "l_hip_yaw", 
-                                        "l_hip_pitch", 
-                                        "l_knee", 
-                                        "l_ankle",
-                                        "r_hip_roll", 
-                                        "r_hip_yaw", 
-                                        "r_hip_pitch", 
-                                        "r_knee", 
-                                        "r_ankle"
-                                        };
 
+const std::vector<std::string> JOINT_NAMES = {"l_hip_roll", 
+                                "l_hip_yaw", 
+                                "l_hip_pitch", 
+                                "l_knee", 
+                                "l_ankle",
+                                "r_hip_roll", 
+                                "r_hip_yaw", 
+                                "r_hip_pitch", 
+                                "r_knee", 
+                                "r_ankle"
+                                };
 
 class JointController: public ignition::gazebo::System, 
                          public ignition::gazebo::ISystemPreUpdate,
                          public ignition::gazebo::ISystemConfigure
 {
     public:
-        JointController(std::mutex &axnMutex);
+        JointController(std::mutex &axnMutex, std::shared_ptr<double[]> axn);
         ~JointController();
 
         // inherited from ISystemConfigure ABC
@@ -58,6 +60,8 @@ class JointController: public ignition::gazebo::System,
         std::shared_ptr<double[]> action_;// commanded action vector for each joint, as sepcified in docs
         std::mutex& axn_mutex_; // lock which function can modify the action ptr
         std::unordered_map<std::string, gz::sim::Entity*> joint_map_; // Map each joint name to its entity.
+        
+
 };
 
-
+#endif

@@ -3,7 +3,7 @@
 TrainSimulator::TrainSimulator(bool gui){
     
     axn_ = std::shared_ptr<double[]>(new double[ACTION_SIZE], std::default_delete<double[]>());
-    state_ =std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
+    state_ = std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
     
     for (int i = 0; i < ACTION_SIZE; i++){
         axn_[i] = 0.0;
@@ -14,22 +14,23 @@ TrainSimulator::TrainSimulator(bool gui){
     }
 
     // debug
+    worldFile = "world/empty.world";
     gz::common::Console::SetVerbosity(4);
-    gz::sim::ServerConfig config; 
-    serverConfig.SetSdfFile("world/empty.world");
+    serverConfig.SetSdfFile(worldFile); //member var
     
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
 
     // adding ECMProvider idx
     auto provider = std::make_shared<ECMProvider>();
-    const auto ok = server_->AddSystem(provider, WORLD_IDX);
-    if (!ok){
+    const auto gotECM = server_->AddSystem(provider, WORLD_IDX);
+    if (!gotECM){
         throw std::runtime_error("could not integrate ECMProvider into server");
     }
 
-    auto controller = std::make_shared<JointController>();
-    const auto ok =  server_->AddSystem(controller, WORLD_IDX);
-    if (!ok){
+    // JointController plugin
+    auto controller = std::make_shared<JointController>(axnMutex, axn_);
+    const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
+    if (!gotCtrl){
         throw std::runtime_error("could not integrate JointController into server");
     }
     
