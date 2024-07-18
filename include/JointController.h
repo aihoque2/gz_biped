@@ -25,7 +25,7 @@ like gz-sim::systems::ApplyJointForce
 #define JOINTCONTROLLER_HPP
 
 
-const std::vector<std::string> JOINT_NAMES = {"l_hip_roll", 
+static const std::vector<std::string> JOINT_NAMES = {"l_hip_roll", 
                                 "l_hip_yaw", 
                                 "l_hip_pitch", 
                                 "l_knee", 
@@ -42,7 +42,7 @@ class JointController: public ignition::gazebo::System,
                          public ignition::gazebo::ISystemConfigure
 {
     public:
-        JointController(std::mutex &axnMutex, std::shared_ptr<double[]> axn);
+        JointController(std::mutex& axnMutex, std::shared_ptr<double[]> axn);
         ~JointController();
 
         // inherited from ISystemConfigure ABC

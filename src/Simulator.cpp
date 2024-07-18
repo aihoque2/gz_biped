@@ -27,6 +27,7 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate ECMProvider into server");
     }
 
+    // TODO: set up the controller
     // JointController plugin
     auto controller = std::make_shared<JointController>(axnMutex, axn_);
     const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
@@ -66,8 +67,6 @@ TrainSimulator::TrainSimulator(bool gui){
 
     ecm_ = provider->getECM();
     event_mgr_ = provider->getEvtMgr();
-
-    // TODO: set up the controller
 
 }
 

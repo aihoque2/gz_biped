@@ -1,13 +1,15 @@
 #include "JointController.h"
 
 typedef gz::sim::components components;
-extern const std::vector<std::string> JOINT_NAMES;
-
 
 JointController::JointController(std::mutex& axnMutex, std::shared_ptr<double[]> axn) : ignition::gazebo::System()
 {
     action_ = axn; // up the reference count
     axn_mutex_ = axnMutex; // share the same mutex?
+
+    for (auto name: JOINT_NAMES){
+        std::cout << "here's name of a joint: " << name << std::endl;
+    }
 
 }
 
