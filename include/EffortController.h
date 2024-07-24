@@ -5,12 +5,15 @@
 #include <ignition/rendering.hh>
 #include <ignition/gui.hh>
 #include <ignition/common.hh>
+#include <ignition/gazebo/components/Joint.hh>
+#include <ignition/gazebo/components/JointForceCmd.hh>
+#include <ignition/gazebo/components/Name.hh>
 #include <memory>
 #include <vector>
 #include <string>
 
 /*
-JointEffortController.h
+EffortController.h
 
 
 joint effort controller for the bipedal. acts as plugin
@@ -21,8 +24,8 @@ like gz-sim::systems::ApplyJointForce
 */
 
 
-#ifndef JOINTCONTROLLER_HPP
-#define JOINTCONTROLLER_HPP
+#ifndef EFFORTCONTROLLER_HPP
+#define EFFORTCONTROLLER_HPP
 
 
 static const std::vector<std::string> JOINT_NAMES = {"l_hip_roll", 
@@ -37,13 +40,13 @@ static const std::vector<std::string> JOINT_NAMES = {"l_hip_roll",
                                 "r_ankle"
                                 };
 
-class JointController: public ignition::gazebo::System, 
+class EffortController: public ignition::gazebo::System, 
                          public ignition::gazebo::ISystemPreUpdate,
                          public ignition::gazebo::ISystemConfigure
 {
     public:
-        JointController(std::mutex& axnMutex, std::shared_ptr<double[]> axn);
-        ~JointController();
+        EffortController(std::mutex& axnMutex, std::shared_ptr<double[]> axn);
+        ~EffortController();
 
         // inherited from ISystemConfigure ABC
         void Configure(const ignition::gazebo::Entity& entity,
@@ -57,10 +60,10 @@ class JointController: public ignition::gazebo::System,
 
 
     private:
-        std::shared_ptr<double[]> action_;// commanded action vector for each joint, as sepcified in docs
+        std::shared_ptr<double[]> axn_; // commanded action vector for each joint, as sepcified in docs
         std::mutex& axn_mutex_; // lock which function can modify the action ptr
         std::unordered_map<std::string, gz::sim::Entity*> joint_map_; // Map each joint name to its entity.
-        
+        int forceCompCreation;
 
 };
 

@@ -30,18 +30,18 @@ target_include_directories(ecm_provider PUBLIC
 target_link_libraries(ecm_provider ignition-gazebo6::ignition-gazebo6)
 
 # Joint Controller 
-add_library(joint_controller include/JointController.h src/JointController.cpp)
+add_library(joint_controller include/EffortController.h src/EffortController.cpp)
 target_include_directories(joint_controller PUBLIC
  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
 target_link_libraries(joint_controller ignition-gazebo6::ignition-gazebo6)
 
 # TrainSimulator
-add_library(train_simulator include/Simulator.h src/Simulator.cpp)
+add_library(train_simulator include/Simulator.h src/Simulator.cpp include/ECMProvider.h include/EffortController.h)
 #target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(train_simulator ecm_provider joint_controller ${Boost_LIBRARIES}) # link TrainSimulator with ECMProvider
 
-# our executable (or binary for Bazel)
+# our executable (or binary if you're familiar with Bazel)
 add_executable(launch_empty_world src/main.cpp)
 target_link_libraries(launch_empty_world train_simulator)
 

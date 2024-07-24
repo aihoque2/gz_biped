@@ -14,7 +14,6 @@
 
 int main(int argc, char **argv)
 {
-
     TrainSimulator my_sim(true);
     bool hasBlackbird = my_sim.server_->HasEntity("blackbird", 0);
     std::cout << "hasBlackbird: " << hasBlackbird << std::endl;
@@ -22,7 +21,6 @@ int main(int argc, char **argv)
     std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
-
     std::cout << "first run...." << std::endl; // debug
     my_sim.server_->Run(true, 200, false);
     std::this_thread::sleep_for(std::chrono::seconds(3));
