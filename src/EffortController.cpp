@@ -3,7 +3,7 @@
 namespace components = gz::sim::components;
 
 EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[]> axn) 
-: ignition::gazebo::System(), axn_mutex_(axnMutex), axn_(axn), 
+: ignition::gazebo::System(), axn_mutex_(axnMutex), axn_(axn), forceCompCreation(0)
 {
     for (auto name: JOINT_NAMES){
         std::cout << "here's name of a joint: " << name << std::endl;
@@ -64,7 +64,6 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         // null entity error check (prevent segfaults)
         if (joint_map_[jntNm] == nullptr){
             throw std::runtime_error("EffortController::PreUpdate(): entity: " + jntNm + " returned NULL. wtf");
-            ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({0.0})); 
         }
 
         gz::sim::Entity joint = *joint_map_[jntNm];
@@ -74,7 +73,9 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         if (force == nullptr){
             std::cout << "EffortController::PreUpdate(): entity: " + jntNm + " has NULL force Component ptr. Adding force component..." << std::endl << std::flush;
             ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({axn_[i]}));
+            forceCompCreation++;
         }
+
         else{
             std::cout << "here's force: " << force << std::endl;
             std::vector<double> data = force->Data();

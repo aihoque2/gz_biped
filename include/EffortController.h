@@ -58,6 +58,8 @@ class EffortController: public ignition::gazebo::System,
         void PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm);
 
+        int getForceCompCreation();
+
 
     private:
         std::shared_ptr<double[]> axn_; // commanded action vector for each joint, as sepcified in docs

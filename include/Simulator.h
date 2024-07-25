@@ -1,7 +1,7 @@
 
 // local includes
 #include "ECMProvider.h"
-#include "JointController.h"
+#include "EffortController.h"
 
 // higher lvl includes
 #include <gz/sim/Server.hh>

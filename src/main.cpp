@@ -34,5 +34,9 @@ int main(int argc, char **argv)
 
     my_sim.pause(); // quick test for me
 
+    int num_creations = getForceCompCreation();
+
+    std::cout << "here's num_creations" << num_creations << std::endl << std::flush;
+
     return 0;
 }

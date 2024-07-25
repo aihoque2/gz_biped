@@ -28,11 +28,11 @@ TrainSimulator::TrainSimulator(bool gui){
     }
 
     // TODO: set up the controller
-    // JointController plugin
-    auto controller = std::make_shared<JointController>(axnMutex, axn_);
+    // EffortController plugin
+    auto controller = std::make_shared<EffortController>(axnMutex, axn_);
     const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
     if (!gotCtrl){
-        throw std::runtime_error("could not integrate JointController into server");
+        throw std::runtime_error("could not integrate EffortController into server");
     }
     
 
@@ -130,7 +130,8 @@ void TrainSimulator::stepFew(std::vector<double> inputAction, int numSteps){
 }    
 
 
-/* pause()
+/* pause()        int getForceCompCreation();
+
 * pause the simulation
 */
 void TrainSimulator::pause(){
@@ -170,3 +171,6 @@ void TrainSimulator::unpause(){
 /* reset_simulation() */
 
 
+int TrainSimulator::getforceCompCreation(){
+    return forceCompCreation;
+}
