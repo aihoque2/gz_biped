@@ -6,7 +6,7 @@ EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[
 : ignition::gazebo::System(), axn_mutex_(axnMutex), axn_(axn), forceCompCreation(0)
 {
     for (auto name: JOINT_NAMES){
-        std::cout << "here's name of a joint: " << name << std::endl;
+        std::cout << "here's name of a joint: " << name << std::endl << std::flush;
     }
 }
 
@@ -15,6 +15,7 @@ EffortController::~EffortController()
     for (auto name : JOINT_NAMES){
         joint_map_[name] = nullptr;
     }
+    std::cout << "num times ForceCompCreation was called: " << forceCompCreation << std::endl;
 }
 
 void EffortController::Configure(const ignition::gazebo::Entity& entity,
@@ -77,7 +78,6 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         }
 
         else{
-            std::cout << "here's force: " << force << std::endl;
             std::vector<double> data = force->Data();
             data[0] = axn_[i];
         }

@@ -21,22 +21,20 @@ int main(int argc, char **argv)
     std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
-    std::cout << "first run...." << std::endl; // debug
-    my_sim.server_->Run(true, 200, false);
+    std::vector<double> axn1 = {0.0, 0.0, 2.0, 0.0, 0.0, /* Left Js */   
+                                        0.0, 0.0, 2.0, 0.0, 0.0 /* Right Js */}; 
+    std::cout << "first run with forces...." << std::endl; // debug
+    my_sim.stepFew(axn1, 10, 290);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
     std::cout << "second run...." << std::endl; // debug
     my_sim.server_->Run(true, 300, false);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
-    std::cout << "third run...." << std::endl; // debug
-    my_sim.server_->Run(true, 300, false);
+    // std::cout << "third run...." << std::endl; // debug
+    // my_sim.server_->Run(true, 300, false);
 
     my_sim.pause(); // quick test for me
-
-    int num_creations = getForceCompCreation();
-
-    std::cout << "here's num_creations" << num_creations << std::endl << std::flush;
 
     return 0;
 }
