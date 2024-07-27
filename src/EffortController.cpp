@@ -6,7 +6,7 @@ EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[
 : ignition::gazebo::System(), axn_mutex_(axnMutex), axn_(axn), forceCompCreation(0)
 {
     for (auto name: JOINT_NAMES){
-        std::cout << "here's name of a joint: " << name << std::endl << std::flush;
+        std::cout << "here's name of a joint: " << name << '\n';
     }
 }
 
@@ -48,7 +48,7 @@ void EffortController::Configure(const ignition::gazebo::Entity& entity,
         }
     }
 
-    std::cout << "joint_map_ creation completed. Here is the size: " << joint_map_.size() << std::endl;
+    std::cout << "joint_map_ creation completed. Here is the size: " << joint_map_.size() << std::endl << std::flush;
 }
 
 void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
@@ -60,16 +60,20 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
     std::lock_guard<std::mutex> lock(axn_mutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jntNm = JOINT_NAMES[i];
-        std::cout << "here's jntNm: " << jntNm << std::endl;
+        std::cout << "here's jntNm: " << jntNm << '\n';
 
         // null entity error check (prevent segfaults)
         if (joint_map_[jntNm] == nullptr){
             throw std::runtime_error("EffortController::PreUpdate(): entity: " + jntNm + " returned NULL. wtf");
+            return;
         }
 
         gz::sim::Entity joint = *joint_map_[jntNm];
     
         // send force command
+        // 07/25 refer to this on line 335: 
+        // https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_controller/JointController.cc
+        
         auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
         if (force == nullptr){
             std::cout << "EffortController::PreUpdate(): entity: " + jntNm + " has NULL force Component ptr. Adding force component..." << std::endl << std::flush;
@@ -78,8 +82,7 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         }
 
         else{
-            std::vector<double> data = force->Data();
-            data[0] = axn_[i];
+            *force = gz::sim::components::JointForceCmd({axn_[i]});
         }
         axn_[i] = 0.0;
     }

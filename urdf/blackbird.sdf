@@ -1,7 +1,6 @@
 
 <sdf version='1.7'>
   <model name='blackbird'>
-    <pose>0 0 2.25 0 0 0</pose>
     <material
       name="teal">
       <color

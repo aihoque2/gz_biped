@@ -15,9 +15,9 @@
 #include <ignition/transport/Node.hh>
 #include <boost/process.hpp>
 #include <memory>
-
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
+
 about being able to pull full state out in valid manner
 
 !!!the ROS2 nodes to step and publish will be written with rclpy!!!
@@ -35,8 +35,6 @@ about being able to pull full state out in valid manner
 
 class TrainSimulator{
     /*
-    TODO:
-
     Hello, I am TrainSimulator
     you shall attach me to a gym
     environment wrapper via pybind11

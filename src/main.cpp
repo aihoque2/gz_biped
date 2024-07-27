@@ -21,8 +21,8 @@ int main(int argc, char **argv)
     std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
-    std::vector<double> axn1 = {0.0, 0.0, 2.0, 0.0, 0.0, /* Left Js */   
-                                        0.0, 0.0, 2.0, 0.0, 0.0 /* Right Js */}; 
+    std::vector<double> axn1 = {0.0, 0.0, 6.0, 0.0, 0.0, /* Left Js */   
+                                        0.0, 0.0, 6.0, 0.0, 0.0 /* Right Js */}; 
     std::cout << "first run with forces...." << std::endl; // debug
     my_sim.stepFew(axn1, 10, 290);
     std::this_thread::sleep_for(std::chrono::seconds(3));

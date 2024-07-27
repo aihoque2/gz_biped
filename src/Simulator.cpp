@@ -27,7 +27,6 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate ECMProvider into server");
     }
 
-    // TODO: set up the controller
     // EffortController plugin
     auto controller = std::make_shared<EffortController>(axnMutex, axn_);
     const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
