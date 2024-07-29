@@ -4,7 +4,8 @@
 implement that header stuff here
 */
 
-JointStateUpdater::JointStateUpdater(std::shared_ptr<double[]> states):ignition::gazebo::System()
+JointStateUpdater::JointStateUpdater(std::shared_ptr<double[]> states)
+:ignition::gazebo::System()
 {
     state_ = states;
 }

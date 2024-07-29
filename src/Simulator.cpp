@@ -120,11 +120,12 @@ void TrainSimulator::step(std::vector<double> inputAction){
 */
 void TrainSimulator::stepFew(std::vector<double> inputAction, int axnSteps, int afterSteps){
     bool stepped = false;
+    std::lock_guard<std::mutex> guard(axnMutex);
+    
     // run our action steps
     for (int i = 0; i < axnSteps; i++){    
         // set our action
         for (int k = 0; k < 10; ++k){
-            std::lock_guard<std::mutex> guard(axnMutex);
             axn_[k] = inputAction[k];
         }
         stepped = server_->RunOnce(false);
