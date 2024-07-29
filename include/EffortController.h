@@ -50,13 +50,11 @@ class EffortController: public ignition::gazebo::System,
         void PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm);
 
-        int getForceCompCreation();
 
 
     private:
         std::shared_ptr<double[]> axn_; // commanded action vector for each joint, as sepcified in docs
         std::mutex& axn_mutex_; // lock which function can modify the action ptr
-        std::unordered_map<std::string, gz::sim::Entity*> joint_map_; // Map each joint name to its entity.
         int forceCompCreation;
 
 };

@@ -12,9 +12,6 @@ EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[
 
 EffortController::~EffortController()
 {
-    for (auto name : JOINT_NAMES){
-        joint_map_[name] = nullptr;
-    }
     std::cout << "num times ForceCompCreation was called: " << forceCompCreation << std::endl;
 }
 
@@ -23,55 +20,58 @@ void EffortController::Configure(const ignition::gazebo::Entity& entity,
                         ignition::gazebo::EntityComponentManager& ecm,
                         ignition::gazebo::EventManager& eventMgr)
 {
+    /*
+    Verify that the robot controller will match the numberr of joints.
+    */
     auto joints = ecm.EntitiesByComponents(gz::sim::components::Joint());
     // std::cout << "size of joints array: " << joints.size() << std::endl;
+    // verify joint array
+    if (joints.size() != 10){
+        throw std::runtime_error("EffortController::Configure(): joints array is not of size 10. It is instead of size: " + joints.size());
+    }
 
-    // mapping with the hash
-    for (auto joint : joints){
-        if (ecm.EntityHasComponentType(joint, gz::sim::components::Name().typeId)){
-            std::string name = ecm.Component<gz::sim::components::Name>(joint)->Data();
-            std::cout << "Configure() name of joint: " << name << std::endl;
-
-            // force command checking (Claim: avoid repeadetedely
-            // doing this in PreUpdate(). Proof is by def of
-            // PreUpdate() and Configure() systems). See cites.
-            auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
-
-            if (force == nullptr){
-                // create JointForceCmd for the joint
-                ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({0.0})); 
+    /*
+    verify each joint name
+    scope brackets to keep this set's 
+    memory temporary for O(1) lookup
+    */
+    {
+        std::unordered_set<std::string> name_set(JOINT_NAMES.begin(), JOINT_NAMES.end());
+        for (auto joint_name : JOINT_NAMES){
+        gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(joint_name), gz::sim::components::Joint());
+            if (joint == gz::sim::kNullEntity){
+                throw std::runtime_error("EffortController::Configure(): Unkown joint name found: " + joint_name);
             }
-
-            // insert to hashmap
-            ignition::gazebo::Entity* entityPtr = &joint;
-            joint_map_.insert(std::make_pair(name, entityPtr));
         }
     }
 
-    std::cout << "joint_map_ creation completed. Here is the size: " << joint_map_.size() << std::endl << std::flush;
+    std::cout << "EffortController::Configure() Joint Controller Verification completed" << std::endl << std::flush;
 }
 
 void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm)
 {
+
     /*
     Torque msg updates
+    We know our joint names.
+    We can just look them up.
     */
     std::lock_guard<std::mutex> lock(axn_mutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jntNm = JOINT_NAMES[i];
-        std::cout << "here's jntNm: " << jntNm << '\n';
+        std::cout << "EffortController::PreUpdate() here's jntNm: " << jntNm << "\n";
 
-        // null entity error check (prevent segfaults)
-        if (joint_map_[jntNm] == nullptr){
-            throw std::runtime_error("EffortController::PreUpdate(): entity: " + jntNm + " returned NULL. wtf");
-            return;
+        gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(jntNm), gz::sim::components::Joint());
+
+
+        if (!ecm.HasEntity(joint)){
+            throw std::runtime_error("EffortController::PreUpdate(): ECM doesn't have joint: " + jntNm);
         }
 
-        gz::sim::Entity joint = *joint_map_[jntNm];
     
         // send force command
-        // 07/25 refer to this on line 335: 
+        // refer to this on line 335: 
         // https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_controller/JointController.cc
         
         auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
@@ -81,8 +81,8 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
             forceCompCreation++;
         }
 
-        else{
-            *force = gz::sim::components::JointForceCmd({axn_[i]});
+        else{ 
+            force->Data()[0] = axn_[i];
         }
         axn_[i] = 0.0;
     }
