@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     
     /* Either or */
     // my_sim.server_->Run(true, 300, false);
-    my_sim.stepFew(axn1, 30, 290);
+    my_sim.StepFew(axn1, 30, 290);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
     std::cout << "second run...." << std::endl; // debug
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     std::cout << "third run...." << std::endl; // debug
     my_sim.server_->Run(true, 300, false);
 
-    my_sim.pause(); // quick test for me
+    my_sim.Pause(); // quick test for me
 
     return 0;
 }

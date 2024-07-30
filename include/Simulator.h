@@ -49,17 +49,17 @@ class TrainSimulator{
         ~TrainSimulator(); // desctructor
 
         // should this be void, or should this return state values?
-        void step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
-        void stepFew(std::vector<double> inputAction, int axnSteps, int afterSteps);
+        void Step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
+        void StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps);
 
-        void set_action(double action[ACTION_SIZE]); // mainly a helper for gym's step() to make modifying axn_ thread-safe       
-        void run(bool train); // just run the simulation like a main example...we'll figure out the rest later
+        void SetAction(double action[ACTION_SIZE]); // mainly a helper for gym's step() to make modifying axn_ thread-safe       
+        void Run(bool train); // just run the simulation like a main example...we'll figure out the rest later
 
-        void pause();
-        void unpause();
+        void Pause();
+        void Unpause();
 
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
-        void reset_simulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
+        void ResetSimulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         /*
         variables 

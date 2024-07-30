@@ -99,7 +99,7 @@ TrainSimulator::~TrainSimulator(){
 * Given our inputAction
 * step 1 ms in the simulation
 */
-void TrainSimulator::step(std::vector<double> inputAction){
+void TrainSimulator::Step(std::vector<double> inputAction){
     // run our action
     {
         std::lock_guard<std::mutex> guard(axnMutex);
@@ -118,7 +118,7 @@ void TrainSimulator::step(std::vector<double> inputAction){
 * simulation with the given inputAction 
 * put for the first frame of these steps.
 */
-void TrainSimulator::stepFew(std::vector<double> inputAction, int axnSteps, int afterSteps){
+void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps){
     bool stepped = false;
     std::lock_guard<std::mutex> guard(axnMutex);
     
@@ -140,7 +140,7 @@ void TrainSimulator::stepFew(std::vector<double> inputAction, int axnSteps, int 
 
 * pause the simulation
 */
-void TrainSimulator::pause(){
+void TrainSimulator::Pause(){
     auto running = this->server_->Running();
     if (!running){
         std::cout << "TrainSimulator already paused. ignoring pause() call ..." << std::endl << std::flush;
@@ -158,7 +158,7 @@ void TrainSimulator::pause(){
 * unpause the simulation
 */
 
-void TrainSimulator::unpause(){
+void TrainSimulator::Unpause(){
     auto running = this->server_->Running();
     if (running){
         std::cout << "TrainSimulator already running. ignoring unpause() call ..." << std::endl << std::flush;
