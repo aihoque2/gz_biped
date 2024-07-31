@@ -88,7 +88,6 @@ class TrainSimulator{
         std::mutex stateMutex; // lock used for publishing state info
 
         bool hasGUI;
-
 };
 
 #endif

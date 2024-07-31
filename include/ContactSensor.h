@@ -14,11 +14,8 @@ class BipedalContact : public gz::sim::System,
                         public gz::sim::ISystemPostUpdate
 {
     public:
-        BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted_);
+        BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted);
         ~BipedalContact() final = default;
-
-        void CreateSensors();
-        void UpdateSensors();
         
 
         // inherited from ISystemConfigure ABC
@@ -33,6 +30,6 @@ class BipedalContact : public gz::sim::System,
 
 
     private:
-        std::shared_ptr<bool[]> contacted; // footL, footR, Body
+        std::shared_ptr<bool[]> contacted_; // footL, footR, Body
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
 }
