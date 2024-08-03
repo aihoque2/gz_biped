@@ -20,7 +20,7 @@
           <izz>0.0088</izz>
         </inertia>
       </inertial>
-      <collision name='torso_fixed_joint_lump__mesh.001_collision'>
+      <collision name='torso_fixed_joint_lump_mesh_001_collision'>
         <pose>0 -0.0275 0.0175 0 -0 0</pose>
         <geometry>
           <box>
@@ -31,7 +31,7 @@
           <ambient>0.184313 0.92157 0.92157 1</ambient> <!-- RGB and alpha channel -->
         </material>
       </collision>
-      <collision name='torso_fixed_joint_lump__mesh.002_collision_1'>
+      <collision name='torso_fixed_joint_lump_mesh_002_collision_1'>
         <pose>0.15 0.10367 -0.00044 1.5708 -0 0</pose>
         <geometry>
           <cylinder>
@@ -43,7 +43,7 @@
           <ambient>0.184313 0.92157 0.92157 1</ambient> <!-- RGB and alpha channel -->
         </material>
       </collision>
-      <collision name='torso_fixed_joint_lump__mesh.003_collision_2'>
+      <collision name='torso_fixed_joint_lump_mesh_003_collision_2'>
         <pose>-0.15 0.10367 -0.00044 1.5708 -0 0</pose>
         <geometry>
           <cylinder>
@@ -91,7 +91,17 @@
           <ambient>0.184313 0.92157 0.92157 1</ambient> <!-- RGB and alpha channel -->
         </material>
       </visual>
+<!-- 
+      <sensor name="torso_contact_1" type='contact'>
+        <contact>
+          <collision>torso_fixed_joint_lump_mesh_001_collision</collision>
+          <collision>torso_fixed_joint_lump_mesh_002_collision</collision>
+          <collision>torso_fixed_joint_lump_mesh_003_collision</collision>
+        </contact>
+      </sensor> -->
+
     </link>
+
     <joint name='l_hip_roll' type='revolute'>
       <pose relative_to='torso'>0.15 0 0 0 -0 0</pose>
       <parent>torso</parent>
@@ -343,7 +353,7 @@
           <izz>0.00151</izz>
         </inertia>
       </inertial>
-      <collision name='l_foot_fixed_joint_lump__Sphere_collision'>
+      <collision name='l_foot_fixed_joint_lump_sphere_collision'>
         <pose>0 -0.09 -0.04 1.5708 -0 0</pose>
         <geometry>
           <sphere>
@@ -351,7 +361,7 @@
           </sphere>
         </geometry>
       </collision>
-      <collision name='l_foot_fixed_joint_lump__Sphere.002_collision_1'>
+      <collision name='l_foot_fixed_joint_lump_sphere_002_collision_1'>
         <pose>0 0.09 -0.04 1.5708 -0 0</pose>
         <geometry>
           <sphere>
@@ -439,6 +449,10 @@
           <ambient>0.184313 0.92157 0.92157 1</ambient> <!-- RGB and alpha channel -->
         </material>
       </visual>
+
+<!-- for each collision element, we make a contact sensor -->
+      <!-- <sensor name='l_foot_contact_1'> -->
+    
     </link>
     <joint name='r_hip_roll' type='revolute'>
       <pose relative_to='torso'>-0.15 0 0 0 -0 0</pose>
@@ -787,6 +801,8 @@
           <ambient>0.184313 0.92157 0.92157 1</ambient> <!-- RGB and alpha channel -->
         </material>
       </visual>
+      <!-- <sensor name="r_foot_sensor_1">
+      </sensor> -->
     </link>
   </model>
 

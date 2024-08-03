@@ -13,6 +13,12 @@ BipedalContact::Configure(const ignition::gazebo::Entity& entity,
 
     your code here :)
     */
+
+   // check to make sure the contact elements have been put on our desired links (idgaf about the other contacts)
+    for (std::string link_name : LINK_NAMES){
+        auto linkComp = ecm.EntityByComponents()
+    }
+
 }
 
 BipedalContact::PreUpdate(const gz::sim::UpdateInfo& info,
