@@ -12,7 +12,7 @@ EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[
 
 EffortController::~EffortController()
 {
-    std::cout << "num times ForceCompCreation was called: " << forceCompCreation << std::endl;
+    std::cout << "num times ForceCompCreation was called outside of Configure(): " << forceCompCreation << std::endl;
 }
 
 void EffortController::Configure(const ignition::gazebo::Entity& entity,
@@ -41,6 +41,11 @@ void EffortController::Configure(const ignition::gazebo::Entity& entity,
         gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(joint_name), gz::sim::components::Joint());
             if (joint == gz::sim::kNullEntity){
                 throw std::runtime_error("EffortController::Configure(): Unkown joint name found: " + joint_name);
+            }
+            auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
+            if (force == nullptr){
+                std::cout << "EffortController::Configure(): entity: " + joint_name + " has NULL force Component ptr. Adding force component..." << std::endl;
+                ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({0.0}));
             }
         }
     }
