@@ -1,6 +1,12 @@
 #include "BipedalContact.h"
 
-BipedalContact::BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted){}
+BipedalContact::BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted)
+: gz::sim::System(), contact_mutex_(contactMutex), contacted_(contacted){
+
+    for (auto name : LINK_NAMES){
+        std::cout << "here's name of them links: " << name << '\n';
+    }
+}
 
 BipedalContact::~BipedalContact(){/* Documentation Inherited */}
 
@@ -24,7 +30,7 @@ BipedalContact::Configure(const gz::sim::Entity& entity,
         if (!ecm.EntityHasComponentType(linkEnt, gz::sim::components::Collision())){
             throw std::runtime_error("Contact Sensor Link " + link_name + " has no <collision> component. give it a contact")            
         }
-        
+
     }
 
 }

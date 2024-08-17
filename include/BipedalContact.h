@@ -38,6 +38,6 @@ class BipedalContact : public gz::sim::System,
 
 
     private:
-        std::shared_ptr<bool[]> contacted_; // {footL, footR, torso} in that order
+        std::shared_ptr<bool[]> contacted_; // {footL, footR, torso} in that order {0, 1, 2}
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
 }

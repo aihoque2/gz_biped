@@ -6,8 +6,6 @@
 #include <gz/sim/components/Joint.hh>
 #include <gz/sim/components/JointForceCmd.hh>
 #include <gz/sim/components/Name.hh>
-#include <gz/msgs/contact.pb.h>
-#include <gz/msgs/contacts.pb.h>
 #include <memory>
 #include <vector>
 #include <string>
