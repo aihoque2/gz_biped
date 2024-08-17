@@ -27,19 +27,19 @@ class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
         ~ECMProvider();
         void Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, 
-                        ignition::gazebo::EntityComponentManager& ecm,
-                        ignition::gazebo::EventManager& eventMgr);
+                        gz::sim::EntityComponentManager& ecm,
+                        gz::sim::EventManager& eventMgr);
 
         
         // getters and setters...or just getters
-        const ignition::gazebo::EntityComponentManager* getECM();
-        const ignition::gazebo::EventManager* getEvtMgr();
+        const gz::sim::EntityComponentManager* getECM();
+        const gz::sim::EventManager* getEvtMgr();
 
         
     
     private:
-        const ignition::gazebo::EntityComponentManager* ecm_ptr_; // not the owner
-        const ignition::gazebo::EventManager* evtmgr_ptr_; // not the owner
+        const gz::sim::EntityComponentManager* ecm_ptr_; // not the owner
+        const gz::sim::EventManager* evtmgr_ptr_; // not the owner
         std::string world_name_;
 
 };

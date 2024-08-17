@@ -3,7 +3,7 @@
 namespace components = gz::sim::components;
 
 EffortController::EffortController(std::mutex& axnMutex, std::shared_ptr<double[]> axn) 
-: ignition::gazebo::System(), axn_mutex_(axnMutex), axn_(axn), forceCompCreation(0)
+: gz::sim::System(), axn_mutex_(axnMutex), axn_(axn), forceCompCreation(0)
 {
     for (auto name: JOINT_NAMES){
         std::cout << "here's name of a joint: " << name << '\n';
@@ -15,10 +15,10 @@ EffortController::~EffortController()
     std::cout << "num times ForceCompCreation was called outside of Configure(): " << forceCompCreation << std::endl;
 }
 
-void EffortController::Configure(const ignition::gazebo::Entity& entity,
+void EffortController::Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, //doc-inherited
-                        ignition::gazebo::EntityComponentManager& ecm,
-                        ignition::gazebo::EventManager& eventMgr)
+                        gz::sim::EntityComponentManager& ecm,
+                        gz::sim::EventManager& eventMgr)
 {
     /*
     Verify that the robot controller will match the numberr of joints.

@@ -30,19 +30,19 @@ static const std::vector<std::string> JOINT_NAMES =
 {"l_hip_roll", "l_hip_yaw", "l_hip_pitch", "l_knee", "l_ankle", 
 "r_hip_roll", "r_hip_yaw", "r_hip_pitch", "r_knee", "r_ankle"};
 
-class EffortController: public ignition::gazebo::System, 
-                         public ignition::gazebo::ISystemPreUpdate,
-                         public ignition::gazebo::ISystemConfigure
+class EffortController: public gz::sim::System, 
+                         public gz::sim::ISystemPreUpdate,
+                         public gz::sim::ISystemConfigure
 {
     public:
         EffortController(std::mutex& axnMutex, std::shared_ptr<double[]> axn);
         ~EffortController();
 
         // inherited from ISystemConfigure ABC
-        void Configure(const ignition::gazebo::Entity& entity,
+        void Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, //doc-inherited
-                        ignition::gazebo::EntityComponentManager& ecm,
-                        ignition::gazebo::EventManager& eventMgr);
+                        gz::sim::EntityComponentManager& ecm,
+                        gz::sim::EventManager& eventMgr);
 
         // inherited from ISystemPreUpdate ABC
         void PreUpdate(const gz::sim::UpdateInfo& info,

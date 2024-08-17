@@ -9,8 +9,10 @@
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Joint.hh>
 #include <gz/sim/ServerConfig.hh>
+#include <gz/transport/Node.hh>
 #include <boost/process.hpp>
 #include <memory>
+
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
 
@@ -64,8 +66,8 @@ class TrainSimulator{
         std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
         // "Simulation Resources"
-        const ignition::gazebo::EventManager* event_mgr_; // not the owner, so raw ptr OK
-        const ignition::gazebo::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
+        const gz::sim::EventManager* event_mgr_; // not the owner, so raw ptr OK
+        const gz::sim::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
 
         // "PhsyicsData" not sure if needed
         double rtf = -1;
