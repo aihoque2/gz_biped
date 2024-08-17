@@ -42,7 +42,7 @@ TrainSimulator::TrainSimulator(bool gui){
     if (gui){
         // Spawn a new process with the GUI
         gui_ = std::make_unique<boost::process::child>(
-            "ign gazebo -g -v4");
+            "gz gui -v 4");
 
         bool guiServiceExists = false;
         ignition::transport::Node node;

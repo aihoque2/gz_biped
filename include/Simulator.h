@@ -6,13 +6,9 @@
 // higher lvl includes
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
-#include <ignition/gazebo/components/Name.hh>
-#include <ignition/gazebo/components/Joint.hh>
-#include <ignition/gazebo/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
-#include <ignition/transport/Node.hh>
+#include <gz/sim/components/Name.hh>
+#include <gz/sim/components/Joint.hh>
+#include <gz/sim/ServerConfig.hh>
 #include <boost/process.hpp>
 #include <memory>
 /*

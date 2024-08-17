@@ -1,11 +1,10 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
 #include <gz/sim/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/World.hh>
 #include <memory>
+
 
 
 /*ECMProvider.h
@@ -21,12 +20,12 @@ UPDATE 06/04: I need this files to access utilize the server's EntityComponentMa
 /*
 
 */
-class ECMProvider: public ignition::gazebo::System, public ignition::gazebo::ISystemConfigure
+class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
 {
     public:
         ECMProvider(); // create the ignition gazebo system
         ~ECMProvider();
-        void Configure(const ignition::gazebo::Entity& entity,
+        void Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, 
                         ignition::gazebo::EntityComponentManager& ecm,
                         ignition::gazebo::EventManager& eventMgr);

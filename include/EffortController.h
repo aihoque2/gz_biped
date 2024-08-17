@@ -2,12 +2,10 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
 #include <gz/sim/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
-#include <ignition/gazebo/components/Joint.hh>
-#include <ignition/gazebo/components/JointForceCmd.hh>
-#include <ignition/gazebo/components/Name.hh>
+#include <gz/rendering.hh>
+#include <gz/sim/components/Joint.hh>
+#include <gz/sim/components/JointForceCmd.hh>
+#include <gz/sim/components/Name.hh>
 #include <memory>
 #include <vector>
 #include <string>

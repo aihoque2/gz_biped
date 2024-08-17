@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 # Find the Gazebo packages
-find_package(ignition-gazebo6 REQUIRED)
-find_package(ignition-rendering6 REQUIRED)
+find_package(gz-sim8 REQUIRED)
+find_package(gz-rendering8 REQUIRED)
 
 # Find Boost for subprocess
 find_package(Boost 1.74.0 REQUIRED)
@@ -27,14 +27,14 @@ add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
 target_include_directories(ecm_provider PUBLIC
  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
-target_link_libraries(ecm_provider ignition-gazebo6::ignition-gazebo6)
+target_link_libraries(ecm_provider gz-sim8::gz-sim8)
 
 # Joint Controller 
 add_library(joint_controller include/EffortController.h src/EffortController.cpp)
 target_include_directories(joint_controller PUBLIC
  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
-target_link_libraries(joint_controller ignition-gazebo6::ignition-gazebo6)
+target_link_libraries(joint_controller gz-sim8::gz-sim8)
 
 # TrainSimulator
 add_library(train_simulator include/Simulator.h src/Simulator.cpp include/ECMProvider.h include/EffortController.h)
@@ -47,6 +47,6 @@ target_link_libraries(launch_empty_world train_simulator)
 
 # Link against the Gazebo libraries
 target_link_libraries(launch_empty_world
-ignition-gazebo6::ignition-gazebo6
-ignition-rendering6::ignition-rendering6
+gz-sim8::gz-sim8
+gz-sim8::gz-sim8
 )
