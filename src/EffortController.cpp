@@ -65,8 +65,6 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
     std::lock_guard<std::mutex> lock(axn_mutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jntNm = JOINT_NAMES[i];
-        std::cout << "EffortController::PreUpdate() here's jntNm: " << jntNm << "\n";
-
         gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(jntNm), gz::sim::components::Joint());
 
 
