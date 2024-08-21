@@ -1,4 +1,4 @@
-# BIPEDAL WALKER SIMULATION WITH IGNITION GAZEBO
+# Bipedal Walker Simulation With Ignition Gazebo
 
 please run 
 
@@ -16,4 +16,5 @@ cd build
 cmake ..
 make
 ```
+
 
