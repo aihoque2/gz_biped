@@ -10,7 +10,8 @@ TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 #include <gz/common/Console.hh>
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Link.hh>
-#include <gz/sim/components/>
+#include <gz/sim/components/ContactSensorData.hh>
+#include <gz/sim/compoenents/ContactSensor.hh>
 #include <memory>
 
 static const std::vector<std::string> LINK_NAMES = 
@@ -38,6 +39,6 @@ class BipedalContact : public gz::sim::System,
 
 
     private:
-        std::shared_ptr<bool[]> contacted_; // {footL, footR, torso} in that order {0, 1, 2}
+        std::shared_ptr<bool[]> contacted_; // {torso, footL, footR} in that order {0, 1, 2}
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
 }

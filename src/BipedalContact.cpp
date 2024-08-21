@@ -25,12 +25,25 @@ BipedalContact::Configure(const gz::sim::Entity& entity,
             throw std::runtime_error("BipedalContact::Configure() link component: " + link_name + "returned NULL");
         }
 
-        // TODO: check the <link> tag for its <collision> tag and <contact/> tag
+        // Check the <link> tag for its <contact/> tag
+        if (!ecm.EntityHasComponentType(linkEnt, gz::sim::compoenents::ContactSensor())){
+            throw std::runtime_error("Link: " linkEnt " on the blackbird robot is expected to have a Contact Sensor.")
+        }
 
+        // checking <link> tag for <collision/> tag
         if (!ecm.EntityHasComponentType(linkEnt, gz::sim::components::Collision())){
             throw std::runtime_error("Contact Sensor Link " + link_name + " has no <collision> component. give it a contact")            
         }
+        std::vector<gz::sim::Entity> collisions = ecm.ChildrenByComponents(linkEnt, gz::sim::components::Collision())
 
+
+        // create ContactSensorData
+        for (auto collision_ent: collisions){
+            if (!ecm.EntityHasComponentType(collision_ent, gz::sim::components::ContactSensorData())){
+                std::cout << "creating ContactSensorData for: " << link_name << std::endl;
+                ecm.CreateComponent(collision_ent, gz::sim::components::ContactSensorData());
+            }
+        }
     }
 
 }
@@ -41,5 +54,9 @@ BipedalContact::PreUpdate(const gz::sim::UpdateInfo& info,
     TODO
 
     your code here :)
+
+    check if each link has made a collision, and update the sensor data in contacted_
     */
+
+
 }

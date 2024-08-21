@@ -73,12 +73,11 @@ TrainSimulator::TrainSimulator(bool gui){
 
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
+    ecm_ = nullptr;
+    event_mgr_ = nullptr;
+        
     if (hasGUI && gui_){
 
-        std::cout << "TrainSimulator gui child PID: " << gui_->id() << std::endl;
-        ecm_ = nullptr;
-        event_mgr_ = nullptr;
-        
         if(gui_->running()){
             std::cerr << "TRAINSIMULATOR GUI FAILED TO EXIT WITHIN A TIMELY MANNER" << std::endl << std::flush;
             std::cerr << "Forcing shutdown of gui..."<< std::endl << std::flush;
@@ -86,10 +85,6 @@ TrainSimulator::~TrainSimulator(){
             std::this_thread::sleep_for(std::chrono::seconds(3));
             gui_->wait();
             std::cerr << "Finished waiting on subprocess"<< std::endl << std::flush;
-        }
-
-        else{
-            std::cout << "TrainSimulator GUI has successfully shut :)" << std::endl;
         }
     }
     std::cout << "Stopping TrainSimulator server..." << std::endl;
@@ -106,7 +101,7 @@ void TrainSimulator::KillProcessIDs(std::string process_name){
     std::array<char, 128> buffer;
     std::vector<std::string> pids;
     std::string command = "ps aux | grep " + process_name + " ";
-    std::cout << "here's command: " << command << std::endl;
+
     const char* cmd = command.c_str();
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
     if (!pipe){
