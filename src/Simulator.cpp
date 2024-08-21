@@ -29,7 +29,7 @@ TrainSimulator::TrainSimulator(bool gui){
 
     // EffortController plugin
     auto controller = std::make_shared<EffortController>(axnMutex, axn_);
-    const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
+    const auto gotCtrl = server_->AddSystem(controller, WORLD_IDX);
     if (!gotCtrl){
         throw std::runtime_error("could not integrate EffortController into server");
     }
@@ -45,12 +45,12 @@ TrainSimulator::TrainSimulator(bool gui){
             "gz sim world/empty.world -v 4");
 
         bool guiServiceExists = false;
-        gz::transport::Node node;
+        std::unique_ptr<gz::transport::Node> node =  std::make_unique<gz::transport::Node>();
         std::vector<std::string> serviceList;
 
         do {
             std::cout << "Waiting for GUI to show up... " << std::endl;
-            node.ServiceList(serviceList);
+            node->ServiceList(serviceList);
 
             for (const auto& serviceName : serviceList) {
                 if (serviceName.find("/gui/") == 0) {
@@ -61,6 +61,7 @@ TrainSimulator::TrainSimulator(bool gui){
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         } while (!guiServiceExists);
+
         // end gui bracket
     } // endif
 
@@ -71,8 +72,9 @@ TrainSimulator::TrainSimulator(bool gui){
 
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
-    if (hasGUI){
-        gui_->wait_for(std::chrono::seconds(5));
+    if (hasGUI && gui_){
+
+        std::cout << "TrainSimulator gui child PID: " << gui_->id(); << std::endl;
         ecm_ = nullptr;
         event_mgr_ = nullptr;
         
@@ -80,7 +82,7 @@ TrainSimulator::~TrainSimulator(){
             std::cerr << "TRAINSIMULATOR GUI FAILED TO EXIT WITHIN A TIMELY MANNER" << std::endl << std::flush;
             std::cerr << "Forcing shutdown of gui..."<< std::endl << std::flush;
             gui_->terminate();
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            std::this_thread::sleep_for(std::chrono::seconds(3));
             gui_->wait();
             std::cerr << "Finished waiting on subprocess"<< std::endl << std::flush;
         }
@@ -89,10 +91,20 @@ TrainSimulator::~TrainSimulator(){
             std::cout << "TrainSimulator GUI has successfully shut :)" << std::endl;
         }
     }
+    std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
+
 }
 
-/* start() */
+/* GetProcessIDS */
+std::vector<string> GetProcessIDs(const std::string &process_name){
+    std::vector<string> pids;
+    std::string result;
+    bp::ipstream pipe_stream;
+
+    std::unique_ptr<boost::process::child> ps_child = std::make_unique<boost::process::child>("ps aux | grep " + process_name);
+     
+} 
 
 
 /* step() 

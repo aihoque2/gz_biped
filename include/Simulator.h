@@ -12,6 +12,8 @@
 #include <gz/transport/Node.hh>
 #include <boost/process.hpp>
 #include <memory>
+#include <string>
+#include <stdio.h>
 
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
@@ -58,6 +60,9 @@ class TrainSimulator{
 
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void ResetSimulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
+
+        // shoutouts to gz-harmonic screwing up from gz-fortress
+        std::vector<string> GetProcessIDs(const std::string &processName);
 
         /*
         variables 
