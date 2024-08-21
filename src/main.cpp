@@ -37,7 +37,6 @@ int main(int argc, char **argv)
     my_sim.server_->Run(true, 300, false);
 
     my_sim.Pause(); // quick test for me
-    my_sim.server_->Stop();
 
     return 0;
 }
