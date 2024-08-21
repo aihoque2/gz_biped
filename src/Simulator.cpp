@@ -95,13 +95,14 @@ TrainSimulator::~TrainSimulator(){
     std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
 
-    std::vector<std::string> pids = GetProcessIDs("gz\\ server\\ ");
-    std::cout << "PIDs vector size: " << pids.size() << std::endl;
+    KillProcessIDs("gz\\ server\\ ");
 
 }
 
-/* GetProcessIDS */
-std::vector<std::string> TrainSimulator::GetProcessIDs(std::string process_name){
+/* KillProcessIDs() 
+* kill gz_sim processes at the end of 
+*/
+void TrainSimulator::KillProcessIDs(std::string process_name){
     std::array<char, 128> buffer;
     std::vector<std::string> pids;
     std::string command = "ps aux | grep gz\\ sim\\ ";
@@ -111,17 +112,9 @@ std::vector<std::string> TrainSimulator::GetProcessIDs(std::string process_name)
         throw std::runtime_error("[ERROR] GetProcessIDs() in TrinSimulator.cpp: popen() failed!");
     }
 
+    // red the output and get our data
     while(fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr){
         const std::string result = buffer.data();
-        
-        // try{
-        //     int pid = std::stoi(result);
-        //     pids.push_back(result);
-        // }
-        // catch(std::invalid_argument const& ex){
-        //     std::string ex_what = ex.what();
-        //     throw std::runtime_error("[ERROR] GetProcessIDs() stoi() invalid_argument(): " + ex_what);
-        // }
 
         std::istringstream iss(result);
         std::string token;
@@ -136,12 +129,8 @@ std::vector<std::string> TrainSimulator::GetProcessIDs(std::string process_name)
         }
 
         pids.push_back(result);
-    
+
     }
-
-    //read the output to get the data.
-
-    return pids;
 
 } 
 

@@ -64,8 +64,7 @@ class TrainSimulator{
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void ResetSimulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
-        // shoutouts to gz-harmonic screwing up from gz-fortress
-        std::vector<std::string> GetProcessIDs(std::string process_name);
+        
 
         /*
         variables 
@@ -83,6 +82,9 @@ class TrainSimulator{
         double realtimeUpdateRate= -1;
 
     private:
+        // shoutouts to gz-harmonic screwing up from gz-fortress
+        void KillProcessIDs(std::string process_name);
+
         gz::sim::ServerConfig serverConfig;
         std::string sdfFile; // filename for the sdf to spawn
         std::string worldFile; // filename for the world
