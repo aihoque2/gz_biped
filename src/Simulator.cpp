@@ -70,11 +70,12 @@ TrainSimulator::TrainSimulator(bool gui){
 
 }
 
+
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
     if (hasGUI && gui_){
 
-        std::cout << "TrainSimulator gui child PID: " << gui_->id(); << std::endl;
+        std::cout << "TrainSimulator gui child PID: " << gui_->id() << std::endl;
         ecm_ = nullptr;
         event_mgr_ = nullptr;
         
@@ -94,18 +95,55 @@ TrainSimulator::~TrainSimulator(){
     std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
 
+    std::vector<std::string> pids = GetProcessIDs("gz\\ server\\ ");
+    std::cout << "PIDs vector size: " << pids.size() << std::endl;
+
 }
 
 /* GetProcessIDS */
-std::vector<string> GetProcessIDs(const std::string &process_name){
-    std::vector<string> pids;
-    std::string result;
-    bp::ipstream pipe_stream;
+std::vector<std::string> TrainSimulator::GetProcessIDs(std::string process_name){
+    std::array<char, 128> buffer;
+    std::vector<std::string> pids;
+    std::string command = "ps aux | grep gz\\ sim\\ ";
+    const char* cmd = command.c_str();
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe){
+        throw std::runtime_error("[ERROR] GetProcessIDs() in TrinSimulator.cpp: popen() failed!");
+    }
 
-    std::unique_ptr<boost::process::child> ps_child = std::make_unique<boost::process::child>("ps aux | grep " + process_name);
-     
+    while(fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr){
+        const std::string result = buffer.data();
+        
+        // try{
+        //     int pid = std::stoi(result);
+        //     pids.push_back(result);
+        // }
+        // catch(std::invalid_argument const& ex){
+        //     std::string ex_what = ex.what();
+        //     throw std::runtime_error("[ERROR] GetProcessIDs() stoi() invalid_argument(): " + ex_what);
+        // }
+
+        std::istringstream iss(result);
+        std::string token;
+        int token_count = 0;
+        while (iss >> token){
+            if (token_count == 1){ // idx 1 gives the PID
+                int pid = std::stoi(token);
+                kill(pid, SIGTERM);
+                break; // next loop iter
+            }
+            token_count++;
+        }
+
+        pids.push_back(result);
+    
+    }
+
+    //read the output to get the data.
+
+    return pids;
+
 } 
-
 
 /* step() 
 * Given our inputAction
