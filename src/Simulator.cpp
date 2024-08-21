@@ -95,7 +95,7 @@ TrainSimulator::~TrainSimulator(){
     std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
 
-    KillProcessIDs("gz\\ server\\ ");
+    KillProcessIDs("gz\\ sim\\ ");
 
 }
 
@@ -105,7 +105,8 @@ TrainSimulator::~TrainSimulator(){
 void TrainSimulator::KillProcessIDs(std::string process_name){
     std::array<char, 128> buffer;
     std::vector<std::string> pids;
-    std::string command = "ps aux | grep gz\\ sim\\ ";
+    std::string command = "ps aux | grep " + process_name + " ";
+    std::cout << "here's command: " << command << std::endl;
     const char* cmd = command.c_str();
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
     if (!pipe){
