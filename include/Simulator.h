@@ -6,15 +6,18 @@
 // higher lvl includes
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
-#include <ignition/gazebo/components/Name.hh>
-#include <ignition/gazebo/components/Joint.hh>
-#include <ignition/gazebo/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
-#include <ignition/transport/Node.hh>
+#include <gz/sim/components/Name.hh>
+#include <gz/sim/components/Joint.hh>
+#include <gz/sim/ServerConfig.hh>
+#include <gz/transport/Node.hh>
 #include <boost/process.hpp>
 #include <memory>
+#include <string>
+#include <vector>
+#include <array>
+#include <cstdio>
+#include <iostream>
+
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
 
@@ -61,6 +64,8 @@ class TrainSimulator{
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void ResetSimulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
+        
+
         /*
         variables 
         */
@@ -68,8 +73,8 @@ class TrainSimulator{
         std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
         // "Simulation Resources"
-        const ignition::gazebo::EventManager* event_mgr_; // not the owner, so raw ptr OK
-        const ignition::gazebo::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
+        const gz::sim::EventManager* event_mgr_; // not the owner, so raw ptr OK
+        const gz::sim::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
 
         // "PhsyicsData" not sure if needed
         double rtf = -1;
@@ -77,6 +82,9 @@ class TrainSimulator{
         double realtimeUpdateRate= -1;
 
     private:
+        // shoutouts to gz-harmonic screwing up from gz-fortress
+        void KillProcessIDs(std::string process_name);
+
         gz::sim::ServerConfig serverConfig;
         std::string sdfFile; // filename for the sdf to spawn
         std::string worldFile; // filename for the world

@@ -29,7 +29,7 @@ TrainSimulator::TrainSimulator(bool gui){
 
     // EffortController plugin
     auto controller = std::make_shared<EffortController>(axnMutex, axn_);
-    const auto gotCtrl =  server_->AddSystem(controller, WORLD_IDX);
+    const auto gotCtrl = server_->AddSystem(controller, WORLD_IDX);
     if (!gotCtrl){
         throw std::runtime_error("could not integrate EffortController into server");
     }
@@ -42,15 +42,15 @@ TrainSimulator::TrainSimulator(bool gui){
     if (gui){
         // Spawn a new process with the GUI
         gui_ = std::make_unique<boost::process::child>(
-            "ign gazebo -g -v4");
+            "gz sim world/empty.world -v 4");
 
         bool guiServiceExists = false;
-        ignition::transport::Node node;
+        std::unique_ptr<gz::transport::Node> node =  std::make_unique<gz::transport::Node>();
         std::vector<std::string> serviceList;
 
         do {
             std::cout << "Waiting for GUI to show up... " << std::endl;
-            node.ServiceList(serviceList);
+            node->ServiceList(serviceList);
 
             for (const auto& serviceName : serviceList) {
                 if (serviceName.find("/gui/") == 0) {
@@ -61,6 +61,7 @@ TrainSimulator::TrainSimulator(bool gui){
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         } while (!guiServiceExists);
+
         // end gui bracket
     } // endif
 
@@ -69,10 +70,12 @@ TrainSimulator::TrainSimulator(bool gui){
 
 }
 
+
 /*DESTRUCTIONNNNN*/
 TrainSimulator::~TrainSimulator(){
-    if (hasGUI){
-        gui_->wait_for(std::chrono::seconds(5));
+    if (hasGUI && gui_){
+
+        std::cout << "TrainSimulator gui child PID: " << gui_->id() << std::endl;
         ecm_ = nullptr;
         event_mgr_ = nullptr;
         
@@ -80,7 +83,7 @@ TrainSimulator::~TrainSimulator(){
             std::cerr << "TRAINSIMULATOR GUI FAILED TO EXIT WITHIN A TIMELY MANNER" << std::endl << std::flush;
             std::cerr << "Forcing shutdown of gui..."<< std::endl << std::flush;
             gui_->terminate();
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            std::this_thread::sleep_for(std::chrono::seconds(3));
             gui_->wait();
             std::cerr << "Finished waiting on subprocess"<< std::endl << std::flush;
         }
@@ -89,11 +92,48 @@ TrainSimulator::~TrainSimulator(){
             std::cout << "TrainSimulator GUI has successfully shut :)" << std::endl;
         }
     }
+    std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
+
+    KillProcessIDs("gz\\ sim\\ ");
+
 }
 
-/* start() */
+/* KillProcessIDs() 
+* kill gz_sim processes at the end of 
+*/
+void TrainSimulator::KillProcessIDs(std::string process_name){
+    std::array<char, 128> buffer;
+    std::vector<std::string> pids;
+    std::string command = "ps aux | grep " + process_name + " ";
+    std::cout << "here's command: " << command << std::endl;
+    const char* cmd = command.c_str();
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe){
+        throw std::runtime_error("[ERROR] GetProcessIDs() in TrinSimulator.cpp: popen() failed!");
+    }
 
+    // red the output and get our data
+    while(fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr){
+        const std::string result = buffer.data();
+
+        std::istringstream iss(result);
+        std::string token;
+        int token_count = 0;
+        while (iss >> token){
+            if (token_count == 1){ // idx 1 gives the PID
+                int pid = std::stoi(token);
+                kill(pid, SIGTERM);
+                break; // next loop iter
+            }
+            token_count++;
+        }
+
+        pids.push_back(result);
+
+    }
+
+} 
 
 /* step() 
 * Given our inputAction

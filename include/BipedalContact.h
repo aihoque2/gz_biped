@@ -1,11 +1,16 @@
 /*
-ContactSensor.h
+BipedalContact.h
 
 ContactSensor system to manage the blackbird's contacts
 
 TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 */
 
+#include <gz/sim/Server.hh>
+#include <gz/common/Console.hh>
+#include <gz/sim/components/Name.hh>
+#include <gz/sim/components/Link.hh>
+#include <gz/sim/components/>
 #include <memory>
 
 static const std::vector<std::string> LINK_NAMES = 
@@ -22,10 +27,10 @@ class BipedalContact : public gz::sim::System,
         
 
         // inherited from ISystemConfigure ABC
-        void Configure(const ignition::gazebo::Entity& _entity,
+        void Configure(const gz::sim::Entity& _entity,
                         const std::shared_ptr<const sdf::Element>& _sdf, //doc-inherited
-                        ignition::gazebo::EntityComponentManager& _ecm,
-                        ignition::gazebo::EventManager& _eventMgr);
+                        gz::sim::EntityComponentManager& _ecm,
+                        gz::sim::EventManager& _eventMgr);
 
         // inherited from ISystemPreUpdate ABC
         void PostUpdate(const gz::sim::UpdateInfo& info,
@@ -33,6 +38,6 @@ class BipedalContact : public gz::sim::System,
 
 
     private:
-        std::shared_ptr<bool[]> contacted_; // {footL, footR, torso} in that order
+        std::shared_ptr<bool[]> contacted_; // {footL, footR, torso} in that order {0, 1, 2}
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
 }

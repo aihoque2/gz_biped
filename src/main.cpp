@@ -1,9 +1,8 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
 #include <gz/sim/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
+#include <gz/rendering.hh>
+#include <gz/gui.hh>
 #include <iostream>
 #include "Simulator.h"
 

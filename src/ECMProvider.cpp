@@ -1,19 +1,12 @@
 #include "ECMProvider.h"
 
-#include <gz/sim/Server.hh>
-#include <gz/common/Console.hh>
-#include <ignition/gazebo/ServerConfig.hh>
-#include <ignition/rendering.hh>
-#include <ignition/gui.hh>
-#include <ignition/common.hh>
-#include <memory>
 #include <iostream> // I use cout because I'm a peasant
 
 
 /*
 Constructor
 */
-ECMProvider::ECMProvider(): ignition::gazebo::System(){}
+ECMProvider::ECMProvider(): gz::sim::System(){}
 
 ECMProvider::~ECMProvider(){
     ecm_ptr_ = nullptr;
@@ -26,10 +19,10 @@ ECMProvider::~ECMProvider(){
 function that is run when the server does 
 AddSystem() on this system
 */
-void ECMProvider::Configure(const ignition::gazebo::Entity& entity,
+void ECMProvider::Configure(const gz::sim::Entity& entity,
     const std::shared_ptr<const sdf::Element>&,
-    ignition::gazebo::EntityComponentManager& ecm,
-    ignition::gazebo::EventManager& eventMgr)
+    gz::sim::EntityComponentManager& ecm,
+    gz::sim::EventManager& eventMgr)
 {
 
     if (!ecm.EntityHasComponentType(entity, 
@@ -54,10 +47,10 @@ void ECMProvider::Configure(const ignition::gazebo::Entity& entity,
     std::cout << "SUCCES: obtained EntityComponentManager & EvenManager from World: " << this->world_name_ << std::endl;
 }
 
-const ignition::gazebo::EntityComponentManager* ECMProvider::getECM(){
+const gz::sim::EntityComponentManager* ECMProvider::getECM(){
     return this->ecm_ptr_;
 }
 
-const ignition::gazebo::EventManager* ECMProvider::getEvtMgr(){
+const gz::sim::EventManager* ECMProvider::getEvtMgr(){
     return this->evtmgr_ptr_;
 }

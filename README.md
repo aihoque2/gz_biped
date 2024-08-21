@@ -3,7 +3,9 @@
 please run 
 
 ```
-export GZ_SIM_RESOURCE_PATH=/home/ahoque245/Projects/robots/gz_bipedal
+source /opt/ros/jazzy/setup.bash
+
+export GZ_SIM_RESOURCE_PATH=/home/ahoque245/Projects/simulations/gz_bipedal
 
 ```
 
