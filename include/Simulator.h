@@ -73,8 +73,8 @@ class TrainSimulator{
         std::unique_ptr<boost::process::child> gui_; // note that gui of ignition simulation runs as a separate process.
 
         // "Simulation Resources"
-        std::shared_ptr<gz::sim::EventManager> event_mgr_; // not the owner, so raw ptr OK
-        std::shared_ptr<gz::sim::EntityComponentManager> ecm_; // not the owner, so raw ptr OK
+        gz::sim::EventManager* event_mgr_; // not the owner, so raw ptr OK
+        gz::sim::EntityComponentManager* ecm_; // not the owner, so raw ptr OK
 
         // "PhsyicsData" not sure if needed
         double rtf = -1;
@@ -94,6 +94,9 @@ class TrainSimulator{
         
         std::mutex axnMutex; // lock used for set_action() and get_action()
         std::mutex stateMutex; // lock used for publishing state info
+ 
+        // we need to keep this plugin
+        std::shared_ptr<ECMProvider> provider;
 
         bool hasGUI;
 };

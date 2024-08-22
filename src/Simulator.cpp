@@ -20,7 +20,7 @@ TrainSimulator::TrainSimulator(bool gui){
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
 
     // adding ECMProvider idx
-    auto provider = std::make_shared<ECMProvider>();
+    provider = std::make_shared<ECMProvider>();
     const auto gotECM = server_->AddSystem(provider, WORLD_IDX);
     if (!gotECM){
         throw std::runtime_error("could not integrate ECMProvider into server");

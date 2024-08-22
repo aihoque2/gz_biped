@@ -8,7 +8,11 @@ Constructor
 */
 ECMProvider::ECMProvider(): gz::sim::System(){}
 
-ECMProvider::~ECMProvider(){}
+ECMProvider::~ECMProvider()
+{
+    ecm_ = nullptr;
+    evtmgr_ = nullptr;
+}
 
 
 /*
@@ -18,7 +22,7 @@ AddSystem() on this system
 void ECMProvider::Configure(const gz::sim::Entity& entity,
     const std::shared_ptr<const sdf::Element>&,
     gz::sim::EntityComponentManager& ecm,
-    gz::sim::EventManager& eventMgr)
+    gz::sim::EventManager& event_mgr)
 {
 
     if (!ecm.EntityHasComponentType(entity, 
@@ -39,20 +43,24 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
     
 
     this->ecm_ = &ecm; // point to the addy
-    this->evtmgr_ptr_ = &eventMgr; // point to the addy
-    std::cout << "SUCCES: obtained EntityComponentManager & EvenManager from World: " << this->world_name_ << std::endl;
+    this->evtmgr_ = &event_mgr; // point to the addy
+    std::cout << "SUCCES: obtained EntityComponentManager & EventManager from World: " << this->world_name_ << std::endl;
 }
 
 void ECMProvider::PostUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm)
 {
-    ecm_ = &ecm;            
+    // update the existing shared ptr
+    ecm_ = &ecm;
 }
 
-const gz::sim::EntityComponentManager* ECMProvider::getECM(){
-    return this->ecm_;
+
+gz::sim::EntityComponentManager* ECMProvider::getECM()
+{
+    return ecm_;
 }
 
-const gz::sim::EventManager* ECMProvider::getEvtMgr(){
-    return this->evtmgr_ptr_;
+gz::sim::EventManager* ECMProvider::getEvtMgr()
+{
+    return evtmgr_;
 }
