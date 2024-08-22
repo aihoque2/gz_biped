@@ -25,7 +25,8 @@ class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
                         const std::shared_ptr<const sdf::Element>&, 
                         gz::sim::EntityComponentManager& ecm,
                         gz::sim::EventManager& eventMgr);
-
+        void PostUpdate(const gz::sim::UpdateInfo& info,
+                        gz::sim::EntityComponentManager& ecm);
         
         // getters and setters...or just getters
         const gz::sim::EntityComponentManager* getECM();
@@ -34,8 +35,8 @@ class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
         
     
     private:
-        const gz::sim::EntityComponentManager* ecm_ptr_; // not the owner
-        const gz::sim::EventManager* evtmgr_ptr_; // not the owner
+        std::shared_ptr<gz::sim::EntityComponentManager> ecm_; // not the owner
+        std::shared_ptr<gz::sim::EventManager> evtmgr_; // not the owner
         std::string world_name_;
 
 };

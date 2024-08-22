@@ -8,11 +8,7 @@ Constructor
 */
 ECMProvider::ECMProvider(): gz::sim::System(){}
 
-ECMProvider::~ECMProvider(){
-    ecm_ptr_ = nullptr;
-    evtmgr_ptr_ = nullptr;
-
-}
+ECMProvider::~ECMProvider(){}
 
 
 /*
@@ -42,13 +38,19 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
     }
     
 
-    this->ecm_ptr_ = &ecm; // point to the addy
+    this->ecm_ = &ecm; // point to the addy
     this->evtmgr_ptr_ = &eventMgr; // point to the addy
     std::cout << "SUCCES: obtained EntityComponentManager & EvenManager from World: " << this->world_name_ << std::endl;
 }
 
+void ECMProvider::PostUpdate(const gz::sim::UpdateInfo& info,
+                        gz::sim::EntityComponentManager& ecm)
+{
+    ecm_ = &ecm;            
+}
+
 const gz::sim::EntityComponentManager* ECMProvider::getECM(){
-    return this->ecm_ptr_;
+    return this->ecm_;
 }
 
 const gz::sim::EventManager* ECMProvider::getEvtMgr(){
