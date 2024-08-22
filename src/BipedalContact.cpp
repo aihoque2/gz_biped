@@ -10,7 +10,7 @@ BipedalContact::BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]>
 
 BipedalContact::~BipedalContact(){/* Documentation Inherited */}
 
-BipedalContact::Configure(const gz::sim::Entity& entity,
+void BipedalContact::Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, //doc-inherited
                         gz::sim::EntityComponentManager& ecm,
                         gz::sim::EventManager& eventMgr){
@@ -37,7 +37,7 @@ BipedalContact::Configure(const gz::sim::Entity& entity,
         std::vector<gz::sim::Entity> collisions = ecm.ChildrenByComponents(linkEnt, gz::sim::components::Collision())
 
 
-        // create ContactSensorData
+        // create ContactSensorData components for the collision elements
         for (auto collision_ent: collisions){
             if (!ecm.EntityHasComponentType(collision_ent, gz::sim::components::ContactSensorData())){
                 std::cout << "creating ContactSensorData for: " << link_name << std::endl;
@@ -48,15 +48,13 @@ BipedalContact::Configure(const gz::sim::Entity& entity,
 
 }
 
-BipedalContact::PreUpdate(const gz::sim::UpdateInfo& info,
+void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm){
     /*
-    TODO
-
     your code here :)
 
     check if each link has made a collision, and update the sensor data in contacted_
     */
-
+    std::cout << "BipedalContact::PostUpdate() still needs to be implemented." << std::endl;
 
 }

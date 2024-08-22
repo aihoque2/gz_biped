@@ -9,10 +9,6 @@
 
 /*ECMProvider.h
 
-lol idk if I need this but scenarIO has it
-but I'll make my implementation more organized with bajillions more files.
-
-UPDATE 06/04: I need this files to access utilize the server's EntityComponentManager
 */
 #ifndef ECMPROVIDER_HPP
 #define ECMPROVIDER_HPP

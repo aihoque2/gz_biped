@@ -13,7 +13,6 @@ TrainSimulator::TrainSimulator(bool gui){
         state_[i] = 0.0; // state is defined by the LaTeX document
     }
 
-    // debug
     worldFile = "world/empty.world";
     gz::common::Console::SetVerbosity(4);
     serverConfig.SetSdfFile(worldFile); //member var
@@ -34,6 +33,7 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate EffortController into server");
     }
     
+    // TODO: Contact Sensor plugin
 
     /*
     gui code

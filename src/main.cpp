@@ -51,16 +51,17 @@ int main(int argc, char **argv)
             throw std::runtime_error("main.cpp link component: " + link_name + "returned NULL");
         }
 
+        std::vector<gz::sim::Entity> contact_sensors = my_sim.ecm_->EntitiesByComponents(gz::sim::components::ContactSensor());
 
-        bool has_contact_sensor = my_sim.ecm_->EntityHasComponentType(link_ent, gz::sim::components::ContactSensor::typeId);
+        bool has_contact_sensor = contact_sensors.size() > 0;
 
         if (!has_contact_sensor){
             throw std::runtime_error("main.cpp: can't find ContactSensor()for link: " + link_name );
         }
-        //gz::sim::Entity contact_ent = my_sim.ecm_->ChildrenByComponents(linkEnt, gz::sim::components::ContactSensor());
+        // gz::sim::Entity contact_ent = my_sim.ecm_->ChildrenByComponents(linkEnt, gz::sim::components::ContactSensor());
 
-        std::vector<gz::sim::Entity> collisions = my_sim.ecm_->ChildrenByComponents(link_ent, gz::sim::components::Collision());
-        std::cout << "Link name: " << link_name <<  ", length of collisions vector: " << collisions.size() << std::endl;
+        // std::vector<gz::sim::Entity> collisions = my_sim.ecm_->ChildrenByComponents(link_ent, gz::sim::components::Collision());
+        // std::cout << "Link name: " << link_name <<  ", length of collisions vector: " << collisions.size() << std::endl;
     
     }
     return 0;
