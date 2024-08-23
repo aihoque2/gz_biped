@@ -92,7 +92,7 @@
         </material>
       </visual>
 
-      <sensor name="torso_contact_1" type='contact'>
+      <sensor name="torso_contact" type='contact'>
         <contact>
           <collision>torso_fixed_joint_lump_mesh_001_collision</collision>
           <collision>torso_fixed_joint_lump_mesh_002_collision</collision>

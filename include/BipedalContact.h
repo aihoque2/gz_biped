@@ -13,7 +13,9 @@ TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 #include <gz/sim/components/ContactSensorData.hh>
 #include <gz/sim/components/ContactSensor.hh>
 #include <gz/sim/components/Collision.hh>
+#include <gz/sim/components/ParentEntity.hh>
 #include <memory>
+#include <vector>
 
 static const std::vector<std::string> LINK_NAMES = 
 {"l_foot", "r_foot", "torso"};
