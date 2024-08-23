@@ -1,7 +1,8 @@
 #include "BipedalContact.h"
 
 BipedalContact::BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted)
-: gz::sim::System(), contact_mutex_(contactMutex), contacted_(contacted){
+: gz::sim::System(), contact_mutex_(contactMutex), contacted_(contacted)
+{
 
     for (auto name : LINK_NAMES){
         std::cout << "here's name of them links: " << name << '\n';
@@ -15,6 +16,13 @@ void BipedalContact::Configure(const gz::sim::Entity& entity,
                         gz::sim::EntityComponentManager& ecm,
                         gz::sim::EventManager& eventMgr){
 
+    if (!ecm.HasComponentType(gz::sim::components::ContactSensor::typeId)){
+        throw std::runtime_error("BipedalContact::Configure() no ContactSensor found...wtf");
+        }
+    else{
+        std::cout << "BipedalContact::Configure() went through first if statement fine!" << std::endl;
+    }
+
 
    // check to make sure the contact elements have been put on our desired links (idgaf about the other contacts)
     for (std::string link_name : LINK_NAMES){
@@ -26,20 +34,21 @@ void BipedalContact::Configure(const gz::sim::Entity& entity,
         }
 
         // Check the <link> tag for its <contact/> tag
-        if (!ecm.EntityHasComponentType(linkEnt, gz::sim::compoenents::ContactSensor())){
-            throw std::runtime_error("Link: " linkEnt " on the blackbird robot is expected to have a Contact Sensor.")
+        if (!ecm.EntityHasComponentType(linkEnt, gz::sim::components::ContactSensor::typeId)){
+            throw std::runtime_error("Link: " + link_name + " on the blackbird robot is expected to have a Contact Sensor.");
         }
 
         // checking <link> tag for <collision/> tag
-        if (!ecm.EntityHasComponentType(linkEnt, gz::sim::components::Collision())){
-            throw std::runtime_error("Contact Sensor Link " + link_name + " has no <collision> component. give it a contact")            
+        if (!ecm.EntityHasComponentType(linkEnt, gz::sim::components::Collision::typeId)){
+            throw std::runtime_error("Contact Sensor Link " + link_name + " has no <collision> component. give it a contact");         
         }
-        std::vector<gz::sim::Entity> collisions = ecm.ChildrenByComponents(linkEnt, gz::sim::components::Collision())
+
+        std::vector<gz::sim::Entity> collisions = ecm.ChildrenByComponents(linkEnt, gz::sim::components::Collision());
 
 
         // create ContactSensorData components for the collision elements
         for (auto collision_ent: collisions){
-            if (!ecm.EntityHasComponentType(collision_ent, gz::sim::components::ContactSensorData())){
+            if (!ecm.EntityHasComponentType(collision_ent, gz::sim::components::ContactSensorData::typeId)){
                 std::cout << "creating ContactSensorData for: " << link_name << std::endl;
                 ecm.CreateComponent(collision_ent, gz::sim::components::ContactSensorData());
             }
@@ -49,7 +58,7 @@ void BipedalContact::Configure(const gz::sim::Entity& entity,
 }
 
 void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
-                        gz::sim::EntityComponentManager& ecm){
+                        const gz::sim::EntityComponentManager& ecm){
     /*
     your code here :)
 

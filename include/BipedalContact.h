@@ -11,12 +11,15 @@ TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Link.hh>
 #include <gz/sim/components/ContactSensorData.hh>
-#include <gz/sim/compoenents/ContactSensor.hh>
+#include <gz/sim/components/ContactSensor.hh>
+#include <gz/sim/components/Collision.hh>
 #include <memory>
 
 static const std::vector<std::string> LINK_NAMES = 
 {"l_foot", "r_foot", "torso"};
 
+#ifndef BIPEDALCONTACT_HPP
+#define BIPEDALCONTACT_HPP
 
 class BipedalContact : public gz::sim::System,
                         public gz::sim::ISystemConfigure,
@@ -24,7 +27,7 @@ class BipedalContact : public gz::sim::System,
 {
     public:
         BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted);
-        ~BipedalContact() final = default;
+        ~BipedalContact();
         
 
         // inherited from ISystemConfigure ABC
@@ -35,10 +38,12 @@ class BipedalContact : public gz::sim::System,
 
         // inherited from ISystemPreUpdate ABC
         void PostUpdate(const gz::sim::UpdateInfo& info,
-                        gz::sim::EntityComponentManager& ecm);
+                        const gz::sim::EntityComponentManager& ecm);
 
 
     private:
         std::shared_ptr<bool[]> contacted_; // {torso, footL, footR} in that order {0, 1, 2}
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
-}
+};
+
+#endif

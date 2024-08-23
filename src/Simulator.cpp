@@ -4,6 +4,7 @@ TrainSimulator::TrainSimulator(bool gui){
     
     axn_ = std::shared_ptr<double[]>(new double[ACTION_SIZE], std::default_delete<double[]>());
     state_ = std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
+    contacted_ = std::shared_ptr<bool[]>(new bool[3], std::default_delete<bool[]>());
     
     for (int i = 0; i < ACTION_SIZE; i++){
         axn_[i] = 0.0;
@@ -34,6 +35,11 @@ TrainSimulator::TrainSimulator(bool gui){
     }
     
     // TODO: Contact Sensor plugin
+    auto contact_sensor = std::make_shared<BipedalContact>(contactMutex, contacted_);
+    const auto gotContact = server_->AddSystem(contact_sensor, WORLD_IDX);
+    if (!gotContact){
+        throw std::runtime_error("could not integrate BipedalContact into server");
+    }
 
     /*
     gui code
@@ -173,7 +179,7 @@ void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int 
 }    
 
 
-/* pause()        int getForceCompCreation();
+/* pause()
 
 * pause the simulation
 */

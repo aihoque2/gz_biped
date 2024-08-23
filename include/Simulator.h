@@ -2,6 +2,7 @@
 // local includes
 #include "ECMProvider.h"
 #include "EffortController.h"
+#include "BipedalContact.h"
 
 // higher lvl includes
 #include <gz/sim/Server.hh>
@@ -91,9 +92,11 @@ class TrainSimulator{
 
         std::shared_ptr<double[]> state_; // 1D 30-vector to represent our state
         std::shared_ptr<double[]> axn_; // 1D 10-vector to represent torques we send on each joint
+        std::shared_ptr<bool[]> contacted_;// 1D 10 vector to show our individual contact states
         
         std::mutex axnMutex; // lock used for set_action() and get_action()
         std::mutex stateMutex; // lock used for publishing state info
+        std::mutex contactMutex;
  
         // we need to keep this plugin
         std::shared_ptr<ECMProvider> provider;

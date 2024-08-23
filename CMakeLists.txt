@@ -36,10 +36,17 @@ target_include_directories(joint_controller PUBLIC
 
 target_link_libraries(joint_controller gz-sim8::gz-sim8)
 
+# Contact Sensor
+add_library(bipedal_contact include/BipedalContact.h src/BipedalContact.cpp)
+target_include_directories(bipedal_contact PUBLIC
+ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
+
+target_link_libraries(bipedal_contact gz-sim8::gz-sim8)
+
 # TrainSimulator
-add_library(train_simulator include/Simulator.h src/Simulator.cpp include/ECMProvider.h include/EffortController.h)
+add_library(train_simulator include/Simulator.h src/Simulator.cpp include/ECMProvider.h include/EffortController.h include/BipedalContact.h)
 #target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
-target_link_libraries(train_simulator ecm_provider joint_controller ${Boost_LIBRARIES}) # link TrainSimulator with ECMProvider
+target_link_libraries(train_simulator ecm_provider joint_controller bipedal_contact ${Boost_LIBRARIES}) # link TrainSimulator with ECMProvider
 
 # our executable (or binary if you're familiar with Bazel)
 add_executable(launch_empty_world src/main.cpp)
