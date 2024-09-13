@@ -14,11 +14,13 @@ TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 #include <gz/sim/components/ContactSensor.hh>
 #include <gz/sim/components/Collision.hh>
 #include <gz/sim/components/ParentEntity.hh>
+#include <unordered_map>
 #include <memory>
 #include <vector>
+#include <string>
 
 static const std::vector<std::string> LINK_NAMES = 
-{"l_foot", "r_foot", "torso"};
+{"torso", "l_foot", "r_foot"};
 
 #ifndef BIPEDALCONTACT_HPP
 #define BIPEDALCONTACT_HPP
@@ -46,6 +48,7 @@ class BipedalContact : public gz::sim::System,
     private:
         std::shared_ptr<bool[]> contacted_; // {torso, footL, footR} in that order {0, 1, 2}
         std::mutex& contact_mutex_; // thread-safe lezzgeddit
+        std::unordered_map<std::string, std::vector<std::string>> link_map; // map link names to their collision names
 };
 
 #endif
