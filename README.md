@@ -1,4 +1,4 @@
-# Bipedal Walker Simulation With Ignition Gazebo
+# Bipedal Walker Simulation With Gazebo Harmonic
 
 please run 
 

@@ -96,14 +96,14 @@ TrainSimulator::~TrainSimulator(){
     std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
 
-    KillProcessIDs("gz\\ sim\\ ");
+    KillPIDs("gz\\ sim\\");
 
 }
 
-/* KillProcessIDs() 
+/* KillPIDs() 
 * kill gz_sim processes at the end of 
 */
-void TrainSimulator::KillProcessIDs(std::string process_name){
+void TrainSimulator::KillPIDs(std::string process_name){
     std::array<char, 128> buffer;
     std::vector<std::string> pids;
     std::string command = "ps aux | grep " + process_name + " ";
@@ -217,4 +217,3 @@ void TrainSimulator::Unpause(){
 }
 
 
-/* reset_simulation() */

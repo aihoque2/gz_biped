@@ -77,13 +77,10 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
     if (!ecm.HasComponentType(gz::sim::components::ContactSensorData::typeId)){
         throw std::runtime_error("BipedalContact::PostUpdate() no ContactSensor found ...wtf");
     }
-    else{
-        std::cout << "BipedalContact::PostUpdate() went through first if statement fine!" << std::endl;
-    }
 
     int i = 0;
     for (std::string link_name : LINK_NAMES){
-        bool contacted = false;
+        bool contacted = 0;
         std::vector<std::string> collision_names = link_map[link_name];
 
         // loop 2
@@ -95,12 +92,16 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
             }
 
             else if (contact->Data().contact_size() > 0){
-                std::cout << "contact sensor of size greater than 0 released" << std::endl;
+                // std::cout << "contact sensor of size greater than 0 released for collision: " + collision_name << std::endl;
+                contacted |= 1;
             }
             else{
-                std::cout << "contact sensor got nothing for " + collision_name + " LOL" << std::endl;
+                // std::cout << "contact sensor got nothing for " + collision_name + " LOL" << std::endl;
+                contacted |= 0;
             }
         }
+        // contacted_[i] = contacted;
+        std::cout << "here's contact for " + link_name + ": " << contacted << std::endl;
         i++;
     }
 

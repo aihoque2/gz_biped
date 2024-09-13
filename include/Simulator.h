@@ -84,7 +84,7 @@ class TrainSimulator{
 
     private:
         // shoutouts to gz-harmonic screwing up from gz-fortress
-        void KillProcessIDs(std::string process_name);
+        void KillPIDs(std::string process_name);
 
         gz::sim::ServerConfig serverConfig;
         std::string sdfFile; // filename for the sdf to spawn
