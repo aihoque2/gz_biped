@@ -21,8 +21,8 @@ TrainSimulator::TrainSimulator(bool gui){
     server_ = std::make_unique<gz::sim::Server>(serverConfig);
 
     // adding ECMProvider idx
-    provider = std::make_shared<ECMProvider>();
-    const auto gotECM = server_->AddSystem(provider, WORLD_IDX);
+    provider_ = std::make_shared<ECMProvider>();
+    const auto gotECM = server_->AddSystem(provider_, WORLD_IDX);
     if (!gotECM){
         throw std::runtime_error("could not integrate ECMProvider into server");
     }
@@ -71,8 +71,8 @@ TrainSimulator::TrainSimulator(bool gui){
         // end gui bracket
     } // endif
 
-    ecm_ = provider->getECM();
-    event_mgr_ = provider->getEvtMgr();
+    ecm_ = provider_->getECM();
+    event_mgr_ = provider_->getEvtMgr();
 
 }
 
@@ -186,7 +186,7 @@ void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int 
 void TrainSimulator::Pause(){
     auto running = this->server_->Running();
     if (!running){
-        std::cout << "TrainSimulator already paused. ignoring pause() call ..." << std::endl << std::flush;
+        GZ_INFO("TrainSimulator already paused. ignoring pause() call ...");
         return;
     }
 
@@ -204,7 +204,6 @@ void TrainSimulator::Pause(){
 void TrainSimulator::Unpause(){
     auto running = this->server_->Running();
     if (running){
-        std::cout << "TrainSimulator already running. ignoring unpause() call ..." << std::endl << std::flush;
         return;
     }
 
@@ -214,6 +213,11 @@ void TrainSimulator::Unpause(){
         throw std::runtime_error("SetPaused() returned false...world does not exist?");
     }
 
+}
+
+void TrainSimulator::ResetSim(){
+    ecm_ = provider_->getECM();
+    return;
 }
 
 

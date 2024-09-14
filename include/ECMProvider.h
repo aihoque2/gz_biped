@@ -1,4 +1,5 @@
 #include <gz/sim/Server.hh>
+#include <gz/sim/EntityComponentManager.hh>
 #include <gz/common/Console.hh>
 #include <gz/sim/ServerConfig.hh>
 #include <gz/sim/components/Name.hh>

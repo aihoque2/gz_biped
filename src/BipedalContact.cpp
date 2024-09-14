@@ -60,10 +60,6 @@ void BipedalContact::Configure(const gz::sim::Entity&,
 
         return true;
     });
-
-    std::vector<gz::sim::Entity> contact_sensors = ecm.EntitiesByComponents(gz::sim::components::ContactSensor());
-    std::cout << "BipedalContact::Configure() here's size of contact sensors vector: " << contact_sensors.size() << std::endl;
-
 }
 
 void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
@@ -72,13 +68,12 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
     check if each link has made a collision, and update the sensor data in contacted_
     */
 
-    std::cout << "BipedalContact::PostUpdate() still needs to be implemented." << std::endl;
-
     if (!ecm.HasComponentType(gz::sim::components::ContactSensorData::typeId)){
         throw std::runtime_error("BipedalContact::PostUpdate() no ContactSensor found ...wtf");
     }
 
-    int i = 0;
+    std::lock_guard<std::mutex> lock(contact_mutex_);
+    int i = 0; // i <  3 through this whole loop because LINK_NAMES.size() == 3
     for (std::string link_name : LINK_NAMES){
         bool contacted = 0;
         std::vector<std::string> collision_names = link_map[link_name];
@@ -100,8 +95,8 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
                 contacted |= 0;
             }
         }
-        // contacted_[i] = contacted;
-        std::cout << "here's contact for " + link_name + ": " << contacted << std::endl;
+        contacted_[i] = contacted;
+        std::cout << "here's contact for " + link_name + ": " << contacted_[i] << std::endl;
         i++;
     }
 

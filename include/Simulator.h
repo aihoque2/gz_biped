@@ -63,7 +63,7 @@ class TrainSimulator{
         void Unpause();
 
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
-        void ResetSimulation(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
+        void ResetSim(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         
 
@@ -99,7 +99,7 @@ class TrainSimulator{
         std::mutex contactMutex;
  
         // we need to keep this plugin
-        std::shared_ptr<ECMProvider> provider;
+        std::shared_ptr<ECMProvider> provider_;
 
         bool hasGUI;
 };
