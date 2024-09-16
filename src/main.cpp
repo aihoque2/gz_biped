@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 
     std::cout << "third run...." << std::endl; // debug
     my_sim.server_->Run(true, 300, false);
+    my_sim.ResetSim();
 
     // my_sim.Pause(); // quick test for me
     

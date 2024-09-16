@@ -136,7 +136,7 @@ void TrainSimulator::KillPIDs(std::string process_name){
 
 } 
 
-/* step() 
+/* Step() 
 * Given our inputAction
 * step 1 ms in the simulation
 */
@@ -158,6 +158,10 @@ void TrainSimulator::Step(std::vector<double> inputAction){
 * step (numSteps) milliseconds in the 
 * simulation with the given inputAction 
 * put for the first frame of these steps.
+*
+* I made this function because this
+* simulation
+* is for force control.
 */
 void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps){
     bool stepped = false;
@@ -186,7 +190,7 @@ void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int 
 void TrainSimulator::Pause(){
     auto running = this->server_->Running();
     if (!running){
-        GZ_INFO("TrainSimulator already paused. ignoring pause() call ...");
+        std::cout << "TrainSimulator already paused. ignoring pause() call ..." << std::endl;
         return;
     }
 
@@ -217,7 +221,18 @@ void TrainSimulator::Unpause(){
 
 void TrainSimulator::ResetSim(){
     ecm_ = provider_->getECM();
-    return;
+
+    /*
+    std::vector<gz::sim::Entity> jointVec = ecm_->EntitiesByComponents(gz::sim::components::Joint());
+    std::cout << "ResetSim() sanity check jointVec size: " << jointVec.size() << std::endl;
+    */
+    
+    auto canon_link = ecm_->EntityByComponents(gz::sim::components::Link(),
+                                               gz::sim::components::CanonicalLink());
+    
+    if (canon_link == gz::sim::kNullEntity){
+        throw std::runtime_error("TrainSimulator could not find the CanonicalLink...wtf");
+    }
 }
 
 

@@ -1,4 +1,4 @@
-#include "gz_bipedal/JointStateUpdater.h"
+#include "JointStateUpdater.h"
 
 /*
 implement that header stuff here
