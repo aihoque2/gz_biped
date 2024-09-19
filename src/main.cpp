@@ -56,11 +56,6 @@ int main(int argc, char **argv)
             throw std::runtime_error("main.cpp link component: " + link_name + "returned NULL");
         }
 
-        // gz::sim::Entity contact_ent = my_sim.ecm_->ChildrenByComponents(linkEnt, gz::sim::components::ContactSensor());
-
-        // std::vector<gz::sim::Entity> collisions = my_sim.ecm_->ChildrenByComponents(link_ent, gz::sim::components::Collision());
-        // std::cout << "Link name: " << link_name <<  ", length of collisions vector: " << collisions.size() << std::endl;
-    
     }
     return 0;
 }
