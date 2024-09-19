@@ -245,20 +245,35 @@ void TrainSimulator::ResetSim(){
     
     auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(canon_ent);
     if (pose_cmd == nullptr){
-        std::cout << "blackbird_ent has no worlPoseCmd. creating command" << std::endl;
+        std::cout << "blackbird_ent has no WorldPoseCmd. creating command" << std::endl;
         ecm_->CreateComponent(canon_ent, gz::sim::components::WorldPoseCmd(initial_pose));
     }
     else{
         // set the components pose
+        std::cout << "blackbird_ent has WorldPoseCmd." << std::endl;
         ecm_->SetComponentData<gz::sim::components::WorldPoseCmd>(canon_ent, initial_pose);
-
+        
+        ecm_->SetChanged(canon_ent,
+            gz::sim::components::WorldPoseCmd::typeId, 
+            gz::sim::ComponentState::OneTimeChange);
     }
 
-    ecm_->SetChanged(canon_ent,
-    gz::sim::components::WorldPoseCmd::typeId, 
-    gz::sim::ComponentState::OneTimeChange);
 
-    /* TODO: reset each joint state */ 
+    for (auto joint_name : JOINT_NAMES){
+        auto joint = ecm_->EntityByComponents(gz::sim::components::Joint(), 
+                                                gz::sim::components::Name(joint_name));
+        /* TODO: reset each joint state */ 
+
+        // TODO: theta reset (position)
+        /*
+        auto * joint_reset = ecm_->Component<gz::sim::components::JointPositionReset>(joint);
+
+        ecm_.SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
+        */
+        // theta-dot
+
+        // theta-double-dot???
+    }
 
 }
 

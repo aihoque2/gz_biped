@@ -14,6 +14,7 @@
 // component includes
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Joint.hh>
+#include <gz/sim/components/JointPositionReset.hh>
 #include <gz/sim/components/Pose.hh>
 #include <gz/sim/components/PoseCmd.hh>
 #include <gz/sim/components/CanonicalLink.hh>

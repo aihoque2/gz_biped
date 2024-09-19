@@ -87,16 +87,14 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
             }
 
             else if (contact->Data().contact_size() > 0){
-                // std::cout << "contact sensor of size greater than 0 released for collision: " + collision_name << std::endl;
                 contacted |= 1;
             }
             else{
-                // std::cout << "contact sensor got nothing for " + collision_name + " LOL" << std::endl;
                 contacted |= 0;
             }
         }
         contacted_[i] = contacted;
-        std::cout << "BipedalContact state for link " + link_name +": " << contacted_[i] << std:: endl; 
+        // std::cout << "BipedalContact state for link " + link_name +": " << contacted_[i] << std:: endl; 
         i++;
     }
 

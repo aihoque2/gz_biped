@@ -64,12 +64,12 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
     */
     std::lock_guard<std::mutex> lock(axn_mutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
-        std::string jntNm = JOINT_NAMES[i];
-        gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(jntNm), gz::sim::components::Joint());
+        std::string jnt_name = JOINT_NAMES[i];
+        gz::sim::Entity joint = ecm.EntityByComponents(gz::sim::components::Name(jnt_name), gz::sim::components::Joint());
 
 
         if (!ecm.HasEntity(joint)){
-            throw std::runtime_error("EffortController::PreUpdate(): ECM doesn't have joint: " + jntNm);
+            throw std::runtime_error("EffortController::PreUpdate(): ECM doesn't have joint: " + jnt_name);
         }
 
     
@@ -79,7 +79,7 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         
         auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
         if (force == nullptr){
-            std::cout << "EffortController::PreUpdate(): entity: " + jntNm + " has NULL force Component ptr. Adding force component..." << std::endl << std::flush;
+            std::cout << "EffortController::PreUpdate(): entity: " + jnt_name + " has NULL force Component ptr. Adding force component..." << std::endl << std::flush;
             ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({axn_[i]}));
             forceCompCreation++;
         }
