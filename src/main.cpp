@@ -41,6 +41,10 @@ int main(int argc, char **argv)
     my_sim.server_->Run(true, 300, false);
     my_sim.ResetSim();
 
+    std::cout << "fourth run...." << std::endl; // debug
+    my_sim.server_->Run(true, 600, false);
+    //my_sim.ResetSim();
+
     // my_sim.Pause(); // quick test for me
     
     std::vector<std::string> LINK_NAMES = {"l_foot", "r_foot", "torso"};

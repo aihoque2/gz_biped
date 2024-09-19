@@ -96,6 +96,7 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
             }
         }
         contacted_[i] = contacted;
+        std::cout << "BipedalContact state for link " + link_name +": " << contacted_[i] << std:: endl; 
         i++;
     }
 

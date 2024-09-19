@@ -91,13 +91,12 @@ TrainSimulator::~TrainSimulator(){
             std::this_thread::sleep_for(std::chrono::seconds(3));
             gui_->wait();
             std::cerr << "Finished waiting on subprocess"<< std::endl << std::flush;
+            KillPIDs("gz\\ sim\\");
+
         }
     }
     std::cout << "Stopping TrainSimulator server..." << std::endl;
     server_->Stop();
-
-    KillPIDs("gz\\ sim\\");
-
 }
 
 /* KillPIDs() 
@@ -220,19 +219,46 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
-    ecm_ = provider_->getECM();
+
+    ecm_ = provider_->getECM(); // just to be safe
 
     /*
     std::vector<gz::sim::Entity> jointVec = ecm_->EntitiesByComponents(gz::sim::components::Joint());
     std::cout << "ResetSim() sanity check jointVec size: " << jointVec.size() << std::endl;
     */
-    
-    auto canon_link = ecm_->EntityByComponents(gz::sim::components::Link(),
-                                               gz::sim::components::CanonicalLink());
-    
-    if (canon_link == gz::sim::kNullEntity){
-        throw std::runtime_error("TrainSimulator could not find the CanonicalLink...wtf");
-    }
-}
 
+    gz::sim::Entity canon_ent = ecm_->EntityByComponents(gz::sim::components::Name("blackbird"));
+    
+    if (canon_ent == gz::sim::kNullEntity){
+        throw std::runtime_error("TrainSimulator could not find the blackbird entity...wtf");
+    }
+    
+    auto* cl_pose_comp = ecm_->Component<gz::sim::components::Pose>(canon_ent);
+    if (cl_pose_comp == nullptr){
+        throw std::runtime_error("TrainSimulator canon_ent's Pose component is NULL");
+    }
+
+    //TODO
+
+    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);
+    // *cl_pose_comp = gz::sim::components::Pose(initial_pose);
+    
+    auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(canon_ent);
+    if (pose_cmd == nullptr){
+        std::cout << "blackbird_ent has no worlPoseCmd. creating command" << std::endl;
+        ecm_->CreateComponent(canon_ent, gz::sim::components::WorldPoseCmd(initial_pose));
+    }
+    else{
+        // set the components pose
+        ecm_->SetComponentData<gz::sim::components::WorldPoseCmd>(canon_ent, initial_pose);
+
+    }
+
+    ecm_->SetChanged(canon_ent,
+    gz::sim::components::WorldPoseCmd::typeId, 
+    gz::sim::ComponentState::OneTimeChange);
+
+    /* TODO: reset each joint state */ 
+
+}
 

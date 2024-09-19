@@ -14,7 +14,11 @@
 // component includes
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Joint.hh>
+#include <gz/sim/components/Pose.hh>
+#include <gz/sim/components/PoseCmd.hh>
 #include <gz/sim/components/CanonicalLink.hh>
+
+#include <gz/math/Pose3.hh>
 
 #include <boost/process.hpp>
 #include <memory>
@@ -29,7 +33,7 @@ NOTE: NO ROS2 to WORRY about here. only have to worry
 
 about being able to pull full state out in valid manner
 
-!!!the ROS2 nodes to step and publish will be written with rclpy!!!
+!!!The ROS2 nodes to step and publish will be written with rclpy!!!
 */
 
 #ifndef TRAINSIMULATOR_H
@@ -69,8 +73,6 @@ class TrainSimulator{
 
         /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void ResetSim(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
-
-        
 
         /*
         variables 
