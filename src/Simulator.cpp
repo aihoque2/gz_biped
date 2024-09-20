@@ -232,7 +232,7 @@ void TrainSimulator::ResetSim(){
     if (blackbird_ent == gz::sim::kNullEntity){
         throw std::runtime_error("TrainSimulator could not find the blackbird entity...wtf");
     }
-    
+
     auto* cl_pose_comp = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
     if (cl_pose_comp == nullptr){
         throw std::runtime_error("TrainSimulator blackbird_ent's Pose component is NULL");
@@ -254,20 +254,6 @@ void TrainSimulator::ResetSim(){
     ecm_->SetChanged(blackbird_ent,
         gz::sim::components::WorldPoseCmd::typeId, 
         gz::sim::ComponentState::OneTimeChange);
-    
-    /*TODO: is this part necessary or delete it?*/
-    // gz::math::Vector3d initial_vel(0.0, 0.0, 0.0);
-    // auto* lin_vel_cmd = ecm_->Component<gz::sim::components::LinearVelocityCmd>(blackbird_ent);
-    // if (lin_vel_cmd == nullptr){
-    //     ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearVelocityCmd(initial_vel));
-    // }
-    // else{
-    //     ecm_->SetComponentData<gz::sim::components::LinearVelocityCmd>(blackbird_ent, initial_vel);
-    // }
-
-    // ecm_->SetChanged(blackbird_ent,
-    //     gz::sim::components::LinearVelocityCmd::typeId, 
-    //     gz::sim::ComponentState::OneTimeChange);
 
 
     for (auto joint_name : JOINT_NAMES){
@@ -280,7 +266,6 @@ void TrainSimulator::ResetSim(){
         
         if (joint_reset == nullptr)
             ecm_->CreateComponent(joint, gz::sim::components::JointPositionReset({0.0}));
-
         else 
             ecm_->SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
         
@@ -296,11 +281,16 @@ void TrainSimulator::ResetSim(){
             ecm_->SetComponentData<gz::sim::components::JointVelocityReset>(blackbird_ent, {0.0});
         }
 
+        // announcing changed states
+        ecm_->SetChanged(joint, gz::sim::components::JointPositionReset::typeId, gz::sim::ComponentState::OneTimeChange);
+        ecm_->SetChanged(joint, gz::sim::components::JointVelocityReset::typeId, gz::sim::ComponentState::OneTimeChange);
+
+
         // theta-double-dot???
         auto* force = ecm_->Component<gz::sim::components::JointForceCmd>(joint);
         force->Data()[0] = 0.0;
 
     }
-
 }
 
+    /*TODO: is this part necessary or delete it?*/
