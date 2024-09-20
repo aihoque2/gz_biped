@@ -175,10 +175,12 @@ void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int 
             }
         }
         stepped = server_->RunOnce(false);
+        if (!stepped) {std::cout << "robot's action steppes returned false at iteration: "<< i << std::endl;}
     }
 
     // run our normal steps
-    stepped = server_->Run(false, afterSteps, false); // true for running the non-blocking.
+    stepped = server_->Run(true, afterSteps, false); // true for running the non-blocking.
+    if (!stepped){ std::cout << "robot did not step afterSteps" << std::endl;}
 }    
 
 
@@ -239,7 +241,7 @@ void TrainSimulator::ResetSim(){
     }
 
     // TODO
-    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);
+    gz::math::Pose3d initial_pose(0.0, 0.0, 0.20, 0.0, 0.0, 0.0);
     // *cl_pose_comp = gz::sim::components::Pose(initial_pose);
     
     auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);

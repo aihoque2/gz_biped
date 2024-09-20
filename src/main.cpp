@@ -26,6 +26,10 @@ int main(int argc, char **argv)
     // run the server
     std::vector<double> axn1 = {0.0, 0.0, 8.0, 0.0, 0.0, /* Left Js */   
                                         0.0, 0.0, 8.0, 0.0, 0.0 /* Right Js */}; 
+    
+    std::vector<double> axn2 = {0.0, 0.0, 0.0, 8.0, 0.0, /* Left Js */   
+                                        0.0, 0.0, 0.0, 8.0, 0.0 /* Right Js */};
+
     std::cout << "first run with forces....\n"; // debug
     
     /* Either or */
@@ -42,20 +46,16 @@ int main(int argc, char **argv)
     my_sim.ResetSim();
 
     std::cout << "fourth run...." << std::endl; // debug
-    my_sim.server_->Run(true, 700, false);
-    //my_sim.ResetSim();
+    my_sim.server_->Run(true, 100, false);
+    my_sim.StepFew(axn2, 200, 500); 
 
+    //std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    my_sim.ResetSim();
+
+    std::cout << "fifth run...." << std::endl;
+    my_sim.server_->Run(true, 500, false);
     // my_sim.Pause(); // quick test for me
-    
-    std::vector<std::string> LINK_NAMES = {"l_foot", "r_foot", "torso"};
-    for (auto link_name : LINK_NAMES){
-        auto link_ent = my_sim.ecm_->EntityByComponents(gz::sim::components::Name(link_name), 
-                                                gz::sim::components::Link());
 
-        if (link_ent == gz::sim::kNullEntity){
-            throw std::runtime_error("main.cpp link component: " + link_name + "returned NULL");
-        }
-
-    }
     return 0;
 }

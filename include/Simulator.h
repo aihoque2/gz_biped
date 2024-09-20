@@ -16,6 +16,7 @@
 #include <gz/sim/components/Joint.hh>
 #include <gz/sim/components/JointPositionReset.hh>
 #include <gz/sim/components/LinearVelocityCmd.hh>
+#include <gz/sim/components/AngularVelocityCmd.hh>
 #include <gz/sim/components/JointVelocityReset.hh>
 #include <gz/sim/components/Pose.hh>
 #include <gz/sim/components/PoseCmd.hh>
