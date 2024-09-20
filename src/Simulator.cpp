@@ -227,36 +227,47 @@ void TrainSimulator::ResetSim(){
     std::cout << "ResetSim() sanity check jointVec size: " << jointVec.size() << std::endl;
     */
 
-    gz::sim::Entity canon_ent = ecm_->EntityByComponents(gz::sim::components::Name("blackbird"));
+    gz::sim::Entity blackbird_ent = ecm_->EntityByComponents(gz::sim::components::Name("blackbird"));
     
-    if (canon_ent == gz::sim::kNullEntity){
+    if (blackbird_ent == gz::sim::kNullEntity){
         throw std::runtime_error("TrainSimulator could not find the blackbird entity...wtf");
     }
     
-    auto* cl_pose_comp = ecm_->Component<gz::sim::components::Pose>(canon_ent);
+    auto* cl_pose_comp = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
     if (cl_pose_comp == nullptr){
-        throw std::runtime_error("TrainSimulator canon_ent's Pose component is NULL");
+        throw std::runtime_error("TrainSimulator blackbird_ent's Pose component is NULL");
     }
 
-    //TODO
-
+    // TODO
     gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);
     // *cl_pose_comp = gz::sim::components::Pose(initial_pose);
     
-    auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(canon_ent);
+    auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
     if (pose_cmd == nullptr){
-        std::cout << "blackbird_ent has no WorldPoseCmd. creating command" << std::endl;
-        ecm_->CreateComponent(canon_ent, gz::sim::components::WorldPoseCmd(initial_pose));
+        ecm_->CreateComponent(blackbird_ent, gz::sim::components::WorldPoseCmd(initial_pose));
     }
     else{
         // set the components pose
-        std::cout << "blackbird_ent has WorldPoseCmd." << std::endl;
-        ecm_->SetComponentData<gz::sim::components::WorldPoseCmd>(canon_ent, initial_pose);
-        
-        ecm_->SetChanged(canon_ent,
-            gz::sim::components::WorldPoseCmd::typeId, 
-            gz::sim::ComponentState::OneTimeChange);
+        ecm_->SetComponentData<gz::sim::components::WorldPoseCmd>(blackbird_ent, initial_pose);
     }
+
+    ecm_->SetChanged(blackbird_ent,
+        gz::sim::components::WorldPoseCmd::typeId, 
+        gz::sim::ComponentState::OneTimeChange);
+    
+    /*TODO: is this part necessary or delete it?*/
+    // gz::math::Vector3d initial_vel(0.0, 0.0, 0.0);
+    // auto* lin_vel_cmd = ecm_->Component<gz::sim::components::LinearVelocityCmd>(blackbird_ent);
+    // if (lin_vel_cmd == nullptr){
+    //     ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearVelocityCmd(initial_vel));
+    // }
+    // else{
+    //     ecm_->SetComponentData<gz::sim::components::LinearVelocityCmd>(blackbird_ent, initial_vel);
+    // }
+
+    // ecm_->SetChanged(blackbird_ent,
+    //     gz::sim::components::LinearVelocityCmd::typeId, 
+    //     gz::sim::ComponentState::OneTimeChange);
 
 
     for (auto joint_name : JOINT_NAMES){
@@ -264,15 +275,31 @@ void TrainSimulator::ResetSim(){
                                                 gz::sim::components::Name(joint_name));
         /* TODO: reset each joint state */ 
 
-        // TODO: theta reset (position)
-        /*
+        // theta reset (position)
         auto * joint_reset = ecm_->Component<gz::sim::components::JointPositionReset>(joint);
+        
+        if (joint_reset == nullptr)
+            ecm_->CreateComponent(joint, gz::sim::components::JointPositionReset({0.0}));
 
-        ecm_.SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
-        */
+        else 
+            ecm_->SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
+        
+
         // theta-dot
+        auto* joint_vel = ecm_->Component<gz::sim::components::JointVelocityReset>(joint);
+        
+        if (joint_vel == nullptr){
+            ecm_->CreateComponent(blackbird_ent, gz::sim::components::JointVelocityReset({0.0}));
+        }
+        else{
+            // set the components pose
+            ecm_->SetComponentData<gz::sim::components::JointVelocityReset>(blackbird_ent, {0.0});
+        }
 
         // theta-double-dot???
+        auto* force = ecm_->Component<gz::sim::components::JointForceCmd>(joint);
+        force->Data()[0] = 0.0;
+
     }
 
 }

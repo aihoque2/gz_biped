@@ -15,11 +15,14 @@
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Joint.hh>
 #include <gz/sim/components/JointPositionReset.hh>
+#include <gz/sim/components/LinearVelocityCmd.hh>
+#include <gz/sim/components/JointVelocityReset.hh>
 #include <gz/sim/components/Pose.hh>
 #include <gz/sim/components/PoseCmd.hh>
 #include <gz/sim/components/CanonicalLink.hh>
 
-#include <gz/math/Pose3.hh>
+// mafs
+#include <gz/math.hh>
 
 #include <boost/process.hpp>
 #include <memory>

@@ -74,9 +74,6 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
 
     
         // send force command
-        // refer to this on line 335: 
-        // https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_controller/JointController.cc
-        
         auto force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
         if (force == nullptr){
             std::cout << "EffortController::PreUpdate(): entity: " + jnt_name + " has NULL force Component ptr. Adding force component..." << std::endl << std::flush;
