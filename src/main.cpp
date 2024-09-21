@@ -47,7 +47,8 @@ int main(int argc, char **argv)
 
     std::cout << "fourth run...." << std::endl; // debug
     my_sim.server_->Run(true, 100, false);
-    my_sim.StepFew(axn2, 200, 500); 
+    my_sim.StepFew(axn2, 300, 500); 
+    //my_sim.server_->Run(true, 700, false);
 
     //std::this_thread::sleep_for(std::chrono::seconds(3));
 

@@ -73,8 +73,8 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
     }
 
     std::lock_guard<std::mutex> lock(contact_mutex_);
-    int i = 0; // i <  3 through this whole loop because LINK_NAMES.size() == 3
-    for (std::string link_name : LINK_NAMES){
+    int i = 0; // i <  3 through this whole loop because CONTACT_LINKS.size() == 3
+    for (std::string link_name : CONTACT_LINKS){
         bool contacted = 0;
         std::vector<std::string> collision_names = link_map[link_name];
 
