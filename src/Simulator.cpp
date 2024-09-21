@@ -240,8 +240,27 @@ void TrainSimulator::ResetSim(){
         throw std::runtime_error("TrainSimulator blackbird_ent's Pose component is NULL");
     }
 
-    // TODO
-    gz::math::Pose3d initial_pose(0.0, 0.0, 0.20, 0.0, 0.0, 0.0);
+    gz::math::Vector3d zero_vec(0.0, 0.0, 0.0);
+    auto* lin_accel = ecm_->Component<gz::sim::components::LinearAcceleration>(blackbird_ent);
+    if (lin_accel) {
+        std::cout << "TrainSimulator::Reset() blackbird has LinearAcceleration" << std::endl;
+        ecm_->SetComponentData<gz::sim::components::LinearAcceleration>(blackbird_ent, zero_vec);
+    }
+    else{ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearAcceleration(zero_vec));}
+    ecm_->SetChanged(blackbird_ent, gz::sim::components::LinearAcceleration::typeId, gz::sim::ComponentState::OneTimeChange);
+
+
+    auto* ang_accel = ecm_->Component<gz::sim::components::AngularAcceleration>(blackbird_ent);
+    if (ang_accel){
+        std::cout << "TrainSimulator::Reset() blackbird has angular acceleration" << std::endl;
+        ecm_->SetComponentData<gz::sim::components::AngularAcceleration>(blackbird_ent, zero_vec);
+    }
+    else{
+        ecm_->CreateComponent(blackbird_ent, gz::sim::components::AngularAcceleration(zero_vec));
+    }
+    ecm_->SetChanged(blackbird_ent, gz::sim::components::AngularAcceleration::typeId, gz::sim::ComponentState::OneTimeChange);
+
+    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);
     // *cl_pose_comp = gz::sim::components::Pose(initial_pose);
     
     auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
@@ -258,6 +277,7 @@ void TrainSimulator::ResetSim(){
         gz::sim::ComponentState::OneTimeChange);
 
 
+   // ecm->Each
     for (auto joint_name : JOINT_NAMES){
         auto joint = ecm_->EntityByComponents(gz::sim::components::Joint(), 
                                                 gz::sim::components::Name(joint_name));
@@ -276,21 +296,21 @@ void TrainSimulator::ResetSim(){
         auto* joint_vel = ecm_->Component<gz::sim::components::JointVelocityReset>(joint);
         
         if (joint_vel == nullptr){
-            ecm_->CreateComponent(blackbird_ent, gz::sim::components::JointVelocityReset({0.0}));
+            ecm_->CreateComponent(joint, gz::sim::components::JointVelocityReset({0.0}));
         }
         else{
             // set the components pose
-            ecm_->SetComponentData<gz::sim::components::JointVelocityReset>(blackbird_ent, {0.0});
+            ecm_->SetComponentData<gz::sim::components::JointVelocityReset>(joint, {0.0});
         }
-
-        // announcing changed states
-        ecm_->SetChanged(joint, gz::sim::components::JointPositionReset::typeId, gz::sim::ComponentState::OneTimeChange);
-        ecm_->SetChanged(joint, gz::sim::components::JointVelocityReset::typeId, gz::sim::ComponentState::OneTimeChange);
-
 
         // theta-double-dot???
         auto* force = ecm_->Component<gz::sim::components::JointForceCmd>(joint);
         force->Data()[0] = 0.0;
+
+        // announcing changed states
+        ecm_->SetChanged(joint, gz::sim::components::JointPositionReset::typeId, gz::sim::ComponentState::OneTimeChange);
+        ecm_->SetChanged(joint, gz::sim::components::JointVelocityReset::typeId, gz::sim::ComponentState::OneTimeChange);
+        ecm_->SetChanged(joint, gz::sim::components::JointForceCmd::typeId, gz::sim::ComponentState::OneTimeChange);
 
     }
 }

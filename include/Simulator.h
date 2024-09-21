@@ -17,6 +17,11 @@
 #include <gz/sim/components/JointPositionReset.hh>
 #include <gz/sim/components/LinearVelocityCmd.hh>
 #include <gz/sim/components/AngularVelocityCmd.hh>
+
+// acceleration components
+#include <gz/sim/components/LinearAcceleration.hh>
+#include <gz/sim/components/AngularAcceleration.hh>
+
 #include <gz/sim/components/JointVelocityReset.hh>
 #include <gz/sim/components/Pose.hh>
 #include <gz/sim/components/PoseCmd.hh>

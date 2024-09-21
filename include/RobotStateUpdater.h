@@ -1,6 +1,9 @@
 #include <gz/sim/Server.hh>
 #include <gz/common/Console.hh>
 #include <gz/sim/ServerConfig.hh>
+
+#include <gz/sim/components/Pose.hh>
+
 #include <memory>
 #include <vector>
 #include <string>

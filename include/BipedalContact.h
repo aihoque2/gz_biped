@@ -19,7 +19,7 @@ TODO: REGISTER THIS PLUGIN TO BE ABLE TO USE IN SDF FILES
 #include <vector>
 #include <string>
 
-static const std::vector<std::string> LINK_NAMES = 
+static const std::vector<std::string> CONTACT_LINKS = 
 {"torso", "l_foot", "r_foot"};
 
 #ifndef BIPEDALCONTACT_HPP
