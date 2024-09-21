@@ -221,6 +221,7 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
+    std::cout << "TrainSimulator::Reset() call!" << std::endl;
 
     ecm_ = provider_->getECM(); // just to be safe
 
@@ -241,6 +242,7 @@ void TrainSimulator::ResetSim(){
     }
 
     gz::math::Vector3d zero_vec(0.0, 0.0, 0.0);
+    gz::math::Vector3d g_vec(0.0, 0.0, -9.8);
     auto* lin_accel = ecm_->Component<gz::sim::components::LinearAcceleration>(blackbird_ent);
     if (lin_accel) {
         std::cout << "TrainSimulator::Reset() blackbird has LinearAcceleration" << std::endl;
@@ -260,9 +262,25 @@ void TrainSimulator::ResetSim(){
     }
     ecm_->SetChanged(blackbird_ent, gz::sim::components::AngularAcceleration::typeId, gz::sim::ComponentState::OneTimeChange);
 
-    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);
-    // *cl_pose_comp = gz::sim::components::Pose(initial_pose);
-    
+
+    auto* lin_vel_cmd = ecm_->Component<gz::sim::components::LinearVelocityCmd>(blackbird_ent);
+    if (lin_vel_cmd == nullptr){
+        ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearVelocityCmd(zero_vec));
+    } else {
+        ecm_->SetComponentData<gz::sim::components::LinearVelocityCmd>(blackbird_ent, zero_vec);
+    }
+    ecm_->SetChanged(blackbird_ent, gz::sim::components::LinearVelocityCmd::typeId, gz::sim::ComponentState::OneTimeChange);
+
+    auto* ang_vel_cmd = ecm_->Component<gz::sim::components::AngularVelocityCmd>(blackbird_ent);
+    if (!ang_vel_cmd) {
+        ecm_->CreateComponent(blackbird_ent, gz::sim::components::AngularVelocityCmd(zero_vec));
+    } else {
+        ecm_->SetComponentData<gz::sim::components::AngularVelocityCmd>(blackbird_ent, zero_vec);
+    }
+    ecm_->SetChanged(blackbird_ent, gz::sim::components::AngularVelocityCmd::typeId, gz::sim::ComponentState::OneTimeChange);
+
+    // Blackbird pose reset
+    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);    
     auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
     if (pose_cmd == nullptr){
         ecm_->CreateComponent(blackbird_ent, gz::sim::components::WorldPoseCmd(initial_pose));
