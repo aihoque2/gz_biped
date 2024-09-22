@@ -10,6 +10,8 @@
 #include <gz/sim/EntityComponentManager.hh>
 #include <gz/common/Console.hh>
 #include <gz/transport/Node.hh>
+#include <gz/msgs/world_control.pb.h>
+#include <gz/msgs/boolean.pb.h>
 
 // component includes
 #include <gz/sim/components/Name.hh>

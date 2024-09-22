@@ -221,116 +221,25 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
-    std::cout << "TrainSimulator::Reset() call!" << std::endl;
+    gz::transport::Node node;
 
-    ecm_ = provider_->getECM(); // just to be safe
+    // Create a message to reset the world
+    gz::msgs::WorldControl req;
+    req.mutable_reset()->set_all(true); // Reset everything (pose, velocities, etc.)
 
-    /*
-    std::vector<gz::sim::Entity> jointVec = ecm_->EntitiesByComponents(gz::sim::components::Joint());
-    std::cout << "ResetSim() sanity check jointVec size: " << jointVec.size() << std::endl;
-    */
-
-    gz::sim::Entity blackbird_ent = ecm_->EntityByComponents(gz::sim::components::Name("blackbird"));
+    // Publish the reset message to the control service
     
-    if (blackbird_ent == gz::sim::kNullEntity){
-        throw std::runtime_error("TrainSimulator could not find the blackbird entity...wtf");
-    }
+    gz::msgs::Boolean rep;
+    std::string service = "/world/empty/control";
+    bool result;
+    unsigned int timeout = 5000; // Timeout in milliseconds
 
-    auto* cl_pose_comp = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
-    if (cl_pose_comp == nullptr){
-        throw std::runtime_error("TrainSimulator blackbird_ent's Pose component is NULL");
-    }
+    // Request reset through the transport node
+    bool success = node.Request(service, req, timeout, rep, result);
 
-    gz::math::Vector3d zero_vec(0.0, 0.0, 0.0);
-    gz::math::Vector3d g_vec(0.0, 0.0, -9.8);
-    auto* lin_accel = ecm_->Component<gz::sim::components::LinearAcceleration>(blackbird_ent);
-    if (lin_accel) {
-        std::cout << "TrainSimulator::Reset() blackbird has LinearAcceleration" << std::endl;
-        ecm_->SetComponentData<gz::sim::components::LinearAcceleration>(blackbird_ent, zero_vec);
-    }
-    else{ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearAcceleration(zero_vec));}
-    ecm_->SetChanged(blackbird_ent, gz::sim::components::LinearAcceleration::typeId, gz::sim::ComponentState::OneTimeChange);
-
-
-    auto* ang_accel = ecm_->Component<gz::sim::components::AngularAcceleration>(blackbird_ent);
-    if (ang_accel){
-        std::cout << "TrainSimulator::Reset() blackbird has angular acceleration" << std::endl;
-        ecm_->SetComponentData<gz::sim::components::AngularAcceleration>(blackbird_ent, zero_vec);
-    }
-    else{
-        ecm_->CreateComponent(blackbird_ent, gz::sim::components::AngularAcceleration(zero_vec));
-    }
-    ecm_->SetChanged(blackbird_ent, gz::sim::components::AngularAcceleration::typeId, gz::sim::ComponentState::OneTimeChange);
-
-
-    auto* lin_vel_cmd = ecm_->Component<gz::sim::components::LinearVelocityCmd>(blackbird_ent);
-    if (lin_vel_cmd == nullptr){
-        ecm_->CreateComponent(blackbird_ent, gz::sim::components::LinearVelocityCmd(zero_vec));
+    if (!success || !result || !rep.data()) {
+        std::cerr << "Failed to reset the world using transport service." << std::endl;
     } else {
-        ecm_->SetComponentData<gz::sim::components::LinearVelocityCmd>(blackbird_ent, zero_vec);
-    }
-    ecm_->SetChanged(blackbird_ent, gz::sim::components::LinearVelocityCmd::typeId, gz::sim::ComponentState::OneTimeChange);
-
-    auto* ang_vel_cmd = ecm_->Component<gz::sim::components::AngularVelocityCmd>(blackbird_ent);
-    if (!ang_vel_cmd) {
-        ecm_->CreateComponent(blackbird_ent, gz::sim::components::AngularVelocityCmd(zero_vec));
-    } else {
-        ecm_->SetComponentData<gz::sim::components::AngularVelocityCmd>(blackbird_ent, zero_vec);
-    }
-    ecm_->SetChanged(blackbird_ent, gz::sim::components::AngularVelocityCmd::typeId, gz::sim::ComponentState::OneTimeChange);
-
-    // Blackbird pose reset
-    gz::math::Pose3d initial_pose(0.0, 0.0, 1.15, 0.0, 0.0, 0.0);    
-    auto* pose_cmd = ecm_->Component<gz::sim::components::Pose>(blackbird_ent);
-    if (pose_cmd == nullptr){
-        ecm_->CreateComponent(blackbird_ent, gz::sim::components::WorldPoseCmd(initial_pose));
-    }
-    else{
-        // set the components pose
-        ecm_->SetComponentData<gz::sim::components::WorldPoseCmd>(blackbird_ent, initial_pose);
-    }
-
-    ecm_->SetChanged(blackbird_ent,
-        gz::sim::components::WorldPoseCmd::typeId, 
-        gz::sim::ComponentState::OneTimeChange);
-
-
-   // ecm->Each
-    for (auto joint_name : JOINT_NAMES){
-        auto joint = ecm_->EntityByComponents(gz::sim::components::Joint(), 
-                                                gz::sim::components::Name(joint_name));
-        /* TODO: reset each joint state */ 
-
-        // theta reset (position)
-        auto * joint_reset = ecm_->Component<gz::sim::components::JointPositionReset>(joint);
-        
-        if (joint_reset == nullptr)
-            ecm_->CreateComponent(joint, gz::sim::components::JointPositionReset({0.0}));
-        else 
-            ecm_->SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
-        
-
-        // theta-dot
-        auto* joint_vel = ecm_->Component<gz::sim::components::JointVelocityReset>(joint);
-        
-        if (joint_vel == nullptr){
-            ecm_->CreateComponent(joint, gz::sim::components::JointVelocityReset({0.0}));
-        }
-        else{
-            // set the components pose
-            ecm_->SetComponentData<gz::sim::components::JointVelocityReset>(joint, {0.0});
-        }
-
-        // theta-double-dot???
-        auto* force = ecm_->Component<gz::sim::components::JointForceCmd>(joint);
-        force->Data()[0] = 0.0;
-
-        // announcing changed states
-        ecm_->SetChanged(joint, gz::sim::components::JointPositionReset::typeId, gz::sim::ComponentState::OneTimeChange);
-        ecm_->SetChanged(joint, gz::sim::components::JointVelocityReset::typeId, gz::sim::ComponentState::OneTimeChange);
-        ecm_->SetChanged(joint, gz::sim::components::JointForceCmd::typeId, gz::sim::ComponentState::OneTimeChange);
-
+        std::cout << "World reset successfully through transport service." << std::endl;
     }
 }
-
-    /*TODO: is this part necessary or delete it?*/

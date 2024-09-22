@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     std::cout << "first run with forces....\n";
     
     /* Either or */
-    my_sim.server_->Run(true, 300, false);
+    my_sim.server_->Run(true, 1500, false);
     // my_sim.StepFew(axn1, 30, 290);
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
@@ -40,7 +40,6 @@ int main(int argc, char **argv)
 
     std::cout << "third run...." << std::endl; 
     my_sim.server_->Run(true, 300, false);
-    my_sim.Pause();
     my_sim.ResetSim();
 
     std::cout << "fourth run...." << std::endl; 
@@ -49,11 +48,10 @@ int main(int argc, char **argv)
 
     //std::this_thread::sleep_for(std::chrono::seconds(3));
 
-    my_sim.Pause();
     my_sim.ResetSim(); // why does this generate a hop?
 
     std::cout << "fifth run...." << std::endl;
-    my_sim.server_->Run(true, 1000, false);
+    my_sim.server_->Run(true, 500, false);
     // my_sim.Pause(); // quick test for me
 
     my_sim.ResetSim(); // why does this generate a hop?

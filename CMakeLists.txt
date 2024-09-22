@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Find the Gazebo packages
 find_package(gz-sim8 REQUIRED)
 find_package(gz-math7 REQUIRED)
+#find_package(gz-msgs10 REQUIRED)
 
 # Find Boost for subprocess
 find_package(Boost 1.74.0 REQUIRED)
@@ -44,7 +45,10 @@ target_include_directories(bipedal_contact PUBLIC
 target_link_libraries(bipedal_contact gz-sim8::gz-sim8)
 
 # TrainSimulator
-add_library(train_simulator include/Simulator.h src/Simulator.cpp include/ECMProvider.h include/EffortController.h include/BipedalContact.h)
+add_library(train_simulator include/Simulator.h 
+src/Simulator.cpp include/ECMProvider.h 
+include/EffortController.h 
+include/BipedalContact.h)
 #target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(train_simulator 
 ecm_provider 
