@@ -67,7 +67,6 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
     /*
     check if each link has made a collision, and update the sensor data in contacted_
     */
-
     if (!ecm.HasComponentType(gz::sim::components::ContactSensorData::typeId)){
         throw std::runtime_error("BipedalContact::PostUpdate() no ContactSensor found ...wtf");
     }
@@ -77,6 +76,7 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
     for (std::string link_name : CONTACT_LINKS){
         bool contacted = 0;
         std::vector<std::string> collision_names = link_map[link_name];
+        
 
         // loop 2
         for (auto collision_name : collision_names){

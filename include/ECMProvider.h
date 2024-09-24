@@ -17,7 +17,10 @@
 /*
 
 */
-class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
+class ECMProvider: public gz::sim::System, 
+                   public gz::sim::ISystemConfigure,
+                   public gz::sim::ISystemPreUpdate,
+                   public gz::sim::ISystemReset
 {
     public:
         ECMProvider(); // create the ignition gazebo system
@@ -26,10 +29,13 @@ class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
         void Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, 
                         gz::sim::EntityComponentManager& ecm,
-                        gz::sim::EventManager& eventMgr);
+                        gz::sim::EventManager& eventMgr) override;
 
-        void PostUpdate(const gz::sim::UpdateInfo& info,
+        void PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm);
+        
+        void Reset(const gz::sim::UpdateInfo &_info,
+                 gz::sim::EntityComponentManager &_ecm) override;
 
         gz::sim::EntityComponentManager* getECM();
         gz::sim::EventManager* getEvtMgr();
@@ -43,5 +49,6 @@ class ECMProvider: public gz::sim::System, public gz::sim::ISystemConfigure
         std::string world_name_;
 
 };
+
 
 #endif

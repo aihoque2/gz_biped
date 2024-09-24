@@ -5,6 +5,21 @@
 #include <gz/rendering.hh>
 #include <gz/sim/components/Joint.hh>
 #include <gz/sim/components/JointForceCmd.hh>
+
+#include <gz/sim/components/Name.hh>
+#include <gz/sim/components/JointPositionReset.hh>
+#include <gz/sim/components/LinearVelocityCmd.hh>
+#include <gz/sim/components/AngularVelocityCmd.hh>
+
+// acceleration components
+#include <gz/sim/components/LinearAcceleration.hh>
+#include <gz/sim/components/AngularAcceleration.hh>
+
+#include <gz/sim/components/JointVelocityReset.hh>
+#include <gz/sim/components/Pose.hh>
+#include <gz/sim/components/PoseCmd.hh>
+#include <gz/sim/components/CanonicalLink.hh>
+
 #include <gz/sim/components/Name.hh>
 #include <memory>
 #include <vector>
@@ -32,7 +47,8 @@ static const std::vector<std::string> JOINT_NAMES =
 
 class EffortController: public gz::sim::System, 
                          public gz::sim::ISystemPreUpdate,
-                         public gz::sim::ISystemConfigure
+                         public gz::sim::ISystemConfigure,
+                         public gz::sim::ISystemReset
 {
     public:
         EffortController(std::mutex& axnMutex, std::shared_ptr<double[]> axn);
@@ -47,6 +63,9 @@ class EffortController: public gz::sim::System,
         // inherited from ISystemPreUpdate ABC
         void PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm);
+        
+        void Reset(const gz::sim::UpdateInfo &info,
+                 gz::sim::EntityComponentManager &_ecm);
 
 
 

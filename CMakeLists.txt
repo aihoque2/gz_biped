@@ -7,6 +7,7 @@ project(fortress_sim)
 
 # we use std::optional here, we need 17
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "-g")
 #set(Boost_USE_MULTITHREADED ON)
 
 

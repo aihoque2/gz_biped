@@ -47,10 +47,16 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
     std::cout << "SUCCES: obtained EntityComponentManager & EventManager from World: " << this->world_name_ << std::endl;
 }
 
-void ECMProvider::PostUpdate(const gz::sim::UpdateInfo& info,
+void ECMProvider::PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm)
 {
     // update the existing shared ptr
+    ecm_ = &ecm;
+}
+
+void ECMProvider::Reset(const gz::sim::UpdateInfo &info,
+                 gz::sim::EntityComponentManager &ecm)
+{
     ecm_ = &ecm;
 }
 

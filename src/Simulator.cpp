@@ -231,7 +231,7 @@ void TrainSimulator::ResetSim(){
     
     gz::msgs::Boolean rep;
     std::string service = "/world/empty/control";
-    bool result;
+    bool result = false;
     unsigned int timeout = 5000; // Timeout in milliseconds
 
     // Request reset through the transport node

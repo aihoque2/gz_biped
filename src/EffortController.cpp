@@ -62,6 +62,7 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
     We know our joint names.
     We can just look them up.
     */
+    
     std::lock_guard<std::mutex> lock(axn_mutex_); // lock our axn array
     for (int i = 0; i < JOINT_NAMES.size(); i++){
         std::string jnt_name = JOINT_NAMES[i];
@@ -87,3 +88,49 @@ void EffortController::PreUpdate(const gz::sim::UpdateInfo& info,
         axn_[i] = 0.0;
     }
 }
+
+void EffortController::Reset(const gz::sim::UpdateInfo& info,
+                        gz::sim::EntityComponentManager& ecm)
+{
+        for (auto joint_name : JOINT_NAMES){
+            auto joint = ecm.EntityByComponents(gz::sim::components::Joint(), 
+                                                gz::sim::components::Name(joint_name));
+            /*reset each joint state */ 
+
+            // theta reset (position)
+            auto * joint_reset = ecm.Component<gz::sim::components::JointPositionReset>(joint);
+            
+            if (joint_reset == nullptr)
+                ecm.CreateComponent(joint, gz::sim::components::JointPositionReset({0.0}));
+            else 
+                ecm.SetComponentData<gz::sim::components::JointPositionReset>(joint, {0.0});
+            
+
+            // theta-dot
+            auto* joint_vel = ecm.Component<gz::sim::components::JointVelocityReset>(joint);
+            
+            if (joint_vel == nullptr){
+                ecm.CreateComponent(joint, gz::sim::components::JointVelocityReset({0.0}));
+            }
+            else{
+                // set the components pose
+                ecm.SetComponentData<gz::sim::components::JointVelocityReset>(joint, {0.0});
+            }
+
+            // theta-double-dot???
+            auto* force = ecm.Component<gz::sim::components::JointForceCmd>(joint);
+            if (force == nullptr){
+                ecm.CreateComponent(joint, gz::sim::components::JointForceCmd({0.0}));
+            }
+            else{
+                force->Data()[0] = 0.0;
+            }
+            // announcing changed states
+            ecm.SetChanged(joint, gz::sim::components::JointPositionReset::typeId, gz::sim::ComponentState::OneTimeChange);
+            ecm.SetChanged(joint, gz::sim::components::JointVelocityReset::typeId, gz::sim::ComponentState::OneTimeChange);
+            ecm.SetChanged(joint, gz::sim::components::JointForceCmd::typeId, gz::sim::ComponentState::OneTimeChange);
+                        std::cout << "EffortController::Reset() passed SetChanged() for: " << joint_name << std::endl;
+
+    }
+}
+
