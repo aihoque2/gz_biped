@@ -100,6 +100,58 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
 
 }
 
+void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
+                 gz::sim::EntityComponentManager &ecm)
+{
+    if (!ecm.HasComponentType(gz::sim::components::ContactSensor::typeId)){
+        throw std::runtime_error("BipedalContact::Reset() no ContactSensor found...wtf");
+    }
+    else{
+        std::cout << "BipedalContact::Reset() went through first if statement fine!" << std::endl;
+    }
+
+    ecm.EachNew<gz::sim::components::ContactSensor>(
+        [&](const gz::sim::Entity& contact_ent_, const gz::sim::components::ContactSensor * contact_comp_)-> bool
+    {
+
+        // declare this lambda before EachNew() call for cleaner code
+        auto* parent_ent = ecm.Component<gz::sim::components::ParentEntity>(contact_ent_); // this dude is the Link Entity object
+
+        std::cout << "EachNew() does ContactEntity have collision components: " << ecm.EntityHasComponentType(contact_ent_, gz::sim::components::Collision::typeId) << std::endl;
+
+        auto* link_ent = ecm.Component<gz::sim::components::Link>(parent_ent->Data());
+        if (link_ent == nullptr){
+            throw std::runtime_error("BipedalContact::Reset EachNew() Parent entity of contact sensor is not a link");
+        }
+        auto link_name_opt = ecm.ComponentData<gz::sim::components::Name>(parent_ent->Data());
+        std::string link_name = link_name_opt.value();
+
+        // debug
+        std::vector<gz::sim::Entity> collisions = ecm.ChildrenByComponents(parent_ent->Data(), gz::sim::components::Collision());
+        if (collisions.empty())
+        {
+            throw std::runtime_error("BipedalContact::Reset() parent_ent has no collisions...wtf");
+        }
+
+        for (auto collision_ent : collisions)
+        {
+            auto collision_name_opt = ecm.ComponentData<gz::sim::components::Name>(collision_ent);
+            std::string collision_name = collision_name_opt.value();
+
+            auto contact = ecm.Component<gz::sim::components::ContactSensorData>(collision_ent);
+            if (contact == nullptr)
+            {
+                std::cout << "BiepdalContact::Reset() creating contact component for: " << link_name + "\n";
+                ecm.CreateComponent(collision_ent, gz::sim::components::ContactSensorData());
+            }
+
+        }
+
+        return true;
+    });
+
+}
+
 
 /*
 TODO: REGISTER PLUGIN

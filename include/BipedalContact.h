@@ -27,7 +27,8 @@ static const std::vector<std::string> CONTACT_LINKS =
 
 class BipedalContact : public gz::sim::System,
                         public gz::sim::ISystemConfigure,
-                        public gz::sim::ISystemPostUpdate
+                        public gz::sim::ISystemPostUpdate,
+                        public gz::sim::ISystemReset
 {
     public:
         BipedalContact(std::mutex& contactMutex, std::shared_ptr<bool[]> contacted);
@@ -43,7 +44,9 @@ class BipedalContact : public gz::sim::System,
         // inherited from ISystemPreUpdate ABC
         void PostUpdate(const gz::sim::UpdateInfo& info,
                         const gz::sim::EntityComponentManager& ecm);
-
+                
+        void Reset(const gz::sim::UpdateInfo &info,
+                 gz::sim::EntityComponentManager &ecm);
 
     private:
         std::shared_ptr<bool[]> contacted_; // {torso, footL, footR} in that order {0, 1, 2}
