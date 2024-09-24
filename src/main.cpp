@@ -43,12 +43,12 @@ int main(int argc, char **argv)
     my_sim.server_->Run(true, 300, false);
 
     std::cout << "fourth run...." << std::endl; 
-    /// my_sim.StepFew(axn2, 300, 500); 
     my_sim.server_->Run(true, 600, false);
 
     //std::this_thread::sleep_for(std::chrono::seconds(3));
-
     my_sim.ResetSim(); // why does this generate a hop?
+    my_sim.StepFew(axn2, 300, 500); // remember under fourth run
+
 
     std::cout << "fifth run...." << std::endl;
     my_sim.server_->Run(true, 500, false);
