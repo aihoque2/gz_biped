@@ -37,10 +37,10 @@ int main(int argc, char **argv)
     std::cout << "second run...." << std::endl; 
     my_sim.server_->Run(true, 300, false);
     std::this_thread::sleep_for(std::chrono::seconds(3));
+    my_sim.ResetSim();
 
     std::cout << "third run...." << std::endl; 
     my_sim.server_->Run(true, 300, false);
-    my_sim.ResetSim();
 
     std::cout << "fourth run...." << std::endl; 
     /// my_sim.StepFew(axn2, 300, 500); 

@@ -27,7 +27,6 @@ void BipedalContact::Configure(const gz::sim::Entity&,
         // declare this lambda before EachNew() call for cleaner code
         auto* parent_ent = ecm.Component<gz::sim::components::ParentEntity>(contact_ent_); // this dude is the Link Entity object
 
-        std::cout << "EachNew() does ContactEntity have collision components: " << ecm.EntityHasComponentType(contact_ent_, gz::sim::components::Collision::typeId) << std::endl;
 
         auto* link_ent = ecm.Component<gz::sim::components::Link>(parent_ent->Data());
         if (link_ent == nullptr){
@@ -94,7 +93,7 @@ void BipedalContact::PostUpdate(const gz::sim::UpdateInfo& info,
             }
         }
         contacted_[i] = contacted;
-        // std::cout << "BipedalContact state for link " + link_name +": " << contacted_[i] << std:: endl; 
+        std::cout << "BipedalContact state for link " + link_name +": " << contacted_[i] << std:: endl; 
         i++;
     }
 
@@ -116,8 +115,6 @@ void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
 
         // declare this lambda before EachNew() call for cleaner code
         auto* parent_ent = ecm.Component<gz::sim::components::ParentEntity>(contact_ent_); // this dude is the Link Entity object
-
-        std::cout << "EachNew() does ContactEntity have collision components: " << ecm.EntityHasComponentType(contact_ent_, gz::sim::components::Collision::typeId) << std::endl;
 
         auto* link_ent = ecm.Component<gz::sim::components::Link>(parent_ent->Data());
         if (link_ent == nullptr){
