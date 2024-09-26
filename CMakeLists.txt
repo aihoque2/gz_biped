@@ -45,25 +45,34 @@ target_include_directories(bipedal_contact PUBLIC
 
 target_link_libraries(bipedal_contact gz-sim8::gz-sim8)
 
+# Robot State Updater
+add_library(state_updater include/RobotStateUpdater.h src/RobotStateUpdater.cpp)
+target_include_directories(state_updater PUBLIC
+$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
+
+target_link_libraries(state_updater gz-sim8::gz-sim8)
+
 # TrainSimulator
 add_library(train_simulator include/Simulator.h 
 src/Simulator.cpp include/ECMProvider.h 
 include/EffortController.h 
-include/BipedalContact.h)
-#target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
+include/BipedalContact.h
+include/RobotStateUpdater.h)
+
+target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(train_simulator 
 ecm_provider 
 joint_controller 
-bipedal_contact 
+bipedal_contact
+state_updater 
 ${Boost_LIBRARIES}
 gz-math7) # link TrainSimulator with ECMProvider
 
-# our executable (or binary if you're familiar with Bazel)
+# our executable/binary
 add_executable(launch_empty_world src/main.cpp)
 target_link_libraries(launch_empty_world train_simulator)
 
 # Link against the Gazebo libraries
 target_link_libraries(launch_empty_world
-gz-sim8::gz-sim8
 gz-sim8::gz-sim8
 )

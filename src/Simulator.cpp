@@ -41,6 +41,7 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate BipedalContact into server");
     }
 
+
     /*
     gui code
     */
@@ -222,7 +223,6 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
-
     gz::transport::Node node;
 
     // Create a message to reset the world
@@ -242,6 +242,6 @@ void TrainSimulator::ResetSim(){
     if (!success || !result || !rep.data()) {
         std::cerr << "Failed to reset the world using transport service." << std::endl;
     } else {
-        std::cout << "World reset successfully through transport service." << std::endl;
+
     }
 }

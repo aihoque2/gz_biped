@@ -17,7 +17,7 @@ class World{
         bool insertModel()
 
     private:
-        std::shared_ptr<ignition::gazebo::SdfEntityCreator> sdfEntityCreator;
+        std::shared_ptr<gz::sim::SdfEntityCreator> sdfEntityCreator;
 };
 
 #endif
