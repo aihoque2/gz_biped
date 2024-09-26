@@ -53,7 +53,7 @@ about being able to pull full state out in valid manner
 
 #define WORLD_IDX 0
 
-#define STATE_SIZE 30
+#define STATE_SIZE 32
 #define ACTION_SIZE 10
 
 /*Sim.h*/
@@ -83,7 +83,6 @@ class TrainSimulator{
         void Pause();
         void Unpause();
 
-        /*NOTE: DO THIS AFTER MAKING A JOINT CONTROLLER*/
         void ResetSim(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
         /*

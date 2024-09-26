@@ -14,15 +14,16 @@ StateUpdater.h
 I'm copying part of this:
 https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/systems/joint_state_publisher/JointStatePublisher.hh
 
-but i'm not making a ignition transport node to publish the data.
+but I'm not making a gz-transport node to publish the data.
 */
 
 
 
 
-class StateUpdater: public ignition::gazebo::System, 
+class StateUpdater: public gz::sim::System, 
                          public ignition::gazebo::ISystemConfigure,
-                         public ignition::gazebo::ISystemPostUpdate 
+                         public ignition::gazebo::ISystemPostUpdate,
+                         public ig 
 {
     public:
         StateUpdater();
@@ -37,6 +38,8 @@ class StateUpdater: public ignition::gazebo::System,
         void PostUpdate(const ignition::gazebo::UpdateInfo& info,
                         const ignition::gazebo::EntityComponentManager& ecm);
 
+        void Reset(const gz::sim::UpdateInfo &info,
+                 gz::sim::EntityComponentManager &ecm);
 
     private:
         std::shared_ptr<double[]> state_ // joint states vector, as sepcified in docs

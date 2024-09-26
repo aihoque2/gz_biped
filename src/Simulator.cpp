@@ -34,7 +34,7 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate EffortController into server");
     }
     
-    // TODO: Contact Sensor plugin
+    // Contact Sensor plugin
     auto contact_sensor = std::make_shared<BipedalContact>(contactMutex, contacted_);
     const auto gotContact = server_->AddSystem(contact_sensor, WORLD_IDX);
     if (!gotContact){
@@ -77,7 +77,7 @@ TrainSimulator::TrainSimulator(bool gui){
 }
 
 
-/*DESTRUCTIONNNNN*/
+/*Destructor*/
 TrainSimulator::~TrainSimulator(){
     ecm_ = nullptr;
     event_mgr_ = nullptr;
@@ -100,7 +100,8 @@ TrainSimulator::~TrainSimulator(){
 }
 
 /* KillPIDs() 
-* kill gz_sim processes at the end of 
+* kill gz_sim processes at the end
+* of the TrainSimulator's lifespan
 */
 void TrainSimulator::KillPIDs(std::string process_name){
     std::array<char, 128> buffer;
@@ -221,6 +222,7 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
+
     gz::transport::Node node;
 
     // Create a message to reset the world
