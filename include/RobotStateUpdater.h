@@ -12,6 +12,9 @@
 #include <vector>
 #include <string>
 
+// mafs
+#include <gz/math.hh>
+
 /*
 StateUpdater.h
 
@@ -21,11 +24,12 @@ https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/systems/joint_state_pub
 but I'm not making a gz-transport node to publish the data.
 */
 
-
+#ifndef STATEUPDATER_HPP
+#define STATEUPDATER_HPP
 class StateUpdater: public gz::sim::System, 
-                         public gz::sim::ISystemConfigure,
-                         public gz::sim::ISystemPostUpdate,
-                         public gz::sim::ISystemReset 
+                    public gz::sim::ISystemConfigure,
+                    public gz::sim::ISystemPostUpdate,
+                    public gz::sim::ISystemReset 
 {
     public:
         StateUpdater(std::mutex& stateMutex, std::shared_ptr<double[]> state);
@@ -33,7 +37,8 @@ class StateUpdater: public gz::sim::System,
 
         // inherited from ISystemConfigure ABC
         void Configure(const gz::sim::Entity& entity,
-                        const gz::sim::EntityComponentManager& ecm,
+                        const std::shared_ptr<const sdf::Element>&, 
+                        gz::sim::EntityComponentManager& ecm,
                         gz::sim::EventManager& eventMgr);
 
         // inherited from ISystemPostUpdate ABC
@@ -50,4 +55,4 @@ class StateUpdater: public gz::sim::System,
 
 };
 
-
+#endif

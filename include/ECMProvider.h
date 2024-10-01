@@ -29,7 +29,7 @@ class ECMProvider: public gz::sim::System,
         void Configure(const gz::sim::Entity& entity,
                         const std::shared_ptr<const sdf::Element>&, 
                         gz::sim::EntityComponentManager& ecm,
-                        gz::sim::EventManager& eventMgr) override;
+                        gz::sim::EventManager& eventMgr);
 
         void PreUpdate(const gz::sim::UpdateInfo& info,
                         gz::sim::EntityComponentManager& ecm);

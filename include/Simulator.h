@@ -3,6 +3,7 @@
 #include "ECMProvider.h"
 #include "EffortController.h"
 #include "BipedalContact.h"
+#include "RobotStateUpdater.h"
 
 // higher lvl includes
 #include <gz/sim/Server.hh>
@@ -114,7 +115,7 @@ class TrainSimulator{
         
         std::mutex axnMutex; // lock used for set_action() and get_action()
         std::mutex stateMutex; // lock used for publishing state info
-        std::mutex contactMutex;
+        std::mutex contactMutex; // lock used for publishing contact sensor data
  
         // we need to keep this plugin
         std::shared_ptr<ECMProvider> provider_;

@@ -41,6 +41,11 @@ TrainSimulator::TrainSimulator(bool gui){
         throw std::runtime_error("could not integrate BipedalContact into server");
     }
 
+    auto state_updater = std::make_shared<StateUpdater>(stateMutex, state_);
+    const auto gotState = server_->AddSystem(state_updater, WORLD_IDX);
+    if (!gotState){
+        throw std::runtime_error("could not integrate State Updater into server");
+    }
 
     /*
     gui code

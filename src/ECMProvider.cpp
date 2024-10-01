@@ -44,7 +44,7 @@ void ECMProvider::Configure(const gz::sim::Entity& entity,
 
     this->ecm_ = &ecm; // point to the addy
     this->evtmgr_ = &event_mgr; // point to the addy
-    std::cout << "SUCCES: obtained EntityComponentManager & EventManager from World: " << this->world_name_ << std::endl;
+    std::cout << "SUCCESS: obtained EntityComponentManager & EventManager from World: " << this->world_name_ << std::endl;
 }
 
 void ECMProvider::PreUpdate(const gz::sim::UpdateInfo& info,

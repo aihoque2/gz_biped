@@ -30,7 +30,7 @@ EffortController.h
 
 
 joint effort controller for the bipedal. acts as plugin
-but i'm not making a ignition transport node to publish the data.
+but i'm not making a gz transport node to publish the data.
 
 cites:
 like gz-sim::systems::ApplyJointForce
