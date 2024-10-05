@@ -148,17 +148,3 @@ void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
     });
 
 }
-
-
-/*
-TODO: REGISTER PLUGIN
-
-Therefore, gz-sim can be read from urdf
-*/
-
-// GZ_ADD_PLUGIN(Contact, System,
-//   Bipedal::ISystemConfigure,
-//   Contact::ISystemPostUpdate
-// )
-
-// GZ_ADD_PLUGIN_ALIAS(Contact, "gz::sim::systems::Contact")

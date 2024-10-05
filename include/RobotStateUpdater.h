@@ -52,7 +52,15 @@ class StateUpdater: public gz::sim::System,
     private:
         std::mutex& state_mutex_;
         std::shared_ptr<double[]> state_; // joint states vector, as sepcified in docs
+        
+        // for velocity updates
+        double x; 
+        double y;
+        double z; 
 
+        double r; 
+        double p; 
+        double w; 
 };
 
 #endif

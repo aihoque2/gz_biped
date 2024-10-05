@@ -5,7 +5,7 @@ implement that header stuff here
 */
 
 StateUpdater::StateUpdater(std::mutex& stateMutex, std::shared_ptr<double[]> state)
-:gz::sim::System(), state_mutex_(stateMutex), state_(state) 
+:gz::sim::System(), state_mutex_(stateMutex), state_(state), x(0.0), y(0.0), z(0.0), r(0.0), p(0.0), w(0.0)
 {
 }
 
@@ -54,44 +54,52 @@ void StateUpdater::Configure(const gz::sim::Entity& entity,
 
 }
 
-void StateUpdater::PostUpdate(const gz::sim::UpdateInfo &_info,
+void StateUpdater::PostUpdate(const gz::sim::UpdateInfo &info,
                                 const gz::sim::EntityComponentManager &ecm)
 {
     gz::sim::Entity blackbird_ent = ecm.EntityByComponents(gz::sim::components::Name("blackbird"));
     int i = 0;
 
-    // first 6 dimensions of state_
-    auto* pose_comp = ecm.Component<gz::sim::components::Pose>(blackbird_ent);
-    auto pose = pose_comp->Data();
-    state_[0] = pose.Pos().X();
-    state_[1] = pose.Pos().Y();
-    state_[2] = pose.Pos().Z();
+    double dub_dt = std::chrono::duration<double>(info.dt).count(); // get the time in seconds
 
-    // angular coords
-    state_[3] = pose.Rot().Roll();
-    state_[4] = pose.Rot().Pitch();
-    state_[5] = pose.Rot().Yaw();
-    i = 6;    
+    if (dub_dt > 0.0){
 
-    auto* lin_vel_comp = ecm.Component<gz::sim::components::LinearVelocity>(blackbird_ent);
-    // 3 states
-    if (lin_vel_comp == nullptr){
-        throw std::runtime_error("StateUpdater::PostUpdate() entity has no component LinearVelocity");
+        // first 6 dimensions of state_
+        auto* pose_comp = ecm.Component<gz::sim::components::Pose>(blackbird_ent);
+        auto pose = pose_comp->Data();
+        state_[0] = pose.Pos().X();
+        state_[6] = (state_[0] - x)/dub_dt; // velx
+        x = state_[0]; // update to new state
+
+        state_[1] = pose.Pos().Y();
+        state_[7] = (state_[1] - y)/dub_dt; // vel_y
+        y = state_[1];
+
+        state_[2] = pose.Pos().Z(); 
+        double dz = state_[2] - z;
+        std::cout << "here's delta z: " << dz << " here's dt: " << dub_dt << std::endl;
+        state_[8] = (dz)/dub_dt; // vel_z
+        z = state_[2];
+        
+        // angular coords
+        state_[3] = pose.Rot().Roll();
+        state_[9] = (state_[3] - r)/dub_dt;
+        r = state_[3];
+
+        state_[4] = pose.Rot().Pitch();
+        state_[10] = (state_[4] - p)/dub_dt;
+        p = state_[4];
+
+        state_[5] = pose.Rot().Yaw();
+        state_[11] = (state_[5] - w)/dub_dt;
+        w = state_[5];
     }
-    auto lin_vel = lin_vel_comp->Data();
-    for (; i < 9; i++){
-        std::cout << "in lin vel update here's i: " << i << std::endl;
-        state_[i] = lin_vel[i-6]; // at i=11, we got ang_vel[2]
-    }
-    auto ang_vel_comp = ecm.Component<gz::sim::components::AngularVelocity>(blackbird_ent);
-    if (ang_vel_comp == nullptr){
-        throw std::runtime_error("StateUpdater::PostUpdate() entity has no component AngularVelocity");
-    }
-    
-    auto ang_vel = ang_vel_comp->Data();
-    for (; i < 12; i++){
-        state_[i] = ang_vel[i-9]; // at i=11, we got ang_vel[2]
-    }
+    /*
+    linear an angular velocities 
+    cover indicies 6-11.
+    */
+
+
     // Joint position states and vels
     i = 12;
     for (auto joint_name: JOINT_NAMES){
@@ -113,7 +121,7 @@ void StateUpdater::PostUpdate(const gz::sim::UpdateInfo &_info,
         i++; // i == 22 at the end of this loop, so we never access beyond idx 31
     }
     
-    std::cout << "StateUpdater::PostUpdate() here's some state info: " << state_[25] << std::endl;
+    std::cout << "StateUpdater::PostUpdate() here's some state info: " << state_[8] << std::endl;
 }
 
 void StateUpdater::Reset(const gz::sim::UpdateInfo &info,
