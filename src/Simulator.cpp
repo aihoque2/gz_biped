@@ -147,13 +147,16 @@ void TrainSimulator::KillPIDs(std::string process_name){
 * step 1 ms in the simulation
 */
 void TrainSimulator::Step(std::vector<double> inputAction){
+    if (inputAction.size() != 10){
+        throw std::runtime_error("invalid inpput action size: " + std::to_string(inputAction.size()) + ". Expected size 10");
+    }
+
     // run our action
     {
         std::lock_guard<std::mutex> guard(axnMutex);
         for (int i = 0; i < 10; i++){
             axn_[i] = inputAction[i];
         }
-        
     }
     bool stepped = server_->RunOnce(true); // true for running the simulation steps paused.
 }    
@@ -170,8 +173,11 @@ void TrainSimulator::Step(std::vector<double> inputAction){
 * is for force control.
 */
 void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps){
-    bool stepped = false;
+    if (inputAction.size() != 10){
+        throw std::runtime_error("StepFew() invalid inpput action size: " + std::to_string(inputAction.size()) + ". Expected size 10");
+    }
     
+    bool stepped = false;
     // run our action steps
     for (int i = 0; i < axnSteps; i++){    
         // set our action and lock our mutex within scope

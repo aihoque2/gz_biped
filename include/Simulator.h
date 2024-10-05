@@ -79,8 +79,6 @@ class TrainSimulator{
         void StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps);
 
         void SetAction(std::vector<double> action); // mainly a helper for gym's step() to make modifying axn_ thread-safe       
-        void Run(bool train); // just run the simulation like a main example...we'll figure out the rest later
-
         void Pause();
         void Unpause();
 

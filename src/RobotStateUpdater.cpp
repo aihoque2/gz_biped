@@ -27,18 +27,6 @@ void StateUpdater::Configure(const gz::sim::Entity& entity,
         throw std::runtime_error("StateUpdater::Configure() Pose component returned nullptr");
     }
 
-    gz::math::Vector3d zero_vel(0, 0, 0);
-
-    // linear velocity check
-    if (!ecm.EntityHasComponentType(blackbird_ent, gz::sim::components::LinearVelocity().TypeId())){
-        ecm.CreateComponent(blackbird_ent, gz::sim::components::LinearVelocity(zero_vel));
-    }
-
-    // angular velocity check
-    if (!ecm.EntityHasComponentType(blackbird_ent, gz::sim::components::AngularVelocity().TypeId())){
-        ecm.CreateComponent(blackbird_ent, gz::sim::components::AngularVelocity(zero_vel));
-    }
-
     for (auto joint_name: JOINT_NAMES){
         gz::sim::Entity joint_ent = ecm.EntityByComponents(gz::sim::components::Joint(), gz::sim::components::Name(joint_name));
         auto* j_pos = ecm.Component<gz::sim::components::JointPosition>(joint_ent);
@@ -77,7 +65,6 @@ void StateUpdater::PostUpdate(const gz::sim::UpdateInfo &info,
 
         state_[2] = pose.Pos().Z(); 
         double dz = state_[2] - z;
-        std::cout << "here's delta z: " << dz << " here's dt: " << dub_dt << std::endl;
         state_[8] = (dz)/dub_dt; // vel_z
         z = state_[2];
         
@@ -120,8 +107,6 @@ void StateUpdater::PostUpdate(const gz::sim::UpdateInfo &info,
         state_[i+10] = j_vel->Data()[0];
         i++; // i == 22 at the end of this loop, so we never access beyond idx 31
     }
-    
-    std::cout << "StateUpdater::PostUpdate() here's some state info: " << state_[8] << std::endl;
 }
 
 void StateUpdater::Reset(const gz::sim::UpdateInfo &info,

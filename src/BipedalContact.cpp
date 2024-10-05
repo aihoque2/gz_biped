@@ -16,9 +16,7 @@ void BipedalContact::Configure(const gz::sim::Entity&,
     if (!ecm.HasComponentType(gz::sim::components::ContactSensor::typeId)){
         throw std::runtime_error("BipedalContact::Configure() no ContactSensor found...wtf");
     }
-    else{
-        std::cout << "BipedalContact::Configure() went through first if statement fine!" << std::endl;
-    }
+
 
     ecm.EachNew<gz::sim::components::ContactSensor>(
         [&](const gz::sim::Entity& contact_ent_, const gz::sim::components::ContactSensor * contact_comp_)-> bool
@@ -105,9 +103,6 @@ void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
     if (!ecm.HasComponentType(gz::sim::components::ContactSensor::typeId)){
         throw std::runtime_error("BipedalContact::Reset() no ContactSensor found...wtf");
     }
-    else{
-        std::cout << "BipedalContact::Reset() went through first if statement fine!" << std::endl;
-    }
 
     ecm.EachNew<gz::sim::components::ContactSensor>(
         [&](const gz::sim::Entity& contact_ent_, const gz::sim::components::ContactSensor * contact_comp_)-> bool
@@ -138,7 +133,6 @@ void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
             auto contact = ecm.Component<gz::sim::components::ContactSensorData>(collision_ent);
             if (contact == nullptr)
             {
-                std::cout << "BiepdalContact::Reset() creating contact component for: " << link_name + "\n";
                 ecm.CreateComponent(collision_ent, gz::sim::components::ContactSensorData());
             }
 

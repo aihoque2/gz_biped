@@ -3,6 +3,7 @@
 #include <gz/sim/ServerConfig.hh>
 
 #include <gz/sim/components/Pose.hh>
+#include <gz/sim/components/Link.hh>
 #include <gz/sim/components/LinearVelocity.hh>
 #include <gz/sim/components/AngularVelocity.hh>
 #include <gz/sim/components/JointPosition.hh>
