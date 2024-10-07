@@ -158,7 +158,7 @@ void TrainSimulator::Step(std::vector<double> inputAction){
             axn_[i] = inputAction[i];
         }
     }
-    bool stepped = server_->RunOnce(true); // true for running the simulation steps paused.
+    bool stepped = server_->RunOnce(false); // false for running the simulation steps unpaused.
 }    
 
 
@@ -267,4 +267,5 @@ bool TrainSimulator::isTerminal(){
 
     // TODO: see more terminal states
     // if robot moves out-of-bounds?
+    return false;
 }

@@ -21,6 +21,9 @@ int main(int argc, char **argv)
     std::cout << "server paused: " << *paused << std::endl;
 
     // run the server
+    std::vector<double> empty_axn = {0.0, 0.0, 0.0, 0.0, 0.0, /* Left Js */   
+                                        0.0, 0.0, 0.0, 0.0, 0.0 /* Right Js */};
+
     std::vector<double> axn1 = {0.0, 0.0, 8.0, 0.0, 0.0, /* Left Js */   
                                         0.0, 0.0, 8.0, 0.0, 0.0 /* Right Js */}; 
     
@@ -56,7 +59,9 @@ int main(int argc, char **argv)
 
     my_sim.ResetSim(); // why does this generate a hop?
     std::cout << "sixth run...." << std::endl;
-    my_sim.server_->Run(true, 800, false);
+    for (int i = 0; i < 800; i++){
+        my_sim.Step(empty_axn);
+    }
 
     return 0;
 }
