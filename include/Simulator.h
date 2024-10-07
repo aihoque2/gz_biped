@@ -84,6 +84,8 @@ class TrainSimulator{
 
         void ResetSim(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
 
+        bool isTerminal(); // check if the robot is in a terminal state
+
         /*
         variables 
         */

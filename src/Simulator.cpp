@@ -256,3 +256,15 @@ void TrainSimulator::ResetSim(){
 
     }
 }
+
+/*
+check if our robot is in a terminal state
+*/
+bool TrainSimulator::isTerminal(){
+    if (contacted_[0]){
+        return true;
+    }
+
+    // TODO: see more terminal states
+    // if robot moves out-of-bounds?
+}

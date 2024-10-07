@@ -50,7 +50,7 @@ class BipedalContact : public gz::sim::System,
 
     private:
         std::shared_ptr<bool[]> contacted_; // {torso, footL, footR} in that order {0, 1, 2}
-        std::mutex& contact_mutex_; // thread-safe lezzgeddit
+        std::mutex& contact_mutex_; // thread-safe
         std::unordered_map<std::string, std::vector<std::string>> link_map; // map link names to their collision names
 };
 
