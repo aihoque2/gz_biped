@@ -61,6 +61,9 @@ int main(int argc, char **argv)
     std::cout << "sixth run...." << std::endl;
     for (int i = 0; i < 800; i++){
         my_sim.Step(empty_axn);
+        if (i%100 == 0){
+            std::cout << "here's isTerminal(): " << my_sim.isTerminal() << std::endl;
+        }
     }
 
     return 0;

@@ -11,10 +11,11 @@ set(CMAKE_CXX_FLAGS "-g")
 #set(Boost_USE_MULTITHREADED ON)
 
 
-# Find the Gazebo packages
+# Find the packages
 find_package(gz-sim8 REQUIRED)
 find_package(gz-math7 REQUIRED)
 #find_package(gz-msgs10 REQUIRED)
+
 
 # Find Boost for subprocess
 find_package(Boost 1.74.0 REQUIRED)
@@ -23,6 +24,7 @@ if(Boost_FOUND)
 else()
   message(FATAL_ERROR "Boost not found")
 endif()
+
 
 # EntityComponentManager Provider
 add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
@@ -67,6 +69,23 @@ bipedal_contact
 state_updater 
 ${Boost_LIBRARIES}
 gz-math7) # link TrainSimulator with ECMProvider
+
+find_package(pybind11 REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+
+# Include pybind11 headers
+include_directories(${pybind11_INCLUDE_DIRS})
+
+
+# Add the source files
+add_library(blackbird_rl MODULE src/bindings.cpp)
+
+set_target_properties(blackbird_rl PROPERTIES PREFIX "")
+target_include_directories(blackbird_rl PRIVATE ${Python3_INCLUDE_DIRS})
+
+# Link pybind11
+target_link_libraries(blackbird_rl PRIVATE pybind11::module train_simulator ${Python3_LIBRARIES})
+
 
 # our executable/binary
 add_executable(launch_empty_world src/main.cpp)
