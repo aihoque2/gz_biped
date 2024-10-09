@@ -10,11 +10,13 @@
 #include <gz/sim/components/Collision.hh>
 #include <gz/sim/components/Link.hh>
 #include <gz/sim/components/ContactSensor.hh>
+#include <string>
 
 
 int main(int argc, char **argv)
 {
-    TrainSimulator my_sim(true);
+    std::string file_path = "world/empty.world";
+    TrainSimulator my_sim(true, file_path);
     bool hasBlackbird = my_sim.server_->HasEntity("blackbird", 0);
     std::cout << "hasBlackbird: " << hasBlackbird << "\n";
     auto paused = my_sim.server_->Paused(); // need to auto bc it returns std::optional

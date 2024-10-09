@@ -25,6 +25,16 @@ else()
   message(FATAL_ERROR "Boost not found")
 endif()
 
+# pybind11
+find_package(pybind11 REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+
+# Include pybind11 AND PYTHON headers
+include_directories(${Python3_INCLUDE_DIRS})
+include_directories(${pybind11_INCLUDE_DIRS})
+
+
+
 
 # EntityComponentManager Provider
 add_library(ecm_provider include/ECMProvider.h src/ECMProvider.cpp)
@@ -61,7 +71,8 @@ include/EffortController.h
 include/BipedalContact.h
 include/RobotStateUpdater.h)
 
-target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS})
+
+target_include_directories(train_simulator PUBLIC ${Boost_INCLUDE_DIRS} PRIVATE ${Python3_INCLUDE_DIRS} ${pybind11_INCLUDE_DIRS})
 target_link_libraries(train_simulator 
 ecm_provider 
 joint_controller 
@@ -70,11 +81,7 @@ state_updater
 ${Boost_LIBRARIES}
 gz-math7) # link TrainSimulator with ECMProvider
 
-find_package(pybind11 REQUIRED)
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
-# Include pybind11 headers
-include_directories(${pybind11_INCLUDE_DIRS})
 
 
 # Add the source files
@@ -89,9 +96,6 @@ target_link_libraries(blackbird_rl PRIVATE pybind11::module train_simulator ${Py
 
 # our executable/binary
 add_executable(launch_empty_world src/main.cpp)
-target_link_libraries(launch_empty_world train_simulator)
-
-# Link against the Gazebo libraries
-target_link_libraries(launch_empty_world
+target_link_libraries(launch_empty_world train_simulatorq
 gz-sim8::gz-sim8
-)
+${Python3_LIBRARIES})

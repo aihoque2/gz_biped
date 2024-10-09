@@ -33,6 +33,7 @@
 // mafs
 #include <gz/math.hh>
 
+// data structures
 #include <boost/process.hpp>
 #include <memory>
 #include <string>
@@ -40,6 +41,8 @@
 #include <array>
 #include <cstdio>
 #include <iostream>
+
+
 
 /*
 NOTE: NO ROS2 to WORRY about here. only have to worry
@@ -71,20 +74,21 @@ class TrainSimulator{
         /*
         functions
         */
-        TrainSimulator(bool gui); // constructor
+        TrainSimulator(bool gui, const std::string file_path); // constructor
         ~TrainSimulator(); // desctructor
 
         // should this be void, or should this return state values?
         void Step(std::vector<double> inputAction); // 10-array of joint commands to send each joint and step environment with joint action
         void StepFew(std::vector<double> inputAction, int axnSteps, int afterSteps);
-
         void SetAction(std::vector<double> action); // mainly a helper for gym's step() to make modifying axn_ thread-safe       
         void Pause();
         void Unpause();
-
         void ResetSim(); // make action_cb ignore actions during the reset, then reset torque/velocities of joints and torso
-
         bool isTerminal(); // check if the robot is in a terminal state
+        std::vector<double> GetState(); //
+        void KillPIDs(std::string process_name);
+
+
 
         /*
         variables 
@@ -103,7 +107,6 @@ class TrainSimulator{
 
     private:
         // shoutouts to gz-harmonic screwing up from gz-fortress
-        void KillPIDs(std::string process_name);
 
         gz::sim::ServerConfig serverConfig;
         std::string sdfFile; // filename for the sdf to spawn

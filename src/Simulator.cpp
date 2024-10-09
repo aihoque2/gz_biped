@@ -1,6 +1,6 @@
 #include "Simulator.h"
 
-TrainSimulator::TrainSimulator(bool gui){
+TrainSimulator::TrainSimulator(bool gui, const std::string file_path){
     
     axn_ = std::shared_ptr<double[]>(new double[ACTION_SIZE], std::default_delete<double[]>());
     state_ = std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
@@ -14,7 +14,7 @@ TrainSimulator::TrainSimulator(bool gui){
         state_[i] = 0.0; // state is defined by the LaTeX document
     }
 
-    worldFile = "world/empty.world";
+    worldFile = file_path;
     gz::common::Console::SetVerbosity(4);
     serverConfig.SetSdfFile(worldFile); //member var
     
@@ -151,13 +151,9 @@ void TrainSimulator::Step(std::vector<double> inputAction){
         throw std::runtime_error("invalid inpput action size: " + std::to_string(inputAction.size()) + ". Expected size 10");
     }
 
+    SetAction(inputAction);
+
     // run our action
-    {
-        std::lock_guard<std::mutex> guard(axnMutex);
-        for (int i = 0; i < 10; i++){
-            axn_[i] = inputAction[i];
-        }
-    }
     bool stepped = server_->RunOnce(false); // false for running the simulation steps unpaused.
 }    
 
@@ -181,12 +177,7 @@ void TrainSimulator::StepFew(std::vector<double> inputAction, int axnSteps, int 
     // run our action steps
     for (int i = 0; i < axnSteps; i++){    
         // set our action and lock our mutex within scope
-        {
-            std::lock_guard<std::mutex> guard(axnMutex);        
-            for (int k = 0; k < 10; ++k){
-                axn_[k] = inputAction[k];
-            }
-        }
+        SetAction(inputAction);
         stepped = server_->RunOnce(false);
         if (!stepped) {std::cout << "robot's action steppes returned false at iteration: "<< i << std::endl;}
     }
@@ -252,7 +243,7 @@ void TrainSimulator::ResetSim(){
 
     if (!success || !result || !rep.data()) {
         std::cerr << "Failed to reset the world using transport service." << std::endl;
-    } else {
+    } else {   
 
     }
 }
@@ -268,4 +259,29 @@ bool TrainSimulator::isTerminal(){
     // TODO: see more terminal states
     // if robot moves out-of-bounds?
     return false;
+}
+
+void TrainSimulator::SetAction(std::vector<double> action){
+    std::lock_guard<std::mutex> guard(axnMutex);        
+    for (int k = 0; k < 10; ++k){
+        axn_[k] = action[k];
+    }
+
+}
+
+std::vector<double> TrainSimulator::GetState(){
+    std::vector<double> ret;
+    {
+        std::lock_guard<std::mutex> state_guard(stateMutex);
+        // Copy state_ data to the combined buffer
+        std::copy(state_.get(), state_.get() + STATE_SIZE, ret.begin());
+    }
+
+    {
+        std::lock_guard<std::mutex> contact_guard(contactMutex);
+        for (int i = 0; i < 3; i++){
+            ret.push_back(contacted_[i]);
+        }
+    }
+    return ret;
 }
