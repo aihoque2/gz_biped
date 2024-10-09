@@ -80,7 +80,7 @@ include_directories(${pybind11_INCLUDE_DIRS})
 # Add the source files
 add_library(blackbird_rl MODULE src/bindings.cpp)
 
-set_target_properties(blackbird_rl PROPERTIES PREFIX "")
+set_target_properties(blackbird_rl PROPERTIES PREFIX "") # python expects 'blackbird_rl.so'
 target_include_directories(blackbird_rl PRIVATE ${Python3_INCLUDE_DIRS})
 
 # Link pybind11
