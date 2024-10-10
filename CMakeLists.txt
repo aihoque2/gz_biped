@@ -96,6 +96,13 @@ target_link_libraries(blackbird_rl PRIVATE pybind11::module train_simulator ${Py
 
 # our executable/binary
 add_executable(launch_empty_world src/main.cpp)
-target_link_libraries(launch_empty_world train_simulatorq
+target_link_libraries(launch_empty_world train_simulator
+gz-sim8::gz-sim8
+${Python3_LIBRARIES})
+
+
+# reset loop
+add_executable(sim_loop src/reset_loop.cpp)
+target_link_libraries(sim_loop train_simulator
 gz-sim8::gz-sim8
 ${Python3_LIBRARIES})

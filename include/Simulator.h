@@ -104,6 +104,8 @@ class TrainSimulator{
         double rtf = -1;
         double maxStepSize = -1;
         double realtimeUpdateRate= -1;
+        
+        bool resetting;
 
     private:
         // shoutouts to gz-harmonic screwing up from gz-fortress
@@ -122,7 +124,6 @@ class TrainSimulator{
  
         // we need to keep this plugin
         std::shared_ptr<ECMProvider> provider_;
-
         bool hasGUI;
 };
 

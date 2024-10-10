@@ -141,4 +141,8 @@ void BipedalContact::Reset(const gz::sim::UpdateInfo &info,
         return true;
     });
 
+    std::lock_guard guard(contact_mutex_);
+    for (int i = 0 ; i < 3; ++i){
+        contacted_[i] = 0;
+    }
 }

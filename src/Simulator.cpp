@@ -2,6 +2,7 @@
 
 TrainSimulator::TrainSimulator(bool gui, const std::string file_path){
     
+    resetting = false;
     axn_ = std::shared_ptr<double[]>(new double[ACTION_SIZE], std::default_delete<double[]>());
     state_ = std::shared_ptr<double[]>(new double[STATE_SIZE], std::default_delete<double[]>());
     contacted_ = std::shared_ptr<bool[]>(new bool[3], std::default_delete<bool[]>());
@@ -225,6 +226,7 @@ void TrainSimulator::Unpause(){
 }
 
 void TrainSimulator::ResetSim(){
+    resetting = true;
     gz::transport::Node node;
 
     // Create a message to reset the world
@@ -244,6 +246,7 @@ void TrainSimulator::ResetSim(){
     if (!success || !result || !rep.data()) {
         std::cerr << "Failed to reset the world using transport service." << std::endl;
     } else {   
+        resetting = false;
 
     }
 }
@@ -252,7 +255,7 @@ void TrainSimulator::ResetSim(){
 check if our robot is in a terminal state
 */
 bool TrainSimulator::isTerminal(){
-    if (contacted_[0]){
+    if (contacted_[0] == 1){
         return true;
     }
 
