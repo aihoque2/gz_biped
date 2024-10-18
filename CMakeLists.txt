@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 
-project(fortress_sim)
+project(gz_blackbird)
 
 # cmake_print_variables(PROJECT_SOURCE_DIR)
 
@@ -16,6 +16,8 @@ find_package(gz-sim8 REQUIRED)
 find_package(gz-math7 REQUIRED)
 #find_package(gz-msgs10 REQUIRED)
 
+
+include(CMakePrintHelpers)
 
 # Find Boost for subprocess
 find_package(Boost 1.74.0 REQUIRED)
@@ -33,7 +35,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${pybind11_INCLUDE_DIRS})
 
-
+cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
 
 
 # EntityComponentManager Provider

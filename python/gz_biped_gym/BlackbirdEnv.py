@@ -3,19 +3,18 @@ import numpy as np
 from gym import spaces
 import sys
 import blackbird_rl
+import os
 
 class BlackbirdGazebo(gym.Env):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 4}
 
     def __init__(self, render_mode=None):
-        sys.path.append("../../build")
         set_gui = False
         if render_mode is not None:
             set_gui = True
         else:
             set_gui = False
-        self.sim = blackbird_rl.TrainSimulator(gui=set_gui)
-
+        self.sim = blackbird_rl.TrainSimulator(set_gui, "world/empty.world")
         obs_low = np.full(32, -np.inf)  # -inf for each element
         obs_high = np.full(32, np.inf)  # inf for each element
 
@@ -44,6 +43,9 @@ class BlackbirdGazebo(gym.Env):
     def reset(self):
         self.sim.reset_sim()
         self.steps = 0
+        state = self.sim.get_state()
+        info = {"pose": {state[0], state[1], state[2]}}
+        return state, info
 
     def step(self, action):
         

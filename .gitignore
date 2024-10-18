@@ -3,3 +3,6 @@ sourcing.sh
 .vscode
 config.cmake
 valgrind.txt
+gz_biped_gym.egg-info
+*.so
+python/gz_biped_gym/__pycache__
