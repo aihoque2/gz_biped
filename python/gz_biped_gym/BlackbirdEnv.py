@@ -58,7 +58,7 @@ class BlackbirdGazebo(gym.Env):
         for i in range(len(action)):
             power += action[i] * state[i+12]
 
-        reward = self.Y_WEIGHT*pose_y - self.POWER_WEIGHT*power
+        reward = self.Y_WEIGHT*np.abs(pose_y) - self.POWER_WEIGHT*power
 
         self.steps += 1
-        return np.array(state, dtype=np.float32), reward, self.det_terminal(), False, {}
+        return np.array(state, dtype=np.float32), reward, self.det_terminal(), {}

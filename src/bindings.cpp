@@ -12,5 +12,5 @@ PYBIND11_MODULE(blackbird_rl, m){
     .def("is_terminal", &TrainSimulator::isTerminal, "check if the robot is in a terminal state")
     .def("pause", &TrainSimulator::Pause, "pause the simulation")
     .def("kill_pids", &TrainSimulator::KillPIDs, py::arg("prcoess_name"), "kill all gz_sim pids")
-    .def("get_state()", &TrainSimulator::GetState);
+    .def("get_state", &TrainSimulator::GetState);
 }

@@ -276,8 +276,13 @@ std::vector<double> TrainSimulator::GetState(){
     std::vector<double> ret;
     {
         std::lock_guard<std::mutex> state_guard(stateMutex);
+        
         // Copy state_ data to the combined buffer
-        std::copy(state_.get(), state_.get() + STATE_SIZE, ret.begin());
+        // std::copy(state_.get(), state_.get() + STATE_SIZE, ret.begin());
+        for (int i = 0; i < STATE_SIZE; i++){
+            ret.push_back(state_[i]);
+        }
+        
     }
 
     {
